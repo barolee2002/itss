@@ -1,7 +1,6 @@
 
 create database itss;
 use itss ; 
-
 create table user  (
 id int auto_increment primary key,
 username VARCHAR(50) NOT NULL,
@@ -15,12 +14,11 @@ avatar VARCHAR(255) ,
 name VARCHAR(255),
 gender VARCHAR(255),
 address VARCHAR(255)
-
 ); 
 
 
 
-create table food(
+create table ingredients(
 id int auto_increment primary key,
 name VARCHAR(255) NOT NULL,
 image VARCHAR(2555),
@@ -30,34 +28,34 @@ create_at TIMESTAMP,
 update_at TIMESTAMP
 );
 
-create table food_attribute (
+create table shopping_attribute (
 id int auto_increment primary key,
 user_id INT,
-but_at TIMESTAMP,
+buy_at TIMESTAMP,
 status INT NOT NULL,
-buy_address VARCHAR(255),
+exprided TIMESTAMP,
 measure  VARCHAR(10),
 quantity decimal(10,0)
-
 );
-
 
 create table dish(
 id int auto_increment primary key,
+image varchar(500),
 name INT NOT NULL,
 descriptions TEXT,
-status INT NOT NULL,
+recipe_des TEXT NOT NULL,
+status INT,
 type varchar(255) not null,
 create_at TIMESTAMP,
 update_at TIMESTAMP
-
 );
+
 create table dish_attribute(
 id int auto_increment primary key,
 dish_id INT NOT NULL,
-recipe_des TEXT NOT NULL,
 expride TIMESTAMP,
 cook_status int,
+quantity int ,
 cook_date timestamp,
 create_at TIMESTAMP,
 update_at TIMESTAMP, 
@@ -65,13 +63,14 @@ foreign key (dish_id) references dish(id)
 );
 
 
-create table recipe_food(
+create table dish_ingredients(
 id int auto_increment primary key,
-recipe_id INT NOT NULL, 
-food_id INT NOT NULL, 
-foreign key (recipe_id) references dish_attribute(id) , 
-foreign key(food_id) references food(id)
+dish_id INT NOT NULL, 
+ingredients_id INT NOT NULL, 
+foreign key (dish_id) references dish(id) , 
+foreign key(ingredients_id) references ingredients(id)
 );
+
 
 create table group_table (
 id int auto_increment primary key,
