@@ -19,7 +19,11 @@ import java.util.Date;
 @Table(name = "dish")
 public class DishEntity extends BaseEntity {
     @Column
-    private String description;
+    private String image;
+    @Column
+    private String descriptions;
+    @Column
+    private String recipeDes;
     @Column
     private Integer status;
     @Column

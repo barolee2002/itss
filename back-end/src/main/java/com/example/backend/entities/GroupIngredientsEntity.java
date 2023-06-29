@@ -1,23 +1,15 @@
 package com.example.backend.entities;
-import jakarta.validation.constraints.*;
 import lombok.Data;
 
 
 import javax.persistence.*;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 import javax.persistence.Entity;
 
-
-import java.util.Date;
-
 @Entity
 @Data
-@Table(name = "group_food")
-public class GroupFoodEntity {
+@Table(name = "group_ingredients")
+public class GroupIngredientsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
@@ -25,5 +17,5 @@ public class GroupFoodEntity {
     @Column
     private Integer groupId;
     @Column
-    private Integer foodId;
+    private Integer ingredientsId;
 }
