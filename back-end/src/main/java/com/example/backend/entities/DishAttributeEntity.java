@@ -22,11 +22,13 @@ import java.util.Date;
 public class DishAttributeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     @Column
     private Integer dishId;
     @Column
     private Integer quantity;
+    @Column
+    private Integer shoppingId;
     @Column
     private LocalDate expride;
     @Column

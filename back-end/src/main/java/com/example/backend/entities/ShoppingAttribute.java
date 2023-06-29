@@ -24,7 +24,7 @@ public class ShoppingAttribute {
     @Column
     private LocalDate buyAt;
     @Column
-    private String status;
+    private Integer status;
     @Column
     private String measure;
     @Column

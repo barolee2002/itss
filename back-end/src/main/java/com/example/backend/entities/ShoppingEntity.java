@@ -2,10 +2,7 @@ package com.example.backend.entities;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
@@ -13,6 +10,7 @@ import java.time.LocalDate;
 @Table(name = "shopping")
 public class ShoppingEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column
     private String code;

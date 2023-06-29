@@ -8,8 +8,8 @@ import javax.persistence.Entity;
 
 @Entity
 @Data
-@Table(name = "group_ingredients")
-public class GroupIngredientsEntity {
+@Table(name = "group_shopping")
+public class GroupShoppingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
@@ -17,5 +17,5 @@ public class GroupIngredientsEntity {
     @Column
     private Integer groupId;
     @Column
-    private Integer ingredientsId;
+    private Integer shoppingId;
 }

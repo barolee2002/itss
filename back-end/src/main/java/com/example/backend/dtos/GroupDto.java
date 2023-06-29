@@ -9,8 +9,9 @@ import java.util.List;
 @Data
 public class GroupDto {
     private String name;
-    UserDto user;
+    UserDto leader;
     private LocalDate createAt;
     private LocalDate updateAt;
     List<UserDto> groupMembers;
+    List<ShoppingDto> shoppings;
 }

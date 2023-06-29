@@ -52,13 +52,8 @@ public class DishService {
             ingredientDto = dishModelMapper.map(ingredientsEntity, IngredientsDto.class);
             ingredientsDtos.add(ingredientDto);
         }
-        List<DishAttributeEntity> attributes = attributeRepository.findByDishId(id);
-        for(DishAttributeEntity attribute : attributes) {
-            DishAttributeDto attributeDto = new DishAttributeDto();
-            attributeDto = dishModelMapper.map(attribute, DishAttributeDto.class);
-            attributeDtos.add(attributeDto);
-        }
-        dto.setAttributes(attributeDtos);
+
+
         dto.setIngredients(ingredientsDtos);
         return dto;
     }
@@ -79,16 +74,15 @@ public class DishService {
     }
     public void addIngredientId(Integer id,Integer ingredientId) {
         DishIngredientsEntity dishIngredient = new DishIngredientsEntity();
-        dishIngredient.setDishId(id);
-        dishIngredient.setIngredientsId(ingredientId);
-        dishIngredientRepository.save(dishIngredient);
+        if(dishIngredientRepository.findByDishIdAndIngredientsId(id, ingredientId) != null) {
+            throw new DuplicateException("Đã có nguyên liệu này ");
+        } else {
+            dishIngredient.setDishId(id);
+            dishIngredient.setIngredientsId(ingredientId);
+            dishIngredientRepository.save(dishIngredient);
+        }
+
     }
-    public List<IngredientsDto> getAllIngredients() {
-        List<IngredientsDto> dtos = new ArrayList<IngredientsDto>();
-        List<IngredientsEntity> entities = ingredientsRepository.findAll();
 
 
-        dtos = Arrays.asList(dishModelMapper.map(entities,IngredientsDto[].class));
-        return dtos;
-    }
 }
