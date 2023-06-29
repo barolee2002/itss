@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface DishIngredientsRepository extends JpaRepository<DishIngredientsEntity, Integer> {
     List<DishIngredientsEntity> findByDishId(Integer id);
+    DishIngredientsEntity findByDishIdAndIngredientsId(Integer dishId,Integer ingredientsId);
 }

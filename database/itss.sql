@@ -49,6 +49,15 @@ type varchar(255) not null,
 create_at TIMESTAMP,
 update_at TIMESTAMP
 );
+create table shopping(
+	id int auto_increment primary key,
+    code varchar(20) unique,
+    create_at datetime,
+    status int,
+    user_id int,
+    foreign key (user_id) references user(id)
+);
+
 
 create table dish_attribute(
 id int auto_increment primary key,
@@ -56,12 +65,13 @@ dish_id INT NOT NULL,
 expride TIMESTAMP,
 cook_status int,
 quantity int ,
+shooping_id int,
 cook_date timestamp,
 create_at TIMESTAMP,
 update_at TIMESTAMP, 
-foreign key (dish_id) references dish(id)
+foreign key (dish_id) references dish(id),
+foreign key (shopping_id) references shopping(id)
 );
-
 
 create table dish_ingredients(
 id int auto_increment primary key,
@@ -88,13 +98,12 @@ user_id int not null,
 foreign key (group_id) references user(id), 
 foreign key (user_id) references group_table(id)
 ); 
-
-create table group_food( 
+create table group_shopping( 
 id int auto_increment primary key,
 group_id INT not null, 
-food_id INT not null, 
+shopping_id INT not null, 
 foreign key	(group_id) references group_table(id), 
-foreign key (food_id) references food(id)
+foreign key (shopping_id) references shopping(id)
 ); 
 
 create table favorite( 
@@ -108,8 +117,17 @@ foreign key (recipe_id) references dish_attribute(id)
 create table fridge (
 id int auto_increment primary key,
 name varchar(100) not null,
-food_id int ,
-quantity int,
-foreign key (food_id) references food(id)
+group_id int,
+user_id int,
+foreign key (group_id) references group_table(id),
+foreign key (user_id) references user(id)
 );
+create table fridge_ingredients(
+id int auto_increment primary key,
+fridge_id int,
+ingredients_id int,
+quantity int,
+foreign key (fridge_id) references fridge(id),
+foreign key (ingredients_id) references ingredients(id)
+)
 

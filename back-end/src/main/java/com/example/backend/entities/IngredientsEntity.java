@@ -16,5 +16,7 @@ public class IngredientsEntity extends BaseEntity{
     @Column
     private String description;
     @Column
+    private Integer dueDate;
+    @Column
     private Integer status;
 }

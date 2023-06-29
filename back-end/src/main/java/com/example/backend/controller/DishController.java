@@ -35,8 +35,5 @@ public class DishController {
         dishService.addIngredientId(id, ingredientId);
         return "success";
     }
-    @GetMapping("/ingredients")
-    public List<IngredientsDto> getAllIngredients() {
-        return dishService.getAllIngredients();
-    }
+
 }

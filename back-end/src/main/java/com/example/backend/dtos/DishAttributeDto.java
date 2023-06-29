@@ -6,6 +6,8 @@ import java.time.LocalDate;
 
 @Data
 public class DishAttributeDto {
+    private Integer id;
+    DishDto dish;
 
     private LocalDate expride;
     private String cook_status;
