@@ -1,37 +1,34 @@
 package com.example.backend.entities;
 
-import jakarta.validation.constraints.*;
 import lombok.Data;
 
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 import javax.persistence.Entity;
 
-
-import java.util.Date;
-
 @Entity
 @Data
-@Table(name = "food_attribute")
-public class FoodAttributeEntity {
+@Table(name = "shopping_attribute")
+public class ShoppingAttribute {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
+    private Integer shoppingId;
+    @Column
     private Integer userId;
+    @Column
+    private Integer ingredientsId;
     @Column
     private LocalDate buyAt;
     @Column
     private String status;
     @Column
-    private String buyAddress;
-    @Column
     private String measure;
+    @Column
+    private LocalDate exprided;
     @Column
     private Integer quantity;
 }

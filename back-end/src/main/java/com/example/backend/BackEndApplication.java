@@ -10,4 +10,8 @@ public class BackEndApplication {
 		SpringApplication.run(BackEndApplication.class, args);
 	}
 
+	public void run(String... args) throws Exception {
+
+	}
+
 }

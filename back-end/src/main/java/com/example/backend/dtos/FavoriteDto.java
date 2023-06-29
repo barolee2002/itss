@@ -1,7 +1,9 @@
 package com.example.backend.dtos;
 
+import lombok.Data;
+
+@Data
 public class FavoriteDto {
-    private String userName;
-    private String dishName;
-    private String dishRecipe;
+    DishDto dish;
+    UserDto user;
 }

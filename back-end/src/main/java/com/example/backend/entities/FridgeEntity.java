@@ -24,7 +24,9 @@ public class FridgeEntity {
     @Column
     private String name;
     @Column
-    private Integer foodId;
+    private Integer groupId;
+    @Column
+    private Integer userId;
     @Column
     private Integer quantity;
 

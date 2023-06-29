@@ -26,7 +26,7 @@ public class DishAttributeEntity {
     @Column
     private Integer dishId;
     @Column
-    private String reciepDes;
+    private Integer quantity;
     @Column
     private LocalDate expride;
     @Column

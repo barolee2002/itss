@@ -1,16 +1,17 @@
 package com.example.backend.dtos;
 
-
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Data
-public class GroupDto {
+public class IngredientsDto {
+    private Integer id;
     private String name;
-    UserDto user;
+    private String image;
+    private String description;
+    private Integer status;
     private LocalDate createAt;
     private LocalDate updateAt;
-    List<UserDto> groupMembers;
+
 }
