@@ -25,6 +25,8 @@ public class UserEntity extends BaseEntity{
     @Column
     private LocalDate verifiedTime;
     @Column
+    private String email;
+    @Column
     private Integer status;
     @Column
     private String avatar;

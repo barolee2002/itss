@@ -4,20 +4,15 @@ import lombok.Data;
 
 import javax.persistence.Column;
 import java.time.LocalDate;
-import java.util.List;
 @Data
-public class UserDto {
-    private String name;
+public class Register {
 
-    private Integer id;
+    private String username;
 
-    private Integer status;
-
+    private String password;
     private String avatar;
 
     private String gender;
     private String email;
-    private LocalDate createAt;
     private String address;
-    List<GroupDto> groups;
 }
