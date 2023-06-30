@@ -2,7 +2,7 @@ import React from 'react';
 
 import SignUp from '../pages/SignUp';
 import SignIn from '../pages/SignIn';
-import Home from '../pages/home/Home';
+import Cook from '../pages/cook/Cook';
 
 interface RouteConfig {
     path: string;
@@ -12,7 +12,7 @@ interface RouteConfig {
 
 // public routes
 const publicRoutes: RouteConfig[] = [
-    { path: '/', component: Home },
+    { path: '/cook', component: Cook },
     { path: '/sign-up', component: SignUp, layout: null },
     { path: '/sign-in', component: SignIn, layout: null },
 ];

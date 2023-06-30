@@ -8,6 +8,7 @@ import {
     faHouse,
     faPeopleGroup,
     faPlus,
+    faUtensils,
 } from '@fortawesome/free-solid-svg-icons';
 
 import NavItem from '../../../NavbarItem/NavItem';
@@ -68,15 +69,14 @@ function Taskbar() {
                     </>
                 )}
             </div>
-
             {/* Các thanh điều hướng */}
             {isLogin && (
                 <div className="mb-1">
                     <NavItem
-                        text="Trang chủ"
+                        text="Món ăn / Nguyên liệu"
                         classN={`${isLogin ? 'nav_active' : ''}`}
-                        icon={faHouse}
-                        href="/"
+                        icon={faUtensils}
+                        href="/cook"
                     />
                     <NavItem text="Xem nhóm" icon={faPeopleGroup} href="/group" />
                     <NavItem text="Thêm công việc mới" icon={faPlus} href="/add-task" />
