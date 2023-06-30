@@ -26,12 +26,6 @@ public class UserController {
         userService.register(user);
         return "success";
     }
-    @PutMapping("/update_user/:id")
-    public String updateUser(
-            @PathVariable("id") Integer id,
-            @RequestBody UserDto user) {
-        userService.updateUser(id, user);
-        return "success";
-    }
+
 
 }

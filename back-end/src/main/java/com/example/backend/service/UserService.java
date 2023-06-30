@@ -46,8 +46,6 @@ public class UserService {
             userRepository.save(newUser);
         }
     }
-    public String updateUser(Integer id, UserDto userDto) {
 
-    }
 
 }
