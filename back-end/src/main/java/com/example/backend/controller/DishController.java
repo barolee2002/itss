@@ -24,6 +24,10 @@ public class DishController {
     public DishDto getDishDetailById(@PathVariable Integer id) {
         return dishService.getDishDetailById(id);
     }
+    @GetMapping("/dishs/search")
+    public List<DishDto> getDishByName(@RequestParam("searchString") String searchString) {
+        return dishService.findDishs(searchString);
+    }
     @PostMapping("/dish")
     public String addDish(@RequestBody DishDto dishDto) {
 
@@ -35,5 +39,16 @@ public class DishController {
         dishService.addIngredientId(id, ingredientId);
         return "success";
     }
+    @PutMapping("/dish/{id}")
+    public String updateDish(@PathVariable Integer id) {
+        dishService.activeDish(id);
+        return "success";
+    }
+    @DeleteMapping("/dish/{id}")
+    public String deleteDish (@PathVariable Integer id) {
+        dishService.deleteDish(id);
+        return "success";
+    }
+    
 
 }

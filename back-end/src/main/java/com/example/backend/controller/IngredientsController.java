@@ -24,6 +24,11 @@ public class IngredientsController {
         ingredientsService.addIngredient(ingredientsDto);
         return "success";
     }
+    @PutMapping("/ingredient/{id")
+    public String updateIngredient(@PathVariable Integer id) {
+        ingredientsService.activeIngredient(id);
+        return "success";
+    }
     @DeleteMapping("/ingredient/{id}")
     public String deleteIngredient(@PathVariable Integer id) {
         ingredientsService.deleteIngredient(id);
