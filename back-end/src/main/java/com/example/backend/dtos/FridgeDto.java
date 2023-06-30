@@ -9,5 +9,6 @@ public class FridgeDto {
     private String name;
     GroupDto group;
     UserDto user;
+    private String type;
     List<FridgeIngredientsDto> ingredients;
 }

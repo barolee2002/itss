@@ -28,6 +28,8 @@ public class FridgeEntity {
     @Column
     private Integer userId;
     @Column
+    private String type;
+    @Column
     private Integer quantity;
 
 }
