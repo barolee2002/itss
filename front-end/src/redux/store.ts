@@ -1,17 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
-import todoSliceReducer from '../pages/Home/todoSlice';
-import procesSliceReducer from '../pages/Home/processSlice';
-import doneSliceReducer from '../pages/Home/doneSlice';
-import filterReducer from '../components/Filter/FilterSlice';
 import authenReducer from '../components/Layout/DefaultLayout/Taskbar/authenSlice';
 import notifyReducer from '../components/Notification/notifycationSlice';
 
 const store = configureStore({
     reducer: {
-        todoList: todoSliceReducer,
-        processList: procesSliceReducer,
-        doneList: doneSliceReducer,
-        filter: filterReducer,
         authen: authenReducer,
         notify: notifyReducer,
     },
