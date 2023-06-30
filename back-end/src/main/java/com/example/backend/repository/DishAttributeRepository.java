@@ -10,4 +10,5 @@ import java.util.List;
 public interface DishAttributeRepository extends JpaRepository<DishAttributeEntity, Integer> {
     List<DishAttributeEntity> findByDishId(Integer id);
     List<DishAttributeEntity> findByShoppingId(Integer ids);
+
 }

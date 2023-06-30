@@ -39,7 +39,15 @@ public class IngredientsService {
     }
     public void deleteIngredient(Integer id) {
         IngredientsEntity entity = ingredientsRepository.findById(id).get();
+        entity.setUpdateAt(now());
+
         entity.setStatus(0);
+        ingredientsRepository.save(entity);
+    }
+    public void activeIngredient(Integer id) {
+        IngredientsEntity entity = ingredientsRepository.findById(id).get();
+        entity.setUpdateAt(now());
+        entity.setStatus(1);
         ingredientsRepository.save(entity);
     }
 }

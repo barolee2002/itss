@@ -83,6 +83,34 @@ public class DishService {
         }
 
     }
+    public void deleteDishIngredient(Integer id,Integer ingredientId) {
+        DishIngredientsEntity dishIngredient = new DishIngredientsEntity();
+        if(dishIngredientRepository.findByDishIdAndIngredientsId(id, ingredientId) != null) {
+            throw new DuplicateException("Đã có nguyên liệu này ");
+        } else {
+            dishIngredient.setDishId(id);
+            dishIngredient.setIngredientsId(ingredientId);
+            dishIngredientRepository.save(dishIngredient);
+        }
+
+    }
+    public void deleteDish(Integer id) {
+        DishEntity entity = dishRepository.findById(id).get();
+        entity.setStatus(0);
+        dishRepository.save(entity);
+    }
+    public List<DishDto> findDishs(String search) {
+        List<DishDto> dtos = new ArrayList<DishDto>();
+        List<DishEntity> entities = dishRepository.findByNameContaining(search);
+        dtos = Arrays.asList(dishModelMapper.map(entities,DishDto[].class));
+        return dtos;
+    }
+    public void activeDish(Integer id) {
+        DishEntity entity = dishRepository.findById(id).get();
+        entity.setUpdateAt(now());
+        entity.setStatus(1);
+        dishRepository.save(entity);
+    }
 
 
 }
