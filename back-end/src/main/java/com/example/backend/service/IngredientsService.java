@@ -50,4 +50,14 @@ public class IngredientsService {
         entity.setStatus(1);
         ingredientsRepository.save(entity);
     }
+    public List<IngredientsDto> getIngredientByFilter(String name, Integer status) {
+        Integer filterStatus = null;
+        if(status == 1 || status ==0) {
+            filterStatus = status;
+        }
+        List<IngredientsDto> dtos = new ArrayList<IngredientsDto>();
+        List<IngredientsEntity> entities = ingredientsRepository.findByFilters(name, filterStatus);
+        dtos = Arrays.asList(ingredientsModelMapper.map(entities,IngredientsDto[].class));
+        return dtos;
+    }
 }

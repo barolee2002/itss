@@ -2,6 +2,7 @@ package com.example.backend.service;
 
 import com.example.backend.dtos.DishAttributeDto;
 import com.example.backend.dtos.DishDto;
+import com.example.backend.dtos.DishIngredientsDto;
 import com.example.backend.dtos.IngredientsDto;
 import com.example.backend.entities.DishAttributeEntity;
 import com.example.backend.entities.DishEntity;
@@ -42,15 +43,19 @@ public class DishService {
     public DishDto getDishDetailById(Integer id) {
         DishEntity entity = dishRepository.findById(id).get();
         DishDto dto = new DishDto();
-        List<IngredientsDto> ingredientsDtos = new ArrayList<IngredientsDto>();
+        List<DishIngredientsDto> ingredientsDtos = new ArrayList<DishIngredientsDto>();
         List<DishAttributeDto> attributeDtos = new ArrayList<DishAttributeDto>();
         dto = dishModelMapper.map(entity, DishDto.class);
         List<DishIngredientsEntity> ingredients = dishIngredientRepository.findByDishId(entity.getId());
         for(DishIngredientsEntity ingredient : ingredients) {
+            DishIngredientsDto dishIngredientsDto = new DishIngredientsDto();
             IngredientsEntity ingredientsEntity = ingredientsRepository.findById(ingredient.getIngredientsId()).get();
             IngredientsDto ingredientDto = new IngredientsDto();
             ingredientDto = dishModelMapper.map(ingredientsEntity, IngredientsDto.class);
-            ingredientsDtos.add(ingredientDto);
+            dishIngredientsDto.setIngredient(ingredientDto);
+            dishIngredientsDto.setQuantity(ingredient.getQuantity());
+
+            ingredientsDtos.add(dishIngredientsDto);
         }
 
 
@@ -83,10 +88,12 @@ public class DishService {
         entity.setCreateAt(now());
         entity = dishRepository.save(entity);
         System.out.println(entity.getId());
-        for(IngredientsDto ingredient : dishDto.getIngredients()) {
+        for(DishIngredientsDto ingredient : dishDto.getIngredients()) {
+
             DishIngredientsEntity dishIngredient = new DishIngredientsEntity();
             dishIngredient.setDishId(entity.getId());
-            dishIngredient.setIngredientsId(ingredient.getId());
+            dishIngredient.setIngredientsId(ingredient.getIngredient().getId());
+            dishIngredient.setQuantity(ingredient.getQuantity());
             dishIngredientRepository.save(dishIngredient);
         }
     }
