@@ -7,9 +7,16 @@ import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import ModalDeleteDish from '../../components/modal/ModalDeleteDish';
 import ModalDetailDish from '../../components/modal/ModalDetailDish';
 import { dishsProps } from '../../interface/Interface';
+import Search from '../../components/search/Search';
+import { useDispatch, useSelector } from 'react-redux';
+import { dishsSelector } from '../../redux/selectors';
+import { updateDishs } from './DishsSlice';
 
 function Cook() {
-    const [dishs, setDishs] = useState<dishsProps[]>([]);
+    const dispatch = useDispatch();
+    const lishDishs = useSelector(dishsSelector);
+
+    // const [dishs, setDishs] = useState<dishsProps[]>([]);
     const [showModalDeleteDish, setShowModalModalDeleteDish] = useState(false);
     const [showModalDetailDish, setShowModalDetailDish] = useState(false);
     const [indexCurrentDish, setIndexCurrentDish] = useState(1);
@@ -29,7 +36,7 @@ function Cook() {
         const fetchData = async () => {
             try {
                 const results = await callApi();
-                setDishs(results);
+                dispatch(updateDishs(results));
             } catch (error) {
                 console.error(error);
             }
@@ -40,6 +47,7 @@ function Cook() {
 
     return (
         <div>
+            <Search />
             <Table hover bordered>
                 <thead>
                     <tr>
@@ -52,7 +60,7 @@ function Cook() {
                     </tr>
                 </thead>
                 <tbody>
-                    {dishs.map((dish, index) => (
+                    {lishDishs.map((dish, index) => (
                         <tr key={index}>
                             <td>{index + 1}</td>
                             <td>

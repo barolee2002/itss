@@ -29,6 +29,7 @@ function ModalDetailDish({ show, hide, indexDish }: ModalDetailDishProps) {
         const fetchData = async () => {
             try {
                 const results = await callApi();
+                console.log(results);
                 setDish(results);
             } catch (error) {
                 console.error(error);
@@ -85,40 +86,41 @@ function ModalDetailDish({ show, hide, indexDish }: ModalDetailDishProps) {
                         </tr>
                     </thead>
                     <tbody>
-                        {dish.ingredients.map((ingredient, index) => (
-                            <tr key={index}>
-                                <td>{index + 1}</td>
-                                <td>
-                                    <Image
-                                        src={ingredient.image}
-                                        alt="anh"
-                                        style={{ width: '3rem', aspectRatio: '1/1' }}
-                                    />
-                                </td>
-                                <td>{ingredient.name}</td>
-                                <td>
-                                    {dish.status === 1 ? (
-                                        <Badge pill bg="success">
-                                            Sẵn sàng mua
-                                        </Badge>
-                                    ) : (
-                                        <Badge pill bg="danger">
-                                            Đã xóa
-                                        </Badge>
-                                    )}
-                                </td>
-                                <td>
-                                    <div
-                                    // onClick={() => {
-                                    //     setCurrentDish(dish);
-                                    //     setShowModalModalDeleteDish(true);
-                                    // }}
-                                    >
-                                        <FontAwesomeIcon size="lg" icon={faTrashCan} />
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
+                        {dish.ingredients &&
+                            dish.ingredients.map((ingredient, index) => (
+                                <tr key={index}>
+                                    <td>{index + 1}</td>
+                                    <td>
+                                        <Image
+                                            src={ingredient.image}
+                                            alt="anh"
+                                            style={{ width: '3rem', aspectRatio: '1/1' }}
+                                        />
+                                    </td>
+                                    <td>{ingredient.name}</td>
+                                    <td>
+                                        {dish.status === 1 ? (
+                                            <Badge pill bg="success">
+                                                Sẵn sàng mua
+                                            </Badge>
+                                        ) : (
+                                            <Badge pill bg="danger">
+                                                Đã xóa
+                                            </Badge>
+                                        )}
+                                    </td>
+                                    <td>
+                                        <div
+                                        // onClick={() => {
+                                        //     setCurrentDish(dish);
+                                        //     setShowModalModalDeleteDish(true);
+                                        // }}
+                                        >
+                                            <FontAwesomeIcon size="lg" icon={faTrashCan} />
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
                     </tbody>
                 </Table>
             </Modal.Body>
