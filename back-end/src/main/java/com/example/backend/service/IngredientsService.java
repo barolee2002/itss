@@ -60,4 +60,12 @@ public class IngredientsService {
         dtos = Arrays.asList(ingredientsModelMapper.map(entities,IngredientsDto[].class));
         return dtos;
     }
+    public void updateIngredient(Integer id ,IngredientsDto ingredient) {
+        IngredientsEntity entity = ingredientsRepository.findById(id).get();
+        entity.setName(ingredient.getName());
+        entity.setDescription(ingredient.getDescription());
+        entity.setImage(ingredient.getImage());
+        entity.setUpdateAt(now());
+        ingredientsRepository.save(entity);
+    }
 }
