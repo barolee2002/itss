@@ -1,6 +1,7 @@
 export interface ingredientsProps {
     id: number;
     name: string;
+    status: number;
     image: string;
     description: string;
     createAt: string;
