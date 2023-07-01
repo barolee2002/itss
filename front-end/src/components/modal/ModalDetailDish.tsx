@@ -29,7 +29,6 @@ function ModalDetailDish({ show, hide, indexDish }: ModalDetailDishProps) {
         const fetchData = async () => {
             try {
                 const results = await callApi();
-                console.log(results);
                 setDish(results);
             } catch (error) {
                 console.error(error);
@@ -43,13 +42,13 @@ function ModalDetailDish({ show, hide, indexDish }: ModalDetailDishProps) {
         <Modal size="xl" show={show} onHide={hide}>
             <Modal.Header closeButton>
                 <Modal.Title>
-                    {dish.name}{' '}
+                    {dish.name}
                     {dish.status === 1 ? (
-                        <Badge pill bg="success">
+                        <Badge className="ms-3" pill bg="success">
                             Sẵn sàng đặt món
                         </Badge>
                     ) : (
-                        <Badge pill bg="danger">
+                        <Badge className="ms-3" pill bg="danger">
                             Đã xóa
                         </Badge>
                     )}

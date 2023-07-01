@@ -1,11 +1,11 @@
 import axios from 'axios';
-import { Form, InputGroup } from 'react-bootstrap';
+import { Badge, Form, InputGroup } from 'react-bootstrap';
 import Url from '../../utils/url';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { updateDishs } from '../../pages/cook/DishsSlice';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlass, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 function Search() {
     const dispatch = useDispatch();
@@ -36,26 +36,42 @@ function Search() {
     }, [params]);
 
     return (
-        <Form>
-            <InputGroup className="mb-3">
-                <InputGroup.Text id="basic-addon1">
-                    <FontAwesomeIcon icon={faMagnifyingGlass} />
-                </InputGroup.Text>
-                <Form.Control
-                    type="text"
-                    placeholder="Nhập tên món ăn"
-                    value={params}
-                    onChange={(e) => setParams(e.target.value)}
-                />
-            </InputGroup>
-            {/* <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                <Form.Control
-                    placeholder="Nhập tên món ăn"
-                    value={params}
-                    onChange={(e) => setParams(e.target.value)}
-                />
-            </Form.Group> */}
-        </Form>
+        <div className="mb-3 me-3">
+            <Form className="d-flex justify-content-between">
+                {/* Tên món ăn */}
+                <InputGroup size="lg" style={{ width: '40%' }}>
+                    <InputGroup.Text id="basic-addon1">
+                        <FontAwesomeIcon icon={faMagnifyingGlass} />
+                    </InputGroup.Text>
+                    <Form.Control
+                        type="text"
+                        placeholder="Nhập tên món ăn"
+                        value={params}
+                        onChange={(e) => setParams(e.target.value)}
+                    />
+                </InputGroup>
+
+                {/* Trạng thái món ăn */}
+                <InputGroup size="lg" className="" style={{ width: '25%' }}>
+                    <InputGroup.Text>Trạng thái</InputGroup.Text>
+                    <Form.Select>
+                        <option>ALL</option>
+                        <option value="1">Sẵn sàng đặt món</option>
+                        <option value="2">Đã xóa</option>
+                    </Form.Select>
+                </InputGroup>
+
+                {/* Kiểu món ăn */}
+                <InputGroup size="lg" className="" style={{ width: '25%' }}>
+                    <InputGroup.Text>Kiểu món ăn</InputGroup.Text>
+                    <Form.Select>
+                        <option>ALL</option>
+                        <option value="1">Món chính</option>
+                        <option value="2">Món phụ</option>
+                    </Form.Select>
+                </InputGroup>
+            </Form>
+        </div>
     );
 }
 
