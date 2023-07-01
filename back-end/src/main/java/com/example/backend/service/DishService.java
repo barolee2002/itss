@@ -59,8 +59,18 @@ public class DishService {
     }
     public List<DishDto> getDishByFilter(String name, Integer status,String type) {
         List<DishDto> dtos = new ArrayList<DishDto>();
+        List<DishEntity> entities = new ArrayList<DishEntity>();
+        Integer filterStatus = null;
+        if(status == 0 || status == 1) {
+            filterStatus = status;
+        }
+        if(type == "") {
+            entities = dishRepository.findByFilters(name,filterStatus,null);
+        } else {
+            entities = dishRepository.findByFilters(name,filterStatus,type);
+        }
 
-        List<DishEntity> entities = dishRepository.findByFilters(name,status,type);
+
         dtos = Arrays.asList(dishModelMapper.map(entities,DishDto[].class));
         return dtos;
     }
