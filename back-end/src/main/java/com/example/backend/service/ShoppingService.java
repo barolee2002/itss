@@ -3,6 +3,8 @@ package com.example.backend.service;
 import com.example.backend.dtos.*;
 import com.example.backend.entities.*;
 import com.example.backend.exception.DuplicateException;
+import com.example.backend.exception.NotCanDoException;
+import com.example.backend.exception.NotFoundException;
 import com.example.backend.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.User;
@@ -98,7 +100,48 @@ public class ShoppingService {
         }
         }
     }
+    public void updateShopping(ShoppingDto shoppingDto) {
+        if(shoppingRepository.findByCode(shoppingDto.getCode()) == null){
+            throw new NotFoundException("Không tìm thấy đơn đi chợ với mã đơn : " + shoppingDto.getCode());
+        } else {
+            ShoppingEntity entity = shoppingModelMapper.map(shoppingDto, ShoppingEntity.class);
+            entity.setCreateAt(now());
+            entity.setStatus(0);
+            shoppingRepository.save(entity);
+            for(ShoppingAttributeDto attributeDto : shoppingDto.getAttributes()) {
+                ShoppingAttribute attribute = new ShoppingAttribute();
+                attribute = shoppingModelMapper.map(attributeDto,ShoppingAttribute.class);
+                attribute.setShoppingId(shoppingDto.getId());
+                attribute.setUserId(attributeDto.getUser().getId());
+                attribute.setStatus(0);
+                attribute.setIngredientsId(attributeDto.getIngredients().getId());
+                attributeRepository.save(attribute);
+            }
+            for(DishAttributeDto dishAttributeDto : shoppingDto.getDishes()) {
+                DishAttributeEntity dishAttribute = new DishAttributeEntity();
+                dishAttribute = shoppingModelMapper.map(dishAttributeDto,DishAttributeEntity.class);
+                dishAttribute.setShoppingId(entity.getId());
+                dishAttribute.setDishId(dishAttributeDto.getDish().getId());
+                dishAttribute.setCookStatus(0);
+                dishAttribute.setCreateAt(now());
+                dishAttributeRepository.save(dishAttribute);
+            }
+        }
+    }
+
+    public List<ShoppingDto> getShoppingByUserId(Integer userId) {
+        List<ShoppingEntity> shoppingList = shoppingRepository.findByUserId(userId);
+        List<ShoppingDto> shoppingDtos = new ArrayList<ShoppingDto>();
+        shoppingDtos = Arrays.asList(shoppingModelMapper.map(shoppingList,ShoppingDto[].class));
+        return shoppingDtos;
+    }
     public void deleteShopping(Integer id){
+        List<ShoppingAttribute> shoppingAttributes = attributeRepository.findByShoppingId(id);
+        for(ShoppingAttribute shoppingAttribute : shoppingAttributes) {
+            if(shoppingAttribute.getStatus() == 1) {
+                throw new NotCanDoException("Đơn hàng đang thực hiện, không thể xóa");
+            }
+        }
         shoppingRepository.deleteById(id);
     }
 

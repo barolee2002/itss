@@ -21,6 +21,11 @@ public class ShoppingController {
         List<ShoppingDto> response = shoppingService.getAllShoppings();
         return response;
     }
+    @GetMapping("/shopping/user/{id}")
+    public List<ShoppingDto> getShoppingById(@PathVariable Integer id) {
+        List<ShoppingDto> response = shoppingService.getShoppingByUserId(id);
+        return response;
+    }
     @GetMapping("/shopping/{id}")
     public ShoppingDto getDetailShoppingById(@PathVariable Integer id) {
         ShoppingDto response = shoppingService.getDetailShoppingById(id);
@@ -29,6 +34,11 @@ public class ShoppingController {
     @PostMapping("/shopping")
     public String addShopping(@RequestBody ShoppingDto shoppingDto) {
         shoppingService.addShopping(shoppingDto);
+        return "success";
+    }
+    @PutMapping("/shopping/update")
+    public String updateShopping(@RequestBody ShoppingDto shoppingDto) {
+        shoppingService.updateShopping(shoppingDto);
         return "success";
     }
     @DeleteMapping("/shopping/{id}")

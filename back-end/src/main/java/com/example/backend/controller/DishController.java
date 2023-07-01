@@ -28,6 +28,20 @@ public class DishController {
     public List<DishDto> getDishByName(@RequestParam("searchString") String searchString) {
         return dishService.findDishs(searchString);
     }
+    @GetMapping("/dishs/filter")
+    public List<DishDto> getDishByFilter(
+            @RequestParam(name = "name" ,required = false) String name,
+            @RequestParam(name = "status" ,required = false) Integer status,
+            @RequestParam(name = "type",required = false) String type
+
+    ) {
+        return dishService.getDishByFilter(name,status,type);
+    }
+
+    @GetMapping("/dish_type")
+    public List<String> getAllDishTypes() {
+        return dishService.getAllDishTypes();
+    }
     @PostMapping("/dish")
     public String addDish(@RequestBody DishDto dishDto) {
 
@@ -49,6 +63,11 @@ public class DishController {
         dishService.deleteDish(id);
         return "success";
     }
-    
+    @DeleteMapping("/dish_ingredient/{id}/{ingredientId}")
+    public String deleteDishIngredient(@PathVariable Integer id, @PathVariable Integer ingredientId) {
+        dishService.deleteDishIngredient(id,ingredientId);
+        return "success";
+    }
+
 
 }

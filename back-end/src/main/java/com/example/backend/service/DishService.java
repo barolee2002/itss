@@ -57,6 +57,14 @@ public class DishService {
         dto.setIngredients(ingredientsDtos);
         return dto;
     }
+    public List<DishDto> getDishByFilter(String name, Integer status,String type) {
+        List<DishDto> dtos = new ArrayList<DishDto>();
+
+        List<DishEntity> entities = dishRepository.findByFilters(name,status,type);
+        dtos = Arrays.asList(dishModelMapper.map(entities,DishDto[].class));
+        return dtos;
+    }
+
     public void save(DishDto dishDto) {
         if(dishRepository.findByName(dishDto.getName()) != null) {
             throw new DuplicateException("Đã có món ăn này ");
@@ -72,6 +80,9 @@ public class DishService {
             dishIngredientRepository.save(dishIngredient);
         }
     }
+    public List<String> getAllDishTypes() {
+        return dishRepository.findDistinctType();
+    }
     public void addIngredientId(Integer id,Integer ingredientId) {
         DishIngredientsEntity dishIngredient = new DishIngredientsEntity();
         if(dishIngredientRepository.findByDishIdAndIngredientsId(id, ingredientId) != null) {
@@ -85,13 +96,8 @@ public class DishService {
     }
     public void deleteDishIngredient(Integer id,Integer ingredientId) {
         DishIngredientsEntity dishIngredient = new DishIngredientsEntity();
-        if(dishIngredientRepository.findByDishIdAndIngredientsId(id, ingredientId) != null) {
-            throw new DuplicateException("Đã có nguyên liệu này ");
-        } else {
-            dishIngredient.setDishId(id);
-            dishIngredient.setIngredientsId(ingredientId);
-            dishIngredientRepository.save(dishIngredient);
-        }
+        dishIngredient = dishIngredientRepository.findByDishIdAndIngredientsId(id, ingredientId);
+        dishIngredientRepository.delete(dishIngredient);
 
     }
     public void deleteDish(Integer id) {
