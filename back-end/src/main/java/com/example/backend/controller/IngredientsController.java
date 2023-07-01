@@ -19,11 +19,20 @@ public class IngredientsController {
     public List<IngredientsDto> getAllIngredients() {
         return ingredientsService.getAllIngredients();
     }
+    @GetMapping("/ingredient/search")
+    public List<IngredientsDto> getIngredientByFilter(
+            @RequestParam(name = "name", required = false) String name,
+            @RequestParam(name = "status", required = false) Integer status
+    ) {
+        return ingredientsService.getIngredientByFilter(name,status);
+    }
+
     @PostMapping("/ingredient")
     public String addIngredient(@RequestBody IngredientsDto ingredientsDto) {
         ingredientsService.addIngredient(ingredientsDto);
         return "success";
     }
+
     @PutMapping("/ingredient/{id")
     public String updateIngredient(@PathVariable Integer id) {
         ingredientsService.activeIngredient(id);

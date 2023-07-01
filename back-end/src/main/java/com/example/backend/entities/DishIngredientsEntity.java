@@ -17,4 +17,6 @@ public class DishIngredientsEntity {
     private Integer dishId;
     @Column
     private Integer ingredientsId;
+    @Column
+    private Integer quantity;
 }
