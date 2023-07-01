@@ -13,6 +13,7 @@ interface ModalDetailDishProps {
 }
 
 function ModalDetailDish({ show, hide, indexDish }: ModalDetailDishProps) {
+    const [reload, setReload] = useState(0);
     const [dish, setDish] = useState<dishsProps>({} as dishsProps);
 
     const callApi = async () => {
@@ -36,7 +37,22 @@ function ModalDetailDish({ show, hide, indexDish }: ModalDetailDishProps) {
         };
 
         fetchData();
-    }, [indexDish]);
+    }, [indexDish, reload]);
+
+    const deleteApi = async (id: number, ingredientId: number) => {
+        try {
+            const response = await axios.delete(Url(`dish_ingredient/${id}/${ingredientId}`));
+            return response.data;
+        } catch (error) {
+            alert('Không xóa được nguyên liệu!!!');
+            return null;
+        }
+    };
+
+    const handleDeleteIngredient = async (ingredientId: number) => {
+        await deleteApi(indexDish, ingredientId);
+        setReload(Math.random());
+    };
 
     return (
         <Modal size="xl" show={show} onHide={hide}>
@@ -98,7 +114,7 @@ function ModalDetailDish({ show, hide, indexDish }: ModalDetailDishProps) {
                                     </td>
                                     <td>{ingredient.name}</td>
                                     <td>
-                                        {dish.status === 1 ? (
+                                        {ingredient.status === 1 ? (
                                             <Badge pill bg="success">
                                                 Sẵn sàng mua
                                             </Badge>
@@ -109,12 +125,7 @@ function ModalDetailDish({ show, hide, indexDish }: ModalDetailDishProps) {
                                         )}
                                     </td>
                                     <td>
-                                        <div
-                                        // onClick={() => {
-                                        //     setCurrentDish(dish);
-                                        //     setShowModalModalDeleteDish(true);
-                                        // }}
-                                        >
+                                        <div onClick={() => handleDeleteIngredient(ingredient.id)}>
                                             <FontAwesomeIcon size="lg" icon={faTrashCan} />
                                         </div>
                                     </td>

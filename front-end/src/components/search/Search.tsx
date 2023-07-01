@@ -10,8 +10,11 @@ import { faMagnifyingGlass, faXmark } from '@fortawesome/free-solid-svg-icons';
 function Search() {
     const dispatch = useDispatch();
     const [name, setName] = useState('');
-    const [status, setStatus] = useState<number>(1);
+    const [status, setStatus] = useState<number>(3);
     const [type, setType] = useState('');
+
+    const [listType, setListType] = useState([]);
+
     const callApi2 = async (name: string, status: number, type: string) => {
         try {
             const response = await axios.get(Url(`dishs/filter`), {
@@ -37,6 +40,14 @@ function Search() {
         fetchData();
     }, [name, status, type]);
 
+    useEffect(() => {
+        axios
+            .get(Url(`dish_type`))
+            .then((response) => response.data)
+            .then((results) => setListType(results))
+            .catch((error) => console.log(error));
+    }, []);
+
     return (
         <div className="mb-3 me-3">
             <Form className="d-flex justify-content-between">
@@ -60,7 +71,7 @@ function Search() {
                         value={status}
                         onChange={(e) => setStatus(parseInt(e.currentTarget.value))}
                     >
-                        <option value="">ALL</option>
+                        <option value="3">ALL</option>
                         <option value="1">Sẵn sàng đặt món</option>
                         <option value="0">Đã xóa</option>
                     </Form.Select>
@@ -70,9 +81,12 @@ function Search() {
                 <InputGroup size="lg" className="" style={{ width: '25%' }}>
                     <InputGroup.Text>Kiểu món ăn</InputGroup.Text>
                     <Form.Select onChange={(e) => setType(e.currentTarget.value)}>
-                        <option>ALL</option>
-                        <option value="Món chính">Món chính</option>
-                        <option value="Món ăn sáng">Món ăn sáng</option>
+                        <option value="">ALL</option>
+                        {listType.map((type, index) => (
+                            <option value={type} key={index}>
+                                {type}
+                            </option>
+                        ))}
                     </Form.Select>
                 </InputGroup>
             </Form>

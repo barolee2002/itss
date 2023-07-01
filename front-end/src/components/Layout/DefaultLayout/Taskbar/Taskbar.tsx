@@ -5,9 +5,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faBell,
     faCircleUser,
+    faHeart,
     faHouse,
+    faKitchenSet,
     faPeopleGroup,
     faPlus,
+    faStore,
+    faToiletPortable,
     faUtensils,
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -56,14 +60,12 @@ function Taskbar() {
             {/* Các thanh điều hướng */}
             {isLogin && (
                 <div className="mb-1">
-                    <NavItem
-                        text="Món ăn / Nguyên liệu"
-                        classN={`${isLogin ? 'nav_active' : ''}`}
-                        icon={faUtensils}
-                        href="/cook"
-                    />
+                    <NavItem text="Món ăn" icon={faUtensils} href="/cook" />
+                    <NavItem text="Nguyên liệu" icon={faKitchenSet} href="/ingredients" />
+                    <NavItem text="Đơn đi chợ" icon={faStore} href="/add-task" />
+                    <NavItem text="Món ăn yêu thích" icon={faHeart} href="/add-task" />
+                    <NavItem text="Tủ lạnh" icon={faToiletPortable} href="/add-task" />
                     <NavItem text="Xem nhóm" icon={faPeopleGroup} href="/group" />
-                    <NavItem text="Thêm công việc mới" icon={faPlus} href="/add-task" />
                 </div>
             )}
 
