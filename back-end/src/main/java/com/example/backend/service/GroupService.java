@@ -4,6 +4,7 @@ import com.example.backend.dtos.GroupDto;
 import com.example.backend.dtos.UserDto;
 import com.example.backend.entities.GroupEntity;
 import com.example.backend.entities.UserEntity;
+import com.example.backend.entities.GroupMemberEntity;
 import com.example.backend.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.User;
@@ -40,6 +41,27 @@ public class GroupService {
 
         return dtos;
 
+    }
+    public List<GroupDto> getGroupByMember(Integer id) {
+        List<GroupMemberEntity> entities = groupMemberRepository.findByUserId(id);
+        List<GroupEntity> groupEntities = new ArrayList<GroupEntity>();
+        for(GroupMemberEntity member : entities) {
+            GroupEntity groupEntity = groupRepository.findById(member.getGroupId()).get();
+            groupEntities.add(groupEntity);
+        }
+        List<GroupDto> dtos = new ArrayList<GroupDto>();
+        dtos = Arrays.asList(modelMapper.map(groupEntities,GroupDto[].class));
+        for (int i = 0; i < dtos.size(); i++) {
+            GroupDto dto = dtos.get(i);
+            GroupEntity entity = groupEntities.get(i);
+            UserEntity user = userRepository.findById(entity.getLeader()).get();
+            UserDto userDto = modelMapper.map(user,UserDto.class);
+            dto.setLeader(userDto);
+
+        }
+
+
+        return dtos;
     }
 
 }
