@@ -9,11 +9,13 @@ import { faMagnifyingGlass, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 function Search() {
     const dispatch = useDispatch();
-    const [params, setParams] = useState('');
-    const callApi2 = async (param: string) => {
+    const [name, setName] = useState('');
+    const [status, setStatus] = useState<number>(1);
+    const [type, setType] = useState('');
+    const callApi2 = async (name: string, status: number, type: string) => {
         try {
-            const response = await axios.get(Url(`dishs/search`), {
-                params: { searchString: param },
+            const response = await axios.get(Url(`dishs/filter`), {
+                params: { name: name, status: status, type: type },
             });
             return response.data;
         } catch (error) {
@@ -25,7 +27,7 @@ function Search() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const results = await callApi2(params);
+                const results = await callApi2(name, status, type);
                 dispatch(updateDishs(results));
             } catch (error) {
                 console.error(error);
@@ -33,7 +35,7 @@ function Search() {
         };
 
         fetchData();
-    }, [params]);
+    }, [name, status, type]);
 
     return (
         <div className="mb-3 me-3">
@@ -46,28 +48,31 @@ function Search() {
                     <Form.Control
                         type="text"
                         placeholder="Nhập tên món ăn"
-                        value={params}
-                        onChange={(e) => setParams(e.target.value)}
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
                     />
                 </InputGroup>
 
                 {/* Trạng thái món ăn */}
                 <InputGroup size="lg" className="" style={{ width: '25%' }}>
                     <InputGroup.Text>Trạng thái</InputGroup.Text>
-                    <Form.Select>
-                        <option>ALL</option>
+                    <Form.Select
+                        value={status}
+                        onChange={(e) => setStatus(parseInt(e.currentTarget.value))}
+                    >
+                        <option value="">ALL</option>
                         <option value="1">Sẵn sàng đặt món</option>
-                        <option value="2">Đã xóa</option>
+                        <option value="0">Đã xóa</option>
                     </Form.Select>
                 </InputGroup>
 
                 {/* Kiểu món ăn */}
                 <InputGroup size="lg" className="" style={{ width: '25%' }}>
                     <InputGroup.Text>Kiểu món ăn</InputGroup.Text>
-                    <Form.Select>
+                    <Form.Select onChange={(e) => setType(e.currentTarget.value)}>
                         <option>ALL</option>
-                        <option value="1">Món chính</option>
-                        <option value="2">Món phụ</option>
+                        <option value="Món chính">Món chính</option>
+                        <option value="Món ăn sáng">Món ăn sáng</option>
                     </Form.Select>
                 </InputGroup>
             </Form>
