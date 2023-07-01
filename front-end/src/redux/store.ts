@@ -1,11 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authenReducer from '../components/Layout/DefaultLayout/Taskbar/authenSlice';
-import notifyReducer from '../components/Notification/notifycationSlice';
+import dishsReducer from '../pages/cook/DishsSlice';
 
 const store = configureStore({
     reducer: {
         authen: authenReducer,
-        notify: notifyReducer,
+        dishs: dishsReducer,
     },
 });
 

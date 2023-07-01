@@ -19,5 +19,3 @@ export interface dishsProps {
     status: 1 | 0;
     type: 'Món chính' | 'Món phụ';
 }
-
-export interface dishProps {}

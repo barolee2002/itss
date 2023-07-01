@@ -10,7 +10,7 @@ function DefaultLayout({ children }: DefaultLayoutProps) {
     return (
         /* <Header /> */
 
-        <Container fluid className="p-0 overflow-hidden" style={{ userSelect: 'none' }}>
+        <Container fluid className="p-0">
             <div className="d-flex bg-light" style={{ height: '100vh' }}>
                 {/* Thanh taskbar */}
                 <div

@@ -15,27 +15,11 @@ import NavItem from '../../../NavbarItem/NavItem';
 import SignOut from '../../../Signout/SignOut';
 import './Taskbar.scss';
 import { useSelector } from 'react-redux';
-import { authenSelector, notifySelector } from '../../../../redux/selectors';
-import Notification from '../../../Notification/Notification';
+import { authenSelector } from '../../../../redux/selectors';
 
 function Taskbar() {
     const isLogin = useSelector(authenSelector);
-    const [showNoti, setShowNoti] = useState(false);
-    const notifyList = useSelector(notifySelector);
     const notifyRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        const handleDocumentClick = (event: MouseEvent) => {
-            if (notifyRef && !notifyRef.current?.contains(event.target as Node)) {
-                setShowNoti(false);
-            }
-        };
-        document.addEventListener('click', handleDocumentClick);
-
-        return () => {
-            document.removeEventListener('click', handleDocumentClick);
-        };
-    }, [showNoti]);
 
     return (
         <div className="d-flex flex-column position-relative">
@@ -86,35 +70,6 @@ function Taskbar() {
             {isLogin && (
                 <div className="mt-5 mb-5">
                     <SignOut />
-                </div>
-            )}
-            {isLogin && (
-                <div className="position-absolute end-7 top-5">
-                    <div
-                        className="position-relative"
-                        style={{ cursor: 'pointer' }}
-                        onClick={() => setShowNoti(!showNoti)}
-                        ref={notifyRef}
-                    >
-                        <FontAwesomeIcon icon={faBell} size="lg" />
-                        <span className="position-absolute top-20 right-20 translate-middle p-1 bg-danger rounded-circle">
-                            <span className="visually-hidden">New alerts</span>
-                        </span>
-                    </div>
-                    {showNoti && (
-                        <div
-                            className="p-3 bg shadow position-absolute start-200 top-0 border rounded-2 overflow-y-scroll"
-                            style={{ height: '80vh', width: '23rem', zIndex: 10 }}
-                        >
-                            <div className="fw-medium fs-4">Thông báo</div>
-                            <hr className="mb-2" />
-
-                            {/* Notification */}
-                            {notifyList.map((notify, index) => (
-                                <Notification key={index} type={notify.type} text={notify.text} />
-                            ))}
-                        </div>
-                    )}
                 </div>
             )}
         </div>
