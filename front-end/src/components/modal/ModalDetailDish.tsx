@@ -97,6 +97,7 @@ function ModalDetailDish({ show, hide, indexDish }: ModalDetailDishProps) {
                             <th>Ảnh</th>
                             <th>Tên nguyên liệu</th>
                             <th>Trạng thái</th>
+                            <th>Số lượng</th>
                             <th>Xóa</th>
                         </tr>
                     </thead>
@@ -107,14 +108,14 @@ function ModalDetailDish({ show, hide, indexDish }: ModalDetailDishProps) {
                                     <td>{index + 1}</td>
                                     <td>
                                         <Image
-                                            src={ingredient.image}
+                                            src={ingredient.ingredient.image}
                                             alt="anh"
                                             style={{ width: '3rem', aspectRatio: '1/1' }}
                                         />
                                     </td>
-                                    <td>{ingredient.name}</td>
+                                    <td>{ingredient.ingredient.name}</td>
                                     <td>
-                                        {ingredient.status === 1 ? (
+                                        {ingredient.ingredient.status === 1 ? (
                                             <Badge pill bg="success">
                                                 Sẵn sàng mua
                                             </Badge>
@@ -124,8 +125,13 @@ function ModalDetailDish({ show, hide, indexDish }: ModalDetailDishProps) {
                                             </Badge>
                                         )}
                                     </td>
+                                    <td>{ingredient.quantity}</td>
                                     <td>
-                                        <div onClick={() => handleDeleteIngredient(ingredient.id)}>
+                                        <div
+                                            onClick={() =>
+                                                handleDeleteIngredient(ingredient.ingredient.id)
+                                            }
+                                        >
                                             <FontAwesomeIcon size="lg" icon={faTrashCan} />
                                         </div>
                                     </td>

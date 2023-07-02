@@ -1,4 +1,8 @@
 export interface ingredientsProps {
+    ingredient: ingredientProps;
+    quantity: number;
+}
+export interface ingredientProps {
     id: number;
     name: string;
     status: number;
