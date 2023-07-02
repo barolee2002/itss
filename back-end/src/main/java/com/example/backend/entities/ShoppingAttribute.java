@@ -14,7 +14,7 @@ import javax.persistence.Entity;
 public class ShoppingAttribute {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     @Column
     private Integer shoppingId;
     @Column

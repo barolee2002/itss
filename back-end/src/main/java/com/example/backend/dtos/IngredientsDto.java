@@ -11,6 +11,7 @@ public class IngredientsDto {
     private String image;
     private String description;
     private Integer status;
+    private Integer dueDate;
     private LocalDate createAt;
     private LocalDate updateAt;
     private Integer dueDate;
