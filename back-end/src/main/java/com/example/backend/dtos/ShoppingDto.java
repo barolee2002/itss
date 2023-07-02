@@ -9,7 +9,7 @@ public class ShoppingDto {
     private Integer id;
     private String code;
     private LocalDate createAt;
-    private Integer userId;
+    UserDto user;
     private Integer status;
     List<ShoppingAttributeDto> attributes;
     List<DishAttributeDto> dishes;

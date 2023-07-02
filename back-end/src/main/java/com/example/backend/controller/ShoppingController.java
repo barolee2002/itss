@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -31,6 +32,17 @@ public class ShoppingController {
         ShoppingDto response = shoppingService.getDetailShoppingById(id);
         return response;
     }
+    @GetMapping("/shopping/filter/{userId}")
+    public List<ShoppingDto> getShoppingByAttributeId(
+            @PathVariable Integer userId,
+            @RequestParam(name = "code",required = false) String code,
+            @RequestParam(name = "status",required = false) Integer status,
+            @RequestParam(name = "minCreateAt",required = false) String minCreateAt,
+            @RequestParam(name = "maxCreateAt",required = false) String maxCreateAt
+            ) {
+        List<ShoppingDto> response = shoppingService.getByFilter(userId,code,status,minCreateAt,maxCreateAt);
+        return response;
+    }
     @PostMapping("/shopping")
     public String addShopping(@RequestBody ShoppingDto shoppingDto) {
         shoppingService.addShopping(shoppingDto);
@@ -39,6 +51,16 @@ public class ShoppingController {
     @PutMapping("/shopping/update")
     public String updateShopping(@RequestBody ShoppingDto shoppingDto) {
         shoppingService.updateShopping(shoppingDto);
+        return "success";
+    }
+    @PutMapping("/shopping/{id}/{attributeId}")
+    public String updateShoppingAttribute(@PathVariable Integer id, @PathVariable Integer attributeId) {
+        shoppingService.updateShoppingAttribute(id, attributeId);
+        return "success";
+    }
+    @PutMapping("shopping/remove/{id}/{attributeId}")
+    public String removeShoppingAttribute(@PathVariable Integer id, @PathVariable Integer attributeId) {
+        shoppingService.removeUpdateShoppingAttribute(id, attributeId);
         return "success";
     }
     @DeleteMapping("/shopping/{id}")

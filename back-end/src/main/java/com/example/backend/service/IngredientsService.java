@@ -65,6 +65,7 @@ public class IngredientsService {
         entity.setName(ingredient.getName());
         entity.setDescription(ingredient.getDescription());
         entity.setImage(ingredient.getImage());
+        entity.setDueDate(ingredient.getDueDate());
         entity.setUpdateAt(now());
         ingredientsRepository.save(entity);
     }
