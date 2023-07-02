@@ -33,7 +33,7 @@ public class IngredientsController {
         return "success";
     }
 
-    @PutMapping("/ingredient/{id")
+    @PutMapping("/ingredient/{id}")
     public String activeIngredient(@PathVariable Integer id) {
         ingredientsService.activeIngredient(id);
         return "success";
