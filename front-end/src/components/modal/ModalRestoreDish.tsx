@@ -13,7 +13,7 @@ interface ModalRestoreDishProps {
 
 function ModalRestoreDish({ show, hide, dish }: ModalRestoreDishProps) {
     const dispatch = useDispatch();
-    // Xóa món ăn
+    // khôi phục món ăn
     const handleRestoreDish = async () => {
         try {
             await axios.put(Url(`dish/${dish.id}`));

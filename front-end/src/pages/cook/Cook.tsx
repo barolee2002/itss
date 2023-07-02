@@ -7,7 +7,7 @@ import { faRotateLeft, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import ModalDeleteDish from '../../components/modal/ModalDeleteDish';
 import ModalDetailDish from '../../components/modal/ModalDetailDish';
 import { dishsProps } from '../../interface/Interface';
-import Search from '../../components/search/Search';
+import Search from '../../components/search/SearchCook';
 import { useDispatch, useSelector } from 'react-redux';
 import { dishsSelector } from '../../redux/selectors';
 import { updateDishs } from './DishsSlice';

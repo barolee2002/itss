@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authenReducer from '../components/Layout/DefaultLayout/Taskbar/authenSlice';
 import dishsReducer from '../pages/cook/DishsSlice';
+import ingredientReducer from '../pages/ingredient/IngredientSlice';
 
 const store = configureStore({
     reducer: {
         authen: authenReducer,
         dishs: dishsReducer,
+        ingredients: ingredientReducer,
     },
 });
 

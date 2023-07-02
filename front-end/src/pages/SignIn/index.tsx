@@ -28,7 +28,7 @@ function SignIn() {
                     </Form.Group>
 
                     <div className="mt-5 text-center w-100" onClick={handleSignIn}>
-                        <Link to="/" className=" py-3 fs-4 signin_button">
+                        <Link to="/cook" className=" py-3 fs-4 signin_button">
                             Đăng nhập
                         </Link>
                     </div>

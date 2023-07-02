@@ -9,7 +9,8 @@ export interface ingredientProps {
     image: string;
     description: string;
     createAt: string;
-    updateAt: string;
+    updateAt: string | null;
+    dueDate: number;
 }
 
 export interface dishsProps {
