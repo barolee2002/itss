@@ -10,14 +10,14 @@ interface NavItemProps {
     text: string;
     classN?: string;
     icon: IconProp;
-    href?: string;
+    href: string;
 }
 
 const NavItem: React.FC<NavItemProps> = ({ text, classN, icon, href }) => {
     const btnRef = useRef<HTMLButtonElement>(null);
     useEffect(() => {
         if (btnRef.current) {
-            if (window.location.pathname === href) {
+            if (window.location.pathname.includes(href)) {
                 btnRef.current.classList.add('nav_active');
             } else btnRef.current.classList.remove('nav_active');
         }

@@ -19,10 +19,10 @@ import NavItem from '../../../NavbarItem/NavItem';
 import SignOut from '../../../Signout/SignOut';
 import './Taskbar.scss';
 import { useSelector } from 'react-redux';
-import { authenSelector } from '../../../../redux/selectors';
+import { isLoginSelector } from '../../../../redux/selectors';
 
 function Taskbar() {
-    const isLogin = useSelector(authenSelector);
+    const isLogin = useSelector(isLoginSelector);
     const notifyRef = useRef<HTMLDivElement>(null);
 
     return (
