@@ -19,10 +19,10 @@ import NavItem from '../../../NavbarItem/NavItem';
 import SignOut from '../../../Signout/SignOut';
 import './Taskbar.scss';
 import { useSelector } from 'react-redux';
-import { authenSelector } from '../../../../redux/selectors';
+import { isLoginSelector } from '../../../../redux/selectors';
 
 function Taskbar() {
-    const isLogin = useSelector(authenSelector);
+    const isLogin = useSelector(isLoginSelector);
     const notifyRef = useRef<HTMLDivElement>(null);
 
     return (
@@ -62,7 +62,7 @@ function Taskbar() {
                 <div className="mb-1">
                     <NavItem text="Món ăn" icon={faUtensils} href="/cook" />
                     <NavItem text="Nguyên liệu" icon={faKitchenSet} href="/ingredients" />
-                    <NavItem text="Đơn đi chợ" icon={faStore} href="/add-task" />
+                    <NavItem text="Đơn đi chợ" icon={faStore} href="/market" />
                     <NavItem text="Món ăn yêu thích" icon={faHeart} href="/add-task" />
                     <NavItem text="Tủ lạnh" icon={faToiletPortable} href="/add-task" />
                     <NavItem text="Xem nhóm" icon={faPeopleGroup} href="/group" />

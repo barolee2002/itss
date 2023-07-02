@@ -9,7 +9,8 @@ export interface ingredientProps {
     image: string;
     description: string;
     createAt: string;
-    updateAt: string;
+    updateAt: string | null;
+    dueDate: number;
 }
 
 export interface dishsProps {
@@ -23,4 +24,26 @@ export interface dishsProps {
     recipeDes: string;
     status: 1 | 0;
     type: 'Món chính' | 'Món phụ';
+}
+
+export interface marketProps {
+    id: string;
+    code: string;
+    createAt: string;
+    userId: number;
+    status: 1 | 0;
+    attributes: null;
+    dishes: null;
+}
+
+export interface userInfoProps {
+    address: string;
+    avatar: string;
+    createAt: string;
+    email: string;
+    gender: 'nam' | 'nữ';
+    groups: null;
+    id: number;
+    name: string;
+    status: 1 | 0;
 }

@@ -13,6 +13,7 @@ function SignOut() {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const handleSignOut = () => {
+        localStorage.removeItem('userInfo');
         dispatch(logout());
     };
     return (
