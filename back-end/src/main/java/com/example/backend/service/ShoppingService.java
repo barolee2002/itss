@@ -161,9 +161,7 @@ public class ShoppingService {
             throw new NotFoundException("Không tìm thấy đơn đi chợ với mã đơn : " + id);
         } else {
             ShoppingEntity shopping = shoppingRepository.findById(id).get();
-
-
-            ShoppingAttribute attributeEntity = attributeRepository.findById(attributeId).get();
+            ShoppingAttribute attributeEntity = attributeRepository.findByShoppingIdAndIngredientsId(id,attributeId);
             IngredientsEntity ingredientEntity = ingredientsRepository.findById(attributeEntity.getIngredientsId()).get();
 
             attributeEntity.setBuyAt(now());
@@ -185,7 +183,7 @@ public class ShoppingService {
         if(attributeRepository.findByShoppingId(id) == null){
             throw new NotFoundException("Không tìm thấy đơn đi chợ với mã đơn : " + id);
         } else {
-            ShoppingAttribute attributeEntity = attributeRepository.findById(attributeId).get();
+            ShoppingAttribute attributeEntity = attributeRepository.findByShoppingIdAndIngredientsId(id,attributeId);
             IngredientsEntity ingredientEntity = ingredientsRepository.findById(attributeEntity.getIngredientsId()).get();
 
             attributeEntity.setBuyAt(null);
@@ -209,9 +207,14 @@ public class ShoppingService {
         }
         if(minCreateAt != "") {
             filterMinCreateAt = LocalDate.parse(minCreateAt);
+        } else {
+            filterMinCreateAt =LocalDate.parse("1000-01-30");
+
         }
         if(maxCreateAt!= "") {
             filterMaxCreateAt = LocalDate.parse(maxCreateAt);
+        } else {
+            filterMaxCreateAt =LocalDate.parse("9999-12-31");
         }
         List<ShoppingEntity> shoppingList = shoppingRepository.findByFilters(filterCode, filterStatus, filterMinCreateAt, filterMaxCreateAt,userId);
 
