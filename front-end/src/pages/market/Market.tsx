@@ -7,18 +7,25 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faRotateLeft, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { marketProps, userInfoProps } from '../../interface/Interface';
 import { useDispatch, useSelector } from 'react-redux';
-import { isLoginSelector } from '../../redux/selectors';
+import { isLoginSelector, marketOrderSelector } from '../../redux/selectors';
 import SearchMarketOrders from '../../components/search/SearchMarketOrders';
+import { updateMarkets } from './MarketSlice';
+import ModalDeleteMarketOrder from '../../components/modal/ModalDeleteMarketOrder';
+import ModalDetailMarketOrder from '../../components/modal/ModalDetailMarketOrder';
 
 function Market() {
     const dispatch = useDispatch();
+    const marketOrders = useSelector(marketOrderSelector);
 
     const isLogin = useSelector(isLoginSelector);
     // Lấy thông tin người dùng
     const userInfoString: string | null = localStorage.getItem('userInfo');
     const userInfo: userInfoProps | null = userInfoString ? JSON.parse(userInfoString) : null;
 
-    const [marketOrders, setMarketOrders] = useState<marketProps[]>([]);
+    const [showModalDeleteMarketOrder, setShowModalDeleteMarketOrder] = useState(false);
+    const [showModalDetailMarketOrder, setShowModalDetailMarketOrder] = useState(false);
+    const [currentIdMarketOrder, setCurrentIdMarketOrder] = useState(1);
+    const [currentMarketOrder, setCurrentMarketOrder] = useState<marketProps>({} as marketProps);
 
     const callApi = async () => {
         try {
@@ -34,14 +41,14 @@ function Market() {
         const fetchData = async () => {
             try {
                 const results = await callApi();
-                setMarketOrders(results);
+                dispatch(updateMarkets(results));
             } catch (error) {
                 console.error(error);
             }
         };
 
         fetchData();
-    }, []);
+    }, [showModalDetailMarketOrder]);
 
     return isLogin ? (
         <div className="position-relative">
@@ -67,7 +74,14 @@ function Market() {
                                 <td>
                                     <div>{order.code}</div>
                                 </td>
-                                <td>{order.userId}</td>
+                                <td
+                                    onClick={() => {
+                                        setCurrentIdMarketOrder(order.id);
+                                        setShowModalDetailMarketOrder(true);
+                                    }}
+                                >
+                                    {order.user.name}
+                                </td>
                                 <td>
                                     {order.status === 1 ? (
                                         <Badge pill bg="success">
@@ -81,28 +95,29 @@ function Market() {
                                 </td>
                                 <td>{order.createAt}</td>
                                 <td>
-                                    {order.status === 1 ? (
-                                        <div
-                                            onClick={() => {
-                                                // handleDeleteIngredient(ingredient.id);
-                                            }}
-                                        >
-                                            <FontAwesomeIcon size="lg" icon={faTrashCan} />
-                                        </div>
-                                    ) : (
-                                        <div
-                                            onClick={() => {
-                                                // handleRestoreIngredient(ingredient.id);
-                                            }}
-                                        >
-                                            <FontAwesomeIcon icon={faRotateLeft} />
-                                        </div>
-                                    )}
+                                    <div
+                                        onClick={() => {
+                                            setShowModalDeleteMarketOrder(true);
+                                            setCurrentMarketOrder(order);
+                                        }}
+                                    >
+                                        <FontAwesomeIcon size="lg" icon={faTrashCan} />
+                                    </div>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </Table>
+                <ModalDeleteMarketOrder
+                    show={showModalDeleteMarketOrder}
+                    hide={() => setShowModalDeleteMarketOrder(false)}
+                    order={currentMarketOrder}
+                />
+                <ModalDetailMarketOrder
+                    show={showModalDetailMarketOrder}
+                    hide={() => setShowModalDetailMarketOrder(false)}
+                    indexOrder={currentIdMarketOrder}
+                />
             </div>
             <Link to="/market/add" className="position-absolute end-3 bottom-3">
                 <Button
