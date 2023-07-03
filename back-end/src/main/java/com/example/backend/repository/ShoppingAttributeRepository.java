@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface ShoppingAttributeRepository extends JpaRepository<ShoppingAttribute, Integer> {
     List<ShoppingAttribute> findByShoppingId(Integer id);
+    ShoppingAttribute findByShoppingIdAndIngredientsId(Integer id, Integer ingredientsId);
 }

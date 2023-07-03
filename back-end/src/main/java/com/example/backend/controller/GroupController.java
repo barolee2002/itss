@@ -4,10 +4,7 @@ import com.example.backend.dtos.GroupDto;
 import com.example.backend.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,6 +18,11 @@ public class GroupController {
     @GetMapping("/groups")
     public List<GroupDto> getAllGroups() {
         List<GroupDto> response = groupService.getAllGroups();
+        return response;
+    }
+    @GetMapping("/user/groups/{id}")
+    public List<GroupDto> getGroupsByUser(@PathVariable("id") Integer id) {
+        List<GroupDto> response = groupService.getGroupByMember(id);
         return response;
     }
 
