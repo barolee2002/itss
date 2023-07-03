@@ -6,44 +6,48 @@ import Url from '../../utils/url';
 import { useEffect, useState } from 'react';
 import { updateMarkets } from '../../pages/market/MarketSlice';
 import { useDispatch } from 'react-redux';
+import { userInfoProps } from '../../interface/Interface';
 
 function SearchMarketOrders() {
+    // Lấy thông tin người dùng
+    const userInfoString: string | null = localStorage.getItem('userInfo');
+    const userInfo: userInfoProps | null = userInfoString ? JSON.parse(userInfoString) : null;
     const dispatch = useDispatch();
     const [code, setCode] = useState('');
     const [status, setStatus] = useState(3);
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
 
-    //     const callApi2 = async (code: string, status: number) => {
-    //         try {
-    //             const response = await axios.get(Url(`ingredient/search`), {
-    //                 params: { code, status },
-    //             });
-    //             return response.data;
-    //         } catch (error) {
-    //             alert('Không tìm được đơn hàng!!!');
-    //             return null;
-    //         }
-    //     };
+    const callApi2 = async (code: string, status: number) => {
+        try {
+            const response = await axios.get(Url(`shopping/filter/${userInfo?.id}`), {
+                params: { code, status, minCreateAt: startDate, maxCreateAt: endDate },
+            });
+            return response.data;
+        } catch (error) {
+            alert('Không tìm được đơn hàng!!!');
+            return null;
+        }
+    };
 
-    //     useEffect(() => {
-    //         const fetchData = async () => {
-    //             try {
-    //                 const results = await callApi2(code, status);
-    //                 dispatch(updateMarkets(results));
-    //             } catch (error) {
-    //                 console.error(error);
-    //             }
-    //         };
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const results = await callApi2(code, status);
+                dispatch(updateMarkets(results));
+            } catch (error) {
+                console.error(error);
+            }
+        };
 
-    //         fetchData();
-    //     }, [code, status]);
+        fetchData();
+    }, [code, status, startDate, endDate]);
 
     return (
         <div className="">
             <Form className="d-flex">
                 {/* Mã đơn hàng */}
-                <InputGroup size="lg" style={{ width: '20%' }}>
+                <InputGroup size="lg" style={{ width: '25%' }}>
                     <InputGroup.Text id="basic-addon1">
                         <FontAwesomeIcon icon={faMagnifyingGlass} />
                     </InputGroup.Text>

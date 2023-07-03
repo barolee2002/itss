@@ -23,14 +23,14 @@ export interface dishsProps {
     name: string;
     recipeDes: string;
     status: 1 | 0;
-    type: 'Món chính' | 'Món phụ';
+    type: 'Món chính' | 'Món phụ' | string;
 }
 
 export interface marketProps {
-    id: string;
+    id: number;
     code: string;
     createAt: string;
-    userId: number;
+    user: userInfoProps;
     status: 1 | 0;
     attributes: null;
     dishes: null;
@@ -46,4 +46,35 @@ export interface userInfoProps {
     id: number;
     name: string;
     status: 1 | 0;
+}
+
+export interface attributesProps {
+    user: userInfoProps;
+    ingredients: ingredientProps;
+    exprided: string;
+    status: 1 | 0;
+    measure: string;
+    buyAt: string;
+    quantity: number;
+}
+
+export interface dishesProps {
+    id: number;
+    dish: dishsProps;
+    expride: string;
+    cook_status: 1 | 0;
+    cookDate: string;
+    quantity: number;
+    createAt: string;
+    updateAt: string;
+}
+
+export interface shoppingProps {
+    id: number;
+    code: string;
+    createAt: string;
+    user: userInfoProps;
+    status: 1 | 0;
+    attributes: attributesProps[];
+    dishes: dishesProps[];
 }
