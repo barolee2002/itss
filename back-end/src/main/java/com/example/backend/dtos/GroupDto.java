@@ -8,6 +8,7 @@ import java.util.List;
 
 @Data
 public class GroupDto {
+    private Integer id;
     private String name;
     UserDto leader;
     private LocalDate createAt;
