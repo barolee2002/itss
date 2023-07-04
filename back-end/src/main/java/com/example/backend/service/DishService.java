@@ -87,7 +87,6 @@ public class DishService {
         DishEntity entity = dishModelMapper.map(dishDto, DishEntity.class);
         entity.setCreateAt(now());
         entity = dishRepository.save(entity);
-        System.out.println(entity.getId());
         for(DishIngredientsDto ingredient : dishDto.getIngredients()) {
 
             DishIngredientsEntity dishIngredient = new DishIngredientsEntity();

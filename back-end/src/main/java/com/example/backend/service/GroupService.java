@@ -22,7 +22,7 @@ public class GroupService {
     private final GroupMemberRepository groupMemberRepository;
 
     private final UserRepository userRepository;
-
+    private final ShoppingAttributeRepository attributeRepository;
     private final GroupShoppingRepository groupShoppingRepository;
     private final ShoppingRepository shoppingRepository;
     private final ModelMapper modelMapper;
@@ -122,6 +122,12 @@ public class GroupService {
             newMember.setUserId(userId);
             groupMemberRepository.save(newMember);
         }
+    }
+    public void addBuyUser(Integer attributeId, Integer userId) {
+        ShoppingAttribute shoppingAttribute = attributeRepository.findById(attributeId).get();
+        shoppingAttribute.setUserId(userId);
+        attributeRepository.save(shoppingAttribute);
+
     }
 
 }
