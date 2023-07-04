@@ -14,4 +14,6 @@ public class IngredientsDto {
     private Integer dueDate;
     private LocalDate createAt;
     private LocalDate updateAt;
+    private Integer dueDate;
+
 }

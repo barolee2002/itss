@@ -43,6 +43,10 @@ public class ShoppingController {
         List<ShoppingDto> response = shoppingService.getByFilter(userId,code,status,minCreateAt,maxCreateAt);
         return response;
     }
+    @GetMapping("/shopping/group/{id}")
+    public List<ShoppingDto> getShoppingsByGroup(@PathVariable Integer id)  {
+        return shoppingService.getShoppingByGroupId(id);
+    }
     @PostMapping("/shopping")
     public String addShopping(@RequestBody ShoppingDto shoppingDto) {
         shoppingService.addShopping(shoppingDto);

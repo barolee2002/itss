@@ -26,6 +26,7 @@ public class ShoppingService {
     private final DishAttributeRepository dishAttributeRepository;
     private final ModelMapper shoppingModelMapper;
     private final IngredientsRepository ingredientsRepository;
+    private final GroupShoppingRepository groupShoppingRepository;
     private final UserRepository userRepository;
     private final DishRepository dishRepository;
     public List<ShoppingDto> getAllShoppings() {
@@ -53,7 +54,7 @@ public class ShoppingService {
             }
             IngredientsEntity ingredientsEntity = ingredientsRepository.findById(attribute.getIngredientsId()).get();
             IngredientsDto ingredientsDto = shoppingModelMapper.map(ingredientsEntity, IngredientsDto.class);
-            System.out.println(ingredientsDto);
+
             attributeDto.setUser(userDto);
             attributeDto.setIngredients(ingredientsDto);
             attributeDtos.add(attributeDto);
@@ -161,9 +162,7 @@ public class ShoppingService {
             throw new NotFoundException("Không tìm thấy đơn đi chợ với mã đơn : " + id);
         } else {
             ShoppingEntity shopping = shoppingRepository.findById(id).get();
-
-
-            ShoppingAttribute attributeEntity = attributeRepository.findById(attributeId).get();
+            ShoppingAttribute attributeEntity = attributeRepository.findByShoppingIdAndIngredientsId(id,attributeId);
             IngredientsEntity ingredientEntity = ingredientsRepository.findById(attributeEntity.getIngredientsId()).get();
 
             attributeEntity.setBuyAt(now());
@@ -185,7 +184,7 @@ public class ShoppingService {
         if(attributeRepository.findByShoppingId(id) == null){
             throw new NotFoundException("Không tìm thấy đơn đi chợ với mã đơn : " + id);
         } else {
-            ShoppingAttribute attributeEntity = attributeRepository.findById(attributeId).get();
+            ShoppingAttribute attributeEntity = attributeRepository.findByShoppingIdAndIngredientsId(id,attributeId);
             IngredientsEntity ingredientEntity = ingredientsRepository.findById(attributeEntity.getIngredientsId()).get();
 
             attributeEntity.setBuyAt(null);
@@ -209,9 +208,14 @@ public class ShoppingService {
         }
         if(minCreateAt != "") {
             filterMinCreateAt = LocalDate.parse(minCreateAt);
+        } else {
+            filterMinCreateAt =LocalDate.parse("1000-01-30");
+
         }
         if(maxCreateAt!= "") {
             filterMaxCreateAt = LocalDate.parse(maxCreateAt);
+        } else {
+            filterMaxCreateAt =LocalDate.parse("9999-12-31");
         }
         List<ShoppingEntity> shoppingList = shoppingRepository.findByFilters(filterCode, filterStatus, filterMinCreateAt, filterMaxCreateAt,userId);
 
@@ -228,5 +232,15 @@ public class ShoppingService {
         return shoppingDtos;
 
     }
+    public List<ShoppingDto> getShoppingByGroupId(Integer groupId) {
+        List<GroupShoppingEntity> entities = groupShoppingRepository.findByGroupId(groupId);
+        List<ShoppingDto> shoppingDtos = new ArrayList<ShoppingDto>();
+        for(GroupShoppingEntity entity : entities) {
+            ShoppingDto dto = getDetailShoppingById(entity.getShoppingId());
+            shoppingDtos.add(dto);
+        }
+        return shoppingDtos;
+    }
+//    public void addBuyMember()
 
 }

@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 @Data
 public class ShoppingAttributeDto {
+    private Integer id;
     UserDto user;
     IngredientsDto ingredients;
     private LocalDate exprided;

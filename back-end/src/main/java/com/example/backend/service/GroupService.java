@@ -1,10 +1,10 @@
 package com.example.backend.service;
 
 import com.example.backend.dtos.GroupDto;
+import com.example.backend.dtos.ShoppingDto;
 import com.example.backend.dtos.UserDto;
-import com.example.backend.entities.GroupEntity;
-import com.example.backend.entities.UserEntity;
-import com.example.backend.entities.GroupMemberEntity;
+import com.example.backend.entities.*;
+import com.example.backend.exception.DuplicateException;
 import com.example.backend.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.User;
@@ -22,6 +22,7 @@ public class GroupService {
     private final GroupMemberRepository groupMemberRepository;
 
     private final UserRepository userRepository;
+    private final ShoppingAttributeRepository attributeRepository;
     private final GroupShoppingRepository groupShoppingRepository;
     private final ShoppingRepository shoppingRepository;
     private final ModelMapper modelMapper;
@@ -37,8 +38,6 @@ public class GroupService {
             dto.setLeader(userDto);
 
         }
-
-
         return dtos;
 
     }
@@ -59,9 +58,77 @@ public class GroupService {
             dto.setLeader(userDto);
 
         }
-
-
         return dtos;
+    }
+    public List<GroupDto> getGroupByLeader(Integer id) {
+        List<GroupEntity> entities = groupRepository.findByLeader(id);
+        List<GroupDto> dtos = new ArrayList<GroupDto>();
+        dtos = Arrays.asList(modelMapper.map(entities, GroupDto[].class));
+        for (int i = 0; i < dtos.size(); i++) {
+            GroupDto dto = dtos.get(i);
+            GroupEntity entity = entities.get(i);
+            UserEntity user = userRepository.findById(entity.getLeader()).get();
+            UserDto userDto = modelMapper.map(user,UserDto.class);
+            dto.setLeader(userDto);
+
+        }
+        return dtos;
+    }
+    public void shareShopping (Integer shoppingId, Integer groupId) {
+        ShoppingEntity shoppingEntity = shoppingRepository.findById(shoppingId).get();
+        GroupEntity groupEntity = groupRepository. findById(groupId).get();
+        GroupShoppingEntity groupShoppingEntity = groupShoppingRepository.findByShoppingIdAndGroupId(shoppingId,groupId);
+        if ( groupShoppingEntity != null ) {
+            throw new DuplicateException("Đã có đơn đi chợ"+ shoppingEntity.getCode() +"trong group" + groupEntity.getName());
+
+        }
+        else {
+            GroupShoppingEntity newGroupShoppingEntity = new GroupShoppingEntity();
+            newGroupShoppingEntity.setShoppingId(shoppingId);
+            newGroupShoppingEntity.setGroupId(groupId);
+            groupShoppingRepository.save(newGroupShoppingEntity);
+        }
+    }
+    public GroupDto getDetailGroup(Integer id) {
+        GroupEntity groupEntity = groupRepository.findById(id).get();
+        GroupDto groupDto = new GroupDto();
+        groupDto = modelMapper.map(groupEntity, GroupDto.class);
+        UserEntity leader = userRepository.findById(groupEntity.getLeader()).get();
+        UserDto userDto = modelMapper.map(leader, UserDto.class);
+        groupDto.setLeader(userDto);
+        List<GroupMemberEntity> members = groupMemberRepository.findByGroupId(id);
+        List<UserDto> users = new ArrayList<UserDto>();
+        for(GroupMemberEntity member : members) {
+            UserEntity user = userRepository.findById(member.getUserId()).get();
+            UserDto dto = modelMapper.map(user, UserDto.class);
+            users.add(dto);
+
+        }
+        groupDto.setGroupMembers(users);
+
+        return groupDto;
+    }
+    public void deleteMember(Integer groupId,Integer userId) {
+        GroupMemberEntity member = groupMemberRepository.findByGroupIdAndUserId(groupId, userId);
+        groupMemberRepository.deleteById(member.getId());
+    }
+    public void addMember(Integer groupId,Integer userId) {
+        GroupMemberEntity member = groupMemberRepository.findByGroupIdAndUserId(groupId, userId);
+        if(member != null) {
+            throw new DuplicateException("Đã có thành viên này trong group");
+        } else {
+            GroupMemberEntity newMember = new GroupMemberEntity();
+            newMember.setGroupId(groupId);
+            newMember.setUserId(userId);
+            groupMemberRepository.save(newMember);
+        }
+    }
+    public void addBuyUser(Integer attributeId, Integer userId) {
+        ShoppingAttribute shoppingAttribute = attributeRepository.findById(attributeId).get();
+        shoppingAttribute.setUserId(userId);
+        attributeRepository.save(shoppingAttribute);
+
     }
 
 }
+
