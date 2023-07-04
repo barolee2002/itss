@@ -26,6 +26,7 @@ public class ShoppingService {
     private final DishAttributeRepository dishAttributeRepository;
     private final ModelMapper shoppingModelMapper;
     private final IngredientsRepository ingredientsRepository;
+    private final GroupShoppingRepository groupShoppingRepository;
     private final UserRepository userRepository;
     private final DishRepository dishRepository;
     public List<ShoppingDto> getAllShoppings() {
@@ -230,6 +231,15 @@ public class ShoppingService {
         }
         return shoppingDtos;
 
+    }
+    public List<ShoppingDto> getShoppingByGroupId(Integer groupId) {
+        List<GroupShoppingEntity> entities = groupShoppingRepository.findByGroupId(groupId);
+        List<ShoppingDto> shoppingDtos = new ArrayList<ShoppingDto>();
+        for(GroupShoppingEntity entity : entities) {
+            ShoppingDto dto = getDetailShoppingById(entity.getShoppingId());
+            shoppingDtos.add(dto);
+        }
+        return shoppingDtos;
     }
 
 }
