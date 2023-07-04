@@ -59,5 +59,11 @@ public class GroupController {
         groupService.addMember(id, memberId);
         return "Success";
     }
+    @PutMapping("group/attribute/{id}")
+    public String addBuyUser(@PathVariable("id") Integer id,@RequestBody Integer userId) {
+        groupService.addBuyUser(id, userId);
+        return "Success";
+    }
+
 
 }

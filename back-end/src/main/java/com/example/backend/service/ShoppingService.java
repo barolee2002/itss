@@ -54,7 +54,7 @@ public class ShoppingService {
             }
             IngredientsEntity ingredientsEntity = ingredientsRepository.findById(attribute.getIngredientsId()).get();
             IngredientsDto ingredientsDto = shoppingModelMapper.map(ingredientsEntity, IngredientsDto.class);
-            System.out.println(ingredientsDto);
+
             attributeDto.setUser(userDto);
             attributeDto.setIngredients(ingredientsDto);
             attributeDtos.add(attributeDto);
@@ -241,5 +241,6 @@ public class ShoppingService {
         }
         return shoppingDtos;
     }
+//    public void addBuyMember()
 
 }
