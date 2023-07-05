@@ -4,6 +4,7 @@ import lombok.Data;
 
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import javax.persistence.Entity;
@@ -30,5 +31,5 @@ public class ShoppingAttribute {
     @Column
     private LocalDate exprided;
     @Column
-    private Integer quantity;
+    private BigDecimal quantity;
 }

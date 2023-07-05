@@ -54,7 +54,7 @@ public class DishService {
             ingredientDto = dishModelMapper.map(ingredientsEntity, IngredientsDto.class);
             dishIngredientsDto.setIngredient(ingredientDto);
             dishIngredientsDto.setQuantity(ingredient.getQuantity());
-
+            dishIngredientsDto.setMeasure(ingredient.getMeasure());
             ingredientsDtos.add(dishIngredientsDto);
         }
 

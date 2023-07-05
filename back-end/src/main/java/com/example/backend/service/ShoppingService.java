@@ -2,6 +2,7 @@ package com.example.backend.service;
 
 import com.example.backend.dtos.*;
 import com.example.backend.entities.*;
+import com.example.backend.service.DishService;
 import com.example.backend.exception.DuplicateException;
 import com.example.backend.exception.NotCanDoException;
 import com.example.backend.exception.NotFoundException;
@@ -11,6 +12,7 @@ import org.apache.catalina.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,7 +23,9 @@ import static java.time.LocalDate.now;
 @Service
 @RequiredArgsConstructor
 public class ShoppingService {
+    private final DishService dishService;
     private final ShoppingRepository shoppingRepository;
+    private final DishIngredientsRepository dishIngredientsRepository;
     private final ShoppingAttributeRepository attributeRepository;
     private final DishAttributeRepository dishAttributeRepository;
     private final ModelMapper shoppingModelMapper;
@@ -78,21 +82,13 @@ public class ShoppingService {
         if(shoppingRepository.findByCode(shoppingDto.getCode()) != null){
             throw new DuplicateException("Mã đi chợ trùng lặp");
         } else {
-
-
         ShoppingEntity entity = shoppingModelMapper.map(shoppingDto, ShoppingEntity.class);
+        entity.setUserId(shoppingDto.getUser().getId());
         entity.setCreateAt(now());
         entity.setStatus(0);
-        shoppingRepository.save(entity);
-        for(ShoppingAttributeDto attributeDto : shoppingDto.getAttributes()) {
-            ShoppingAttribute attribute = new ShoppingAttribute();
-            attribute = shoppingModelMapper.map(attributeDto,ShoppingAttribute.class);
-            attribute.setShoppingId(shoppingDto.getId());
-            attribute.setUserId(attributeDto.getUser().getId());
-            attribute.setStatus(0);
-            attribute.setIngredientsId(attributeDto.getIngredients().getId());
-            attributeRepository.save(attribute);
-        }
+        entity = shoppingRepository.save(entity);
+        System.out.println(entity);
+        List<DishIngredientsEntity> dishShoppingList = new ArrayList<DishIngredientsEntity>();
         for(DishAttributeDto dishAttributeDto : shoppingDto.getDishes()) {
             DishAttributeEntity dishAttribute = new DishAttributeEntity();
             dishAttribute = shoppingModelMapper.map(dishAttributeDto,DishAttributeEntity.class);
@@ -101,6 +97,43 @@ public class ShoppingService {
             dishAttribute.setCookStatus(0);
             dishAttribute.setCreateAt(now());
             dishAttributeRepository.save(dishAttribute);
+            List<DishIngredientsEntity> dishDto = dishIngredientsRepository.findByDishId(dishAttribute.getDishId());
+            dishShoppingList.addAll(dishDto);
+        }
+        for(DishIngredientsEntity dishShopping  : dishShoppingList) {
+            ShoppingAttribute oldAttribute = attributeRepository.findByShoppingIdAndIngredientsIdAndMeasure(entity.getId(),dishShopping.getIngredientsId(),dishShopping.getMeasure());
+            if(oldAttribute != null) {
+                oldAttribute.setQuantity((oldAttribute.getQuantity()).add(BigDecimal.valueOf(dishShopping.getQuantity())));
+                attributeRepository.save(oldAttribute);
+
+            } else {
+                ShoppingAttribute attribute = new ShoppingAttribute();
+                attribute.setShoppingId(entity.getId());
+                attribute.setStatus(0);
+                attribute.setUserId(entity.getUserId());
+                attribute.setIngredientsId(dishShopping.getIngredientsId());
+                attribute.setQuantity(BigDecimal.valueOf(dishShopping.getQuantity()));
+                attribute.setMeasure(dishShopping.getMeasure());
+                attributeRepository.save(attribute);
+            }
+
+        }
+        for(ShoppingAttributeDto attributeDto : shoppingDto.getAttributes()) {
+
+            ShoppingAttribute oldAttribute = attributeRepository.findByShoppingIdAndIngredientsIdAndMeasure(entity.getId(),attributeDto.getIngredients().getId(),attributeDto.getMeasure());
+            if(oldAttribute != null) {
+                oldAttribute.setQuantity(oldAttribute.getQuantity().add(attributeDto.getQuantity()));
+                attributeRepository.save(oldAttribute);
+
+            } else {
+                ShoppingAttribute attribute = new ShoppingAttribute();
+                attribute = shoppingModelMapper.map(attributeDto, ShoppingAttribute.class);
+                attribute.setShoppingId(entity.getId());
+                attribute.setUserId(attributeDto.getUser().getId());
+                attribute.setStatus(0);
+                attribute.setIngredientsId(attributeDto.getIngredients().getId());
+                attributeRepository.save(attribute);
+            }
         }
         }
     }
@@ -157,12 +190,12 @@ public class ShoppingService {
         }
         shoppingRepository.deleteById(id);
     }
-    public void updateShoppingAttribute(Integer id,Integer attributeId) {
+    public void updateShoppingAttribute(Integer id,Integer attributeId,String measure) {
         if(attributeRepository.findById(id) == null){
             throw new NotFoundException("Không tìm thấy đơn đi chợ với mã đơn : " + id);
         } else {
             ShoppingEntity shopping = shoppingRepository.findById(id).get();
-            ShoppingAttribute attributeEntity = attributeRepository.findByShoppingIdAndIngredientsId(id,attributeId);
+            ShoppingAttribute attributeEntity = attributeRepository.findByShoppingIdAndIngredientsIdAndMeasure(id,attributeId, measure);
             IngredientsEntity ingredientEntity = ingredientsRepository.findById(attributeEntity.getIngredientsId()).get();
 
             attributeEntity.setBuyAt(now());
@@ -180,11 +213,11 @@ public class ShoppingService {
             shoppingRepository.save(shopping);
         }
     }
-    public void removeUpdateShoppingAttribute(Integer id,Integer attributeId) {
+    public void removeUpdateShoppingAttribute(Integer id,Integer attributeId,String measure) {
         if(attributeRepository.findByShoppingId(id) == null){
             throw new NotFoundException("Không tìm thấy đơn đi chợ với mã đơn : " + id);
         } else {
-            ShoppingAttribute attributeEntity = attributeRepository.findByShoppingIdAndIngredientsId(id,attributeId);
+            ShoppingAttribute attributeEntity = attributeRepository.findByShoppingIdAndIngredientsIdAndMeasure(id,attributeId,measure);
             IngredientsEntity ingredientEntity = ingredientsRepository.findById(attributeEntity.getIngredientsId()).get();
 
             attributeEntity.setBuyAt(null);
@@ -236,11 +269,16 @@ public class ShoppingService {
         List<GroupShoppingEntity> entities = groupShoppingRepository.findByGroupId(groupId);
         List<ShoppingDto> shoppingDtos = new ArrayList<ShoppingDto>();
         for(GroupShoppingEntity entity : entities) {
-            ShoppingDto dto = getDetailShoppingById(entity.getShoppingId());
+            ShoppingEntity shoppingEntity = shoppingRepository.findById(entity.getShoppingId()).get();
+            UserEntity userCreate = userRepository.findById(shoppingEntity.getUserId()).get();
+            ShoppingDto dto = shoppingModelMapper.map(shoppingEntity, ShoppingDto.class);
             shoppingDtos.add(dto);
         }
         return shoppingDtos;
     }
 //    public void addBuyMember()
+    public List<String> getAllIngredientsMeasure() {
+    return attributeRepository.findDistinctMeasure();
+}
 
 }

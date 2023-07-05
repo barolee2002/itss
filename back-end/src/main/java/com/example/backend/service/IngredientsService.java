@@ -52,6 +52,7 @@ public class IngredientsService {
     }
     public List<IngredientsDto> getIngredientByFilter(String name, Integer status) {
         Integer filterStatus = null;
+
         if(status == 1 || status ==0) {
             filterStatus = status;
         }

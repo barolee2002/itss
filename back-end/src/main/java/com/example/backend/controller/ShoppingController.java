@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @Validated
@@ -47,6 +48,10 @@ public class ShoppingController {
     public List<ShoppingDto> getShoppingsByGroup(@PathVariable Integer id)  {
         return shoppingService.getShoppingByGroupId(id);
     }
+    @GetMapping("/shopping/attribute/measures")
+    public List<String> getAllMeasures() {
+        return shoppingService.getAllIngredientsMeasure();
+    }
     @PostMapping("/shopping")
     public String addShopping(@RequestBody ShoppingDto shoppingDto) {
         shoppingService.addShopping(shoppingDto);
@@ -57,14 +62,24 @@ public class ShoppingController {
         shoppingService.updateShopping(shoppingDto);
         return "success";
     }
-    @PutMapping("/shopping/{id}/{attributeId}")
-    public String updateShoppingAttribute(@PathVariable Integer id, @PathVariable Integer attributeId) {
-        shoppingService.updateShoppingAttribute(id, attributeId);
+    @PutMapping("/shopping/active")
+    public String updateShoppingAttribute(
+            @RequestBody Map<String, Object> request
+    ) {
+        Integer id = (Integer) request.get("id");
+        Integer attributeId = (Integer) request.get("attributeId");
+        String measure = (String) request.get("measure");
+        shoppingService.updateShoppingAttribute(id, attributeId, measure);
         return "success";
     }
-    @PutMapping("shopping/remove/{id}/{attributeId}")
-    public String removeShoppingAttribute(@PathVariable Integer id, @PathVariable Integer attributeId) {
-        shoppingService.removeUpdateShoppingAttribute(id, attributeId);
+    @PutMapping("/shopping/remove")
+    public String removeShoppingAttribute(
+            @RequestBody Map<String , Object>  request
+            ) {
+        Integer id = (Integer) request.get("id");
+        Integer attributeId = (Integer) request.get("attributeId");
+        String measure = (String) request.get("measure");
+        shoppingService.removeUpdateShoppingAttribute(id, attributeId, measure);
         return "success";
     }
     @DeleteMapping("/shopping/{id}")
