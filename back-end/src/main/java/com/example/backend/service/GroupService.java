@@ -113,6 +113,9 @@ public class GroupService {
         groupMemberRepository.deleteById(member.getId());
     }
     public void addMember(Integer groupId,Integer userId) {
+        System.out.println(groupId);
+        System.out.println(userId);
+
         GroupMemberEntity member = groupMemberRepository.findByGroupIdAndUserId(groupId, userId);
         if(member != null) {
             throw new DuplicateException("Đã có thành viên này trong group");
@@ -127,6 +130,21 @@ public class GroupService {
         ShoppingAttribute shoppingAttribute = attributeRepository.findById(attributeId).get();
         shoppingAttribute.setUserId(userId);
         attributeRepository.save(shoppingAttribute);
+
+    }
+    public List<UserDto> getUserByGroup(Integer id) {
+        GroupEntity group  = groupRepository.findById(id).get();
+        List <GroupMemberEntity> groups = groupMemberRepository.findByGroupId(id);
+        GroupMemberEntity groupMemberEntity = groupMemberRepository.findByGroupIdAndUserId(id, group.getLeader());
+        groups.remove(groupMemberEntity);
+
+        List<UserDto> members = new ArrayList<UserDto>();
+        for(GroupMemberEntity groupMember : groups) {
+            UserEntity use = userRepository.findById(groupMember.getUserId()).get();
+            UserDto dto = modelMapper.map(use, UserDto.class);
+            members.add(dto);
+        }
+        return members;
 
     }
 

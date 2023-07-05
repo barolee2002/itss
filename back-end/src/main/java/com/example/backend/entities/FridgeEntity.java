@@ -20,7 +20,7 @@ import java.util.Date;
 public class FridgeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     @Column
     private String name;
     @Column
@@ -28,8 +28,7 @@ public class FridgeEntity {
     @Column
     private Integer userId;
     @Column
-    private String type;
-    @Column
-    private Integer quantity;
+    private Integer type;
+
 
 }

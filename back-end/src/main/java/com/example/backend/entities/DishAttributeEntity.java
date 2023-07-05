@@ -31,6 +31,7 @@ public class DishAttributeEntity {
     private Integer shoppingId;
     @Column
     private LocalDate expride;
+
     @Column
     private Integer cookStatus;
     @Column

@@ -19,4 +19,6 @@ public class DishIngredientsEntity {
     private Integer ingredientsId;
     @Column
     private Integer quantity;
+    @Column
+    private String measure;
 }

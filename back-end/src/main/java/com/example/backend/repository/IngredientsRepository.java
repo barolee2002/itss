@@ -17,4 +17,5 @@ public interface IngredientsRepository extends JpaRepository<IngredientsEntity, 
     )
     List<IngredientsEntity> findByFilters(@Param("name") String name,
                                    @Param("status") Integer status);
+
 }

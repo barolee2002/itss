@@ -1,6 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.dtos.GroupDto;
+import com.example.backend.dtos.UserDto;
 import com.example.backend.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -8,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @Validated
@@ -31,39 +33,53 @@ public class GroupController {
         List<GroupDto> response = groupService.getGroupByLeader(id);
         return  response;
     }
-    @PostMapping("/group/share/{shoppingId}/{groupId}")
+    @GetMapping("/group-user/{id}")
+    public List<UserDto> getUserByGroup(@PathVariable Integer id) {
+        return groupService.getUserByGroup(id);
+    }
+    @PostMapping("/group/share")
     public String shareShoppingToGroup(
-            @PathVariable("shoppingId") Integer shoppingId,
-            @PathVariable("groupId") Integer groupId
-            ) {
-            groupService.shareShopping(shoppingId, groupId);
-            return "success";
+            @RequestBody Map<String, Object> request
+    ) {
+        Integer shoppingId = (Integer) request.get("shoppingId");
+        Integer groupId = (Integer) request.get("groupId");
+        groupService.shareShopping(shoppingId, groupId);
+        return "success";
     }
     @GetMapping("/group/{id}")
     public GroupDto getGroupDetail( @PathVariable("id") Integer id) {
         return groupService.getDetailGroup(id);
     }
-    @DeleteMapping("group/{groupId}/{memberId}")
+    @DeleteMapping("/group/member")
     public String deleteMember(
-            @PathVariable("groupId") Integer groupId,
-            @PathVariable("memberId") Integer memberId
+            @RequestBody Map<String, Object> request
+
     ){
+        Integer groupId = (Integer) request.get("groupId");
+        Integer memberId = (Integer) request.get("memberId");
         groupService.deleteMember(groupId, memberId);
         return "success";
     }
-    @PostMapping("group/adding/{id}")
-    public String addGroup(
-            @PathVariable("id") Integer id,
-            @RequestBody Integer memberId
+    @PostMapping("/group/adding")
+    public String addGroupMember(
+            @RequestBody Map<String , Object> request
+
             ) {
+        Integer id = (Integer) request.get("id");
+        Integer memberId = (Integer) request.get("memberId");
         groupService.addMember(id, memberId);
         return "Success";
     }
-    @PutMapping("group/attribute/{id}")
-    public String addBuyUser(@PathVariable("id") Integer id,@RequestBody Integer userId) {
+    @PutMapping("/group/attribute")
+    public String addBuyUser(
+            @RequestBody Map<String , Object> request
+    ) {
+        Integer id = (Integer) request.get("id");
+        Integer userId = (Integer) request.get("userId");
         groupService.addBuyUser(id, userId);
         return "Success";
     }
+
 
 
 }
