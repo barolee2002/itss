@@ -77,3 +77,9 @@ html *::-webkit-scrollbar {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+
+.hover {
+    &:hover {
+        background-color: #dcdcdc;
+    }
+}

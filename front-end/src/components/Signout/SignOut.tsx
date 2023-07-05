@@ -30,7 +30,7 @@ function SignOut() {
                     <Button variant="secondary" onClick={handleClose}>
                         Hủy bỏ
                     </Button>
-                    <Link to="/sign-in">
+                    <Link to="/">
                         <Button variant="primary" onClick={handleSignOut}>
                             Đăng xuất
                         </Button>

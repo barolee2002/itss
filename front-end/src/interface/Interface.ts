@@ -62,7 +62,7 @@ export interface dishesProps {
     id: number;
     dish: dishsProps;
     expride: string;
-    cook_status: 1 | 0;
+    cook_status: 1 | 0 | null;
     cookDate: string;
     quantity: number;
     createAt: string;

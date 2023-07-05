@@ -87,7 +87,7 @@ function Ingredients() {
                         <tr>
                             <th>STT</th>
                             <th>Ảnh</th>
-                            <th>Tên món ăn</th>
+                            <th>Tên nguyên liệu</th>
                             <th>Trạng thái</th>
                             <th>Ngày tạo</th>
                             <th>Hết hạn (ngày)</th>

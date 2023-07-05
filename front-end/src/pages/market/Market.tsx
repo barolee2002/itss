@@ -1,32 +1,31 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Url from '../../utils/url';
 import { Badge, Button, Table } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faRotateLeft, faTrashCan } from '@fortawesome/free-solid-svg-icons';
-import { marketProps, userInfoProps } from '../../interface/Interface';
+import { faPlus, faShareFromSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { marketProps } from '../../interface/Interface';
 import { useDispatch, useSelector } from 'react-redux';
 import { isLoginSelector, marketOrderSelector } from '../../redux/selectors';
 import SearchMarketOrders from '../../components/search/SearchMarketOrders';
 import { updateMarkets } from './MarketSlice';
 import ModalDeleteMarketOrder from '../../components/modal/ModalDeleteMarketOrder';
 import ModalDetailMarketOrder from '../../components/modal/ModalDetailMarketOrder';
+import { userInfo } from '../../utils/userInfo';
 
 function Market() {
     const dispatch = useDispatch();
     const marketOrders = useSelector(marketOrderSelector);
 
     const isLogin = useSelector(isLoginSelector);
-    // Lấy thông tin người dùng
-    const userInfoString: string | null = localStorage.getItem('userInfo');
-    const userInfo: userInfoProps | null = userInfoString ? JSON.parse(userInfoString) : null;
 
     const [showModalDeleteMarketOrder, setShowModalDeleteMarketOrder] = useState(false);
     const [showModalDetailMarketOrder, setShowModalDetailMarketOrder] = useState(false);
     const [currentIdMarketOrder, setCurrentIdMarketOrder] = useState(1);
     const [currentMarketOrder, setCurrentMarketOrder] = useState<marketProps>({} as marketProps);
 
+    // Market order
     const callApi = async () => {
         try {
             const response = await axios.get(Url(`/shopping/user/${userInfo?.id}`));
@@ -48,7 +47,8 @@ function Market() {
         };
 
         fetchData();
-    }, [showModalDetailMarketOrder]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [showModalDetailMarketOrder, showModalDeleteMarketOrder]);
 
     return isLogin ? (
         <div className="position-relative">
@@ -65,6 +65,7 @@ function Market() {
                             <th>Trạng thái</th>
                             <th>Ngày tạo</th>
                             <th>Xóa đơn</th>
+                            <th>Chia sẻ</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -103,6 +104,9 @@ function Market() {
                                     >
                                         <FontAwesomeIcon size="lg" icon={faTrashCan} />
                                     </div>
+                                </td>
+                                <td>
+                                    <FontAwesomeIcon size="lg" icon={faShareFromSquare} />
                                 </td>
                             </tr>
                         ))}
