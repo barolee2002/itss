@@ -1,18 +1,17 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import axios from 'axios';
-import { Badge, Form, InputGroup } from 'react-bootstrap';
+import { Form, InputGroup } from 'react-bootstrap';
 import Url from '../../utils/url';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { updateIngredients } from '../../pages/ingredient/IngredientSlice';
 
 function SearchIngredients() {
     const dispatch = useDispatch();
     const [name, setName] = useState('');
     const [status, setStatus] = useState<number>(3);
-
-    const [listType, setListType] = useState([]);
 
     const callApi2 = async (name: string, status: number) => {
         try {

@@ -1,12 +1,11 @@
 import axios from 'axios';
-import { Badge, Button, Col, Modal, Row, Image, Table, Tabs, Tab, Form } from 'react-bootstrap';
+import { Badge, Button, Modal, Image, Table, Tabs, Tab, Form } from 'react-bootstrap';
 import Url from '../../utils/url';
 import { useEffect, useState } from 'react';
-import { dishsProps, shoppingProps } from '../../interface/Interface';
+import { shoppingProps } from '../../interface/Interface';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
-import { useDispatch } from 'react-redux';
-import { deleteMarket, restoreMarket } from '../../pages/market/MarketSlice';
+import { faToiletPortable } from '@fortawesome/free-solid-svg-icons';
+// import { useDispatch } from 'react-redux';
 
 interface ModalDetailMarketOrderProps {
     show: boolean;
@@ -15,7 +14,7 @@ interface ModalDetailMarketOrderProps {
 }
 
 function ModalDetailMarketOrder({ show, hide, indexOrder }: ModalDetailMarketOrderProps) {
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
     const [reload, setReload] = useState(0);
     const [shopping, setShopping] = useState<shoppingProps>({} as shoppingProps);
 
@@ -41,12 +40,13 @@ function ModalDetailMarketOrder({ show, hide, indexOrder }: ModalDetailMarketOrd
         console.log(1);
 
         fetchData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [show, reload]);
 
-    const handleChangeAttributeStatus = async (status: 1 | 0, ingredientId: number) => {
+    const handleChangeAttributeStatus = async (status: 1 | 0 | null, ingredientId: number) => {
         if (status === 1) {
             try {
-                await axios.put(Url(`shopping/remove/${indexOrder}/${ingredientId}`));
+                // await axios.put(Url(`shopping/remove/${indexOrder}/${ingredientId}`));
                 setReload(Math.random());
             } catch (error) {
                 console.log(error);
@@ -54,7 +54,7 @@ function ModalDetailMarketOrder({ show, hide, indexOrder }: ModalDetailMarketOrd
         }
         if (status === 0) {
             try {
-                await axios.put(Url(`shopping/${indexOrder}/${ingredientId}`));
+                // await axios.put(Url(`shopping/${indexOrder}/${ingredientId}`));
                 setReload(Math.random());
             } catch (error) {
                 console.log(error);
@@ -62,19 +62,24 @@ function ModalDetailMarketOrder({ show, hide, indexOrder }: ModalDetailMarketOrd
         }
     };
 
-    //     const deleteApi = async (id: number, ingredientId: number) => {
-    //         try {
-    //             const response = await axios.delete(Url(`dish_ingredient/${id}/${ingredientId}`));
-    //             return response.data;
-    //         } catch (error) {
-    //             alert('Không xóa được nguyên liệu!!!');
-    //             return null;
-    //         }
-    //     };
-
-    //     const handleDeleteIngredient = async (ingredientId: number) => {
-    //         await deleteApi(indexOrder, ingredientId);
-    //     };
+    const handleChangeDishStatus = async (status: 1 | 0, dishId: number) => {
+        if (status === 1) {
+            try {
+                // await axios.put(Url(`shopping/remove/${indexOrder}/${ingredientId}`));
+                setReload(Math.random());
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        if (status === 0) {
+            try {
+                // await axios.put(Url(`shopping/${indexOrder}/${ingredientId}`));
+                setReload(Math.random());
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    };
 
     return (
         <Modal size="xl" show={show} onHide={hide}>
@@ -103,7 +108,7 @@ function ModalDetailMarketOrder({ show, hide, indexOrder }: ModalDetailMarketOrd
                 </div>
                 <Tabs defaultActiveKey="ingredients" className="mb-3" justify>
                     <Tab eventKey="ingredients" title="Nguyên liệu">
-                        <Table bordered hover className="mt-4">
+                        <Table bordered hover className="mt-4 ">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -115,7 +120,8 @@ function ModalDetailMarketOrder({ show, hide, indexOrder }: ModalDetailMarketOrd
                                     <th>Đơn vị tính</th>
                                     <th>Ngày mua</th>
                                     <th>Ngày hết hạn</th>
-                                    <th></th>
+                                    <th style={{ width: '5%' }}></th>
+                                    <th style={{ width: '5%' }}></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -147,8 +153,9 @@ function ModalDetailMarketOrder({ show, hide, indexOrder }: ModalDetailMarketOrd
                                             <td>{attribute.measure}</td>
                                             <td>{attribute.buyAt}</td>
                                             <td>{attribute.exprided}</td>
-                                            <td>
+                                            <td className="text-center">
                                                 <Form.Check
+                                                    className="fs-5"
                                                     checked={attribute.status === 1}
                                                     onChange={() =>
                                                         handleChangeAttributeStatus(
@@ -158,13 +165,74 @@ function ModalDetailMarketOrder({ show, hide, indexOrder }: ModalDetailMarketOrd
                                                     }
                                                 />
                                             </td>
+                                            <td className="text-center">
+                                                <FontAwesomeIcon
+                                                    size="xl"
+                                                    icon={faToiletPortable}
+                                                />
+                                            </td>
                                         </tr>
                                     ))}
                             </tbody>
                         </Table>
                     </Tab>
                     <Tab eventKey="dishes" title="Món ăn">
-                        Tab content for Profile
+                        <Table bordered hover className="mt-4 ">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Ảnh</th>
+                                    <th>Tên món ăn</th>
+                                    <th>Trạng thái</th>
+                                    <th>Số lượng</th>
+                                    <th>Ngày nấu</th>
+                                    <th>Ngày hết hạn</th>
+                                    <th style={{ width: '5%' }}></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {shopping.attributes &&
+                                    shopping.dishes.map((dish, index) => (
+                                        <tr key={index}>
+                                            <td>{index + 1}</td>
+                                            <td>
+                                                <Image
+                                                    src={dish.dish.image}
+                                                    alt="anh"
+                                                    style={{ width: '3rem', aspectRatio: '1/1' }}
+                                                />
+                                            </td>
+                                            <td>{dish.dish.name}</td>
+                                            <td>
+                                                {dish.cook_status === 1 ? (
+                                                    <Badge pill bg="success">
+                                                        Đã mua
+                                                    </Badge>
+                                                ) : (
+                                                    <Badge pill bg="warning">
+                                                        Chưa mua
+                                                    </Badge>
+                                                )}
+                                            </td>
+                                            <td>{dish.quantity}</td>
+                                            <td>{dish.cookDate}</td>
+                                            <td>{dish.expride}</td>
+                                            <td className="text-center">
+                                                <Form.Check
+                                                    className="fs-5"
+                                                    checked={dish.cook_status === 1}
+                                                    // onChange={() =>
+                                                    //     handleChangeDishStatus(
+                                                    //         dish.cook_status,
+                                                    //         dish.dish.id,
+                                                    //     )
+                                                    // }
+                                                />
+                                            </td>
+                                        </tr>
+                                    ))}
+                            </tbody>
+                        </Table>
                     </Tab>
                 </Tabs>
             </Modal.Body>

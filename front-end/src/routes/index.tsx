@@ -19,7 +19,7 @@ const publicRoutes: RouteConfig[] = [
     { path: '/market', component: Market },
     { path: '/market/add', component: AddMarketOrder },
     { path: '/sign-up', component: SignUp, layout: null },
-    { path: '/sign-in', component: SignIn, layout: null },
+    { path: '/', component: SignIn, layout: null },
 ];
 
 const privateRoutes: RouteConfig[] = [];
