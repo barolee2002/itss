@@ -20,4 +20,6 @@ import java.util.Date;
 public class GroupEntity extends BaseEntity{
     @Column
     private Integer leader;
+    @Column
+    private String image;
 }
