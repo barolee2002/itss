@@ -1,7 +1,7 @@
 import { faArrowLeft, faMagnifyingGlass, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Col, Form, Image, InputGroup, Row, Tab, Table, Tabs } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { userInfo } from '../../utils/userInfo';
 import SearchIngredients from '../../components/search/SearchIngredients';
 import { useEffect, useState } from 'react';
@@ -15,14 +15,20 @@ import { updateDishs } from '../cook/DishsSlice';
 import moment from 'moment';
 
 function AddMarketOrder() {
+    const today = new Date().toISOString().split('T')[0];
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const listIngredients = useSelector(ingredientsSelector);
     const listDishes = useSelector(dishsSelector);
+
+    const [code, setCode] = useState('');
 
     // Tab ingredients
     const [name, setName] = useState('');
     const [showResultIngredient, setShowResultIngredient] = useState(false);
     const [ingredientsSelected, setIngredientsSelected] = useState<ingredientProps[]>([]);
+    const [measureIngredient, setMeasureIngredient] = useState(['']);
+    const [quantityIngredient, setQuantityIngredient] = useState(['']);
 
     const callApi2 = async (name: string) => {
         try {
@@ -59,12 +65,11 @@ function AddMarketOrder() {
 
     // Tab dishes
     const [nameDish, setNameDish] = useState('');
-    const [typeDish, setTypeDish] = useState('');
     const [showResultDish, setShowResultDish] = useState(false);
     const [dishSelected, setDishSelected] = useState<dishsProps[]>([]);
     const [cookDate, setCookDate] = useState(['']);
     const [expireDate, setExpireDate] = useState(['']);
-    const dishes = [];
+    const [quantityDish, setQuantityDish] = useState(['']);
 
     const callApiDish = async (name: string) => {
         try {
@@ -101,6 +106,59 @@ function AddMarketOrder() {
         setDishSelected(dishSelected.filter((item) => item.id !== id));
     };
 
+    const [listMeasure, setListMeasure] = useState<any>([]);
+
+    useEffect(() => {
+        const fetchMeasure = async () => {
+            try {
+                const result = await axios.get(Url('shopping/attribute/measures'));
+                setListMeasure(result.data);
+            } catch (error) {
+                alert(error);
+            }
+        };
+        fetchMeasure();
+    }, []);
+
+    const handleSubmit = async () => {
+        // Format dataSubmit trước khi post Api
+        const dataSubmit: any = {};
+        dataSubmit.code = code;
+        dataSubmit.user = userInfo;
+
+        dataSubmit.attributes = [];
+        ingredientsSelected.forEach((ingredient, index) => {
+            dataSubmit.attributes.push({
+                user: userInfo,
+                ingredients: ingredient,
+                measure: measureIngredient[index],
+                quantity: quantityIngredient[index],
+            });
+        });
+
+        dataSubmit.dishes = [];
+        dishSelected.forEach((dish, index) => {
+            dataSubmit.dishes.push({
+                dish,
+                expride: expireDate[index],
+                cook_status: 0,
+                cookDate: cookDate[index],
+                quantity: quantityDish[index],
+            });
+        });
+
+        // Gọi api tạo đơn đi chợ
+        try {
+            await axios.post(Url('shopping'), dataSubmit);
+        } catch (error: any) {
+            alert(error.response.data.message);
+        }
+
+        setTimeout(() => {
+            navigate('/market');
+        }, 200);
+    };
+
     return (
         <div>
             <div className="mb-3 d-flex justify-content-between">
@@ -110,7 +168,7 @@ function AddMarketOrder() {
                     </Link>
                     <h2>Tạo đơn đi chợ</h2>
                 </div>
-                <Button className="fs-5 me-3" style={{ width: '10%' }}>
+                <Button className="fs-5 me-3" style={{ width: '10%' }} onClick={handleSubmit}>
                     Tạo đơn
                 </Button>
             </div>
@@ -119,7 +177,12 @@ function AddMarketOrder() {
                     <Col>
                         <Form.Group className="mb-3" controlId="codeMarketOrder">
                             <Form.Label>Mã đơn</Form.Label>
-                            <Form.Control type="text" placeholder="SH..." />
+                            <Form.Control
+                                type="text"
+                                placeholder="SH..."
+                                value={code}
+                                onChange={(e) => setCode(e.target.value)}
+                            />
                         </Form.Group>
                     </Col>
                     <Col>
@@ -207,18 +270,47 @@ function AddMarketOrder() {
                                     <td>{ingredient.name}</td>
                                     <td style={{ width: '15%' }}>
                                         <Form.Group controlId={`measure ${index}`}>
-                                            <Form.Control type="text" list="listMeasure" />
+                                            <Form.Control
+                                                type="text"
+                                                list="listMeasure"
+                                                value={measureIngredient[index]}
+                                                onChange={(e) => {
+                                                    const updatedmeasureIngredient = [
+                                                        ...measureIngredient,
+                                                    ];
+                                                    updatedmeasureIngredient[index] =
+                                                        e.target.value;
+                                                    setMeasureIngredient(updatedmeasureIngredient);
+                                                }}
+                                            />
                                         </Form.Group>
                                         <datalist id="listMeasure">
+                                            {listMeasure.map((measure: any, index: any) => (
+                                                <option value={measure} key={index}>
+                                                    {measure}
+                                                </option>
+                                            ))}
+                                            {/* <option value="quả">quả</option>
                                             <option value="quả">quả</option>
-                                            <option value="quả">quả</option>
-                                            <option value="quả">quả</option>
-                                            <option value="quả">quả</option>
+                                            <option value="quả">quả</option> */}
                                         </datalist>
                                     </td>
                                     <td style={{ width: '15%' }}>
                                         <Form.Group controlId={`quantity ${index}`}>
-                                            <Form.Control type="number" />
+                                            <Form.Control
+                                                type="number"
+                                                value={quantityIngredient[index]}
+                                                onChange={(e) => {
+                                                    const updatedQuantityIngredient = [
+                                                        ...quantityIngredient,
+                                                    ];
+                                                    updatedQuantityIngredient[index] =
+                                                        e.target.value;
+                                                    setQuantityIngredient(
+                                                        updatedQuantityIngredient,
+                                                    );
+                                                }}
+                                            />
                                         </Form.Group>
                                     </td>
                                     <td className="text-center">
@@ -309,6 +401,7 @@ function AddMarketOrder() {
                                         <Form.Group controlId={`cook ${index}`}>
                                             <Form.Control
                                                 type="date"
+                                                min={today}
                                                 value={cookDate[index]}
                                                 onChange={(e) => {
                                                     const updatedCookDate = [...cookDate];
@@ -322,6 +415,7 @@ function AddMarketOrder() {
                                         <Form.Group controlId={`expire ${index}`}>
                                             <Form.Control
                                                 type="date"
+                                                min={today}
                                                 value={expireDate[index]}
                                                 onChange={(e) => {
                                                     const updatedExpireDate = [...expireDate];
@@ -333,7 +427,16 @@ function AddMarketOrder() {
                                     </td>
                                     <td style={{ width: '15%' }}>
                                         <Form.Group controlId={`quantityDish ${index}`}>
-                                            <Form.Control type="number" />
+                                            <Form.Control
+                                                type="number"
+                                                min={1}
+                                                value={quantityDish[index]}
+                                                onChange={(e) => {
+                                                    const updatedQuantityDish = [...quantityDish];
+                                                    updatedQuantityDish[index] = e.target.value;
+                                                    setQuantityDish(updatedQuantityDish);
+                                                }}
+                                            />
                                         </Form.Group>
                                     </td>
                                     <td className="text-center">

@@ -98,6 +98,7 @@ function ModalDetailDish({ show, hide, indexDish }: ModalDetailDishProps) {
                             <th>Tên nguyên liệu</th>
                             <th>Trạng thái</th>
                             <th>Số lượng</th>
+                            <th>Đơn vị tính</th>
                             <th>Xóa</th>
                         </tr>
                     </thead>
@@ -126,6 +127,7 @@ function ModalDetailDish({ show, hide, indexDish }: ModalDetailDishProps) {
                                         )}
                                     </td>
                                     <td>{ingredient.quantity}</td>
+                                    <td>{ingredient.measure}</td>
                                     <td>
                                         <div
                                             onClick={() =>

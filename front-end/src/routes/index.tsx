@@ -6,6 +6,8 @@ import Cook from '../pages/cook/Cook';
 import Ingredient from '../pages/ingredient/Ingredients';
 import Market from '../pages/market/Market';
 import AddMarketOrder from '../pages/add-market-order/AddMarketOrder';
+import Group from '../pages/group/Group';
+import GroupDetail from '../components/group-detail/GroupDetail';
 interface RouteConfig {
     path: string;
     component: React.ComponentType;
@@ -19,6 +21,8 @@ const publicRoutes: RouteConfig[] = [
     { path: '/market', component: Market },
     { path: '/market/add', component: AddMarketOrder },
     { path: '/sign-up', component: SignUp, layout: null },
+    { path: '/group', component: Group },
+    { path: '/group/:id', component: GroupDetail },
     { path: '/', component: SignIn, layout: null },
 ];
 

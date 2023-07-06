@@ -1,6 +1,7 @@
 export interface ingredientsProps {
     ingredient: ingredientProps;
     quantity: number;
+    measure: string;
 }
 export interface ingredientProps {
     id: number;
@@ -49,6 +50,7 @@ export interface userInfoProps {
 }
 
 export interface attributesProps {
+    id: number;
     user: userInfoProps;
     ingredients: ingredientProps;
     exprided: string;
@@ -77,4 +79,14 @@ export interface shoppingProps {
     status: 1 | 0;
     attributes: attributesProps[];
     dishes: dishesProps[];
+}
+
+export interface groupsProps {
+    id: number;
+    groupMembers: null;
+    createAt: string;
+    leader: userInfoProps;
+    name: string;
+    shoppings: null;
+    updatedAt: string;
 }

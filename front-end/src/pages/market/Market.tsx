@@ -13,6 +13,7 @@ import { updateMarkets } from './MarketSlice';
 import ModalDeleteMarketOrder from '../../components/modal/ModalDeleteMarketOrder';
 import ModalDetailMarketOrder from '../../components/modal/ModalDetailMarketOrder';
 import { userInfo } from '../../utils/userInfo';
+import ModalShareMarketOrder from '../../components/modal/ModalShareMarketOrder';
 
 function Market() {
     const dispatch = useDispatch();
@@ -22,6 +23,7 @@ function Market() {
 
     const [showModalDeleteMarketOrder, setShowModalDeleteMarketOrder] = useState(false);
     const [showModalDetailMarketOrder, setShowModalDetailMarketOrder] = useState(false);
+    const [showModalShareMarketOrder, setShowModalShareMarketOrder] = useState(false);
     const [currentIdMarketOrder, setCurrentIdMarketOrder] = useState(1);
     const [currentMarketOrder, setCurrentMarketOrder] = useState<marketProps>({} as marketProps);
 
@@ -48,7 +50,7 @@ function Market() {
 
         fetchData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [showModalDetailMarketOrder, showModalDeleteMarketOrder]);
+    }, [showModalDetailMarketOrder, showModalDeleteMarketOrder, showModalShareMarketOrder]);
 
     return isLogin ? (
         <div className="position-relative">
@@ -106,7 +108,14 @@ function Market() {
                                     </div>
                                 </td>
                                 <td>
-                                    <FontAwesomeIcon size="lg" icon={faShareFromSquare} />
+                                    <div
+                                        onClick={() => {
+                                            setShowModalShareMarketOrder(true);
+                                            setCurrentMarketOrder(order);
+                                        }}
+                                    >
+                                        <FontAwesomeIcon size="lg" icon={faShareFromSquare} />
+                                    </div>
                                 </td>
                             </tr>
                         ))}
@@ -121,6 +130,11 @@ function Market() {
                     show={showModalDetailMarketOrder}
                     hide={() => setShowModalDetailMarketOrder(false)}
                     indexOrder={currentIdMarketOrder}
+                />
+                <ModalShareMarketOrder
+                    show={showModalShareMarketOrder}
+                    hide={() => setShowModalShareMarketOrder(false)}
+                    order={currentMarketOrder}
                 />
             </div>
             <Link to="/market/add" className="position-absolute end-3 bottom-3">

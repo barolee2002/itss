@@ -37,16 +37,22 @@ function ModalDetailMarketOrder({ show, hide, indexOrder }: ModalDetailMarketOrd
                 console.error(error);
             }
         };
-        console.log(1);
-
         fetchData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [show, reload]);
 
-    const handleChangeAttributeStatus = async (status: 1 | 0 | null, ingredientId: number) => {
+    const handleChangeAttributeStatus = async (
+        status: 1 | 0 | null,
+        ingredientId: number,
+        measure: string,
+    ) => {
         if (status === 1) {
             try {
-                // await axios.put(Url(`shopping/remove/${indexOrder}/${ingredientId}`));
+                await axios.put(Url(`shopping/remove`), {
+                    id: indexOrder,
+                    attributeId: ingredientId,
+                    measure,
+                });
                 setReload(Math.random());
             } catch (error) {
                 console.log(error);
@@ -54,7 +60,11 @@ function ModalDetailMarketOrder({ show, hide, indexOrder }: ModalDetailMarketOrd
         }
         if (status === 0) {
             try {
-                // await axios.put(Url(`shopping/${indexOrder}/${ingredientId}`));
+                await axios.put(Url(`shopping/active`), {
+                    id: indexOrder,
+                    attributeId: ingredientId,
+                    measure,
+                });
                 setReload(Math.random());
             } catch (error) {
                 console.log(error);
@@ -62,24 +72,24 @@ function ModalDetailMarketOrder({ show, hide, indexOrder }: ModalDetailMarketOrd
         }
     };
 
-    const handleChangeDishStatus = async (status: 1 | 0, dishId: number) => {
-        if (status === 1) {
-            try {
-                // await axios.put(Url(`shopping/remove/${indexOrder}/${ingredientId}`));
-                setReload(Math.random());
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        if (status === 0) {
-            try {
-                // await axios.put(Url(`shopping/${indexOrder}/${ingredientId}`));
-                setReload(Math.random());
-            } catch (error) {
-                console.log(error);
-            }
-        }
-    };
+    // const handleChangeDishStatus = async (status: 1 | 0, dishId: number) => {
+    //     if (status === 1) {
+    //         try {
+    //             // await axios.put(Url(`shopping/remove/${indexOrder}/${ingredientId}`));
+    //             setReload(Math.random());
+    //         } catch (error) {
+    //             console.log(error);
+    //         }
+    //     }
+    //     if (status === 0) {
+    //         try {
+    //             // await axios.put(Url(`shopping/${indexOrder}/${ingredientId}`));
+    //             setReload(Math.random());
+    //         } catch (error) {
+    //             console.log(error);
+    //         }
+    //     }
+    // };
 
     return (
         <Modal size="xl" show={show} onHide={hide}>
@@ -161,6 +171,7 @@ function ModalDetailMarketOrder({ show, hide, indexOrder }: ModalDetailMarketOrd
                                                         handleChangeAttributeStatus(
                                                             attribute.status,
                                                             attribute.ingredients.id,
+                                                            attribute.measure,
                                                         )
                                                     }
                                                 />
@@ -187,7 +198,7 @@ function ModalDetailMarketOrder({ show, hide, indexOrder }: ModalDetailMarketOrd
                                     <th>Số lượng</th>
                                     <th>Ngày nấu</th>
                                     <th>Ngày hết hạn</th>
-                                    <th style={{ width: '5%' }}></th>
+                                    {/* <th style={{ width: '5%' }}></th> */}
                                 </tr>
                             </thead>
                             <tbody>
@@ -217,7 +228,7 @@ function ModalDetailMarketOrder({ show, hide, indexOrder }: ModalDetailMarketOrd
                                             <td>{dish.quantity}</td>
                                             <td>{dish.cookDate}</td>
                                             <td>{dish.expride}</td>
-                                            <td className="text-center">
+                                            {/* <td className="text-center">
                                                 <Form.Check
                                                     className="fs-5"
                                                     checked={dish.cook_status === 1}
@@ -228,7 +239,7 @@ function ModalDetailMarketOrder({ show, hide, indexOrder }: ModalDetailMarketOrd
                                                     //     )
                                                     // }
                                                 />
-                                            </td>
+                                            </td> */}
                                         </tr>
                                     ))}
                             </tbody>
