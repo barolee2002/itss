@@ -6,4 +6,5 @@ import lombok.Data;
 public class FridgeIngredientsDto {
     IngredientsDto ingredientsDto;
     private Integer quantity;
+    private String measure;
 }

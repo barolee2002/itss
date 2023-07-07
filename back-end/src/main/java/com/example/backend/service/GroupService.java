@@ -79,7 +79,7 @@ public class GroupService {
         GroupEntity groupEntity = groupRepository. findById(groupId).get();
         GroupShoppingEntity groupShoppingEntity = groupShoppingRepository.findByShoppingIdAndGroupId(shoppingId,groupId);
         if ( groupShoppingEntity != null ) {
-            throw new DuplicateException("Đã có đơn đi chợ"+ shoppingEntity.getCode() +"trong group" + groupEntity.getName());
+            throw new DuplicateException("Đã có đơn đi chợ "+ shoppingEntity.getCode() +" trong group " + groupEntity.getName());
 
         }
         else {
@@ -147,6 +147,21 @@ public class GroupService {
         return members;
 
     }
+    public List<UserDto> getUsersNotInGroup(Integer groupId) {
+        List<UserEntity> users = userRepository.findAll();
+        GroupEntity group  = groupRepository.findById(groupId).get();
+        List <GroupMemberEntity> groups = groupMemberRepository.findByGroupId(groupId);
+        GroupMemberEntity groupMemberEntity = groupMemberRepository.findByGroupIdAndUserId(groupId, group.getLeader());
+        groups.remove(groupMemberEntity);
+        for(GroupMemberEntity groupMember : groups) {
+            UserEntity user = userRepository.findById(groupMember.getUserId()).get();
+            users.remove(user);
+        }
+        List<UserDto> dtos = Arrays.asList(modelMapper.map(users,UserDto[].class));
+        return dtos;
+
+    }
+
 
 }
 

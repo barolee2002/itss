@@ -1,28 +1,27 @@
 package com.example.backend.service;
 
-import com.example.backend.dtos.FridgeDto;
-import com.example.backend.entities.FridgeEntity;
-import com.example.backend.entities.GroupEntity;
-import com.example.backend.entities.GroupMemberEntity;
-import com.example.backend.repository.FridgeIngredientsRepository;
-import com.example.backend.repository.FridgeRepository;
-import com.example.backend.repository.GroupMemberRepository;
-import com.example.backend.repository.GroupRepository;
+import com.example.backend.dtos.*;
+import com.example.backend.entities.*;
+import com.example.backend.exception.NotCanDoException;
+import com.example.backend.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class FridgeService {
-//    private final GroupMemberRepository groupMemberRepository;
-//    private final GroupRepository groupRepository;
-//    private final FridgeRepository fridgeRepository;
-//    private final FridgeIngredientsRepository fridgeIngredientsRepository;
-//    private final ModelMapper modelMapper;
+    private final GroupMemberRepository groupMemberRepository;
+    private final GroupRepository groupRepository;
+    private final FridgeRepository fridgeRepository;
+    private final UserRepository userRepository;
+    private final FridgeIngredientsRepository fridgeIngredientsRepository;
+    private final IngredientsRepository ingredientRepository;
+    private final ModelMapper modelMapper;
 //    public List<FridgeDto> getFridgeDtoByUserAndGroup(Integer userId) {
 //        List<GroupEntity> groups = groupRepository.findByLeader(userId);
 //        List<FridgeDto> fridgeDtos = new ArrayList<FridgeDto>();
@@ -31,4 +30,50 @@ public class FridgeService {
 //
 //        }
 //    }
+    public List<FridgeDto> getAllFridgeByGroup(Integer groupId) {
+        List<FridgeEntity> fridges = fridgeRepository.findByGroupId(groupId);
+        List<FridgeDto> fridgeDtoList = Arrays.asList(modelMapper.map(fridges, FridgeDto[].class));
+        GroupEntity group = groupRepository.findById(groupId).get();
+         GroupDto groupDto = modelMapper.map(group, GroupDto.class);
+
+        UserEntity leader = userRepository.findById(group.getLeader()).get();
+        UserDto userDto = modelMapper.map(leader, UserDto.class);
+        groupDto.setLeader(userDto);
+        for(FridgeDto fridgeDto : fridgeDtoList) {
+            fridgeDto.setGroup(groupDto);
+        }
+
+
+        return fridgeDtoList;
+    }
+    public FridgeDto getDetailFridge(Integer id) {
+        FridgeEntity entity = fridgeRepository.findById(id).get();
+        FridgeDto dto = new FridgeDto();
+        dto = modelMapper.map(entity,FridgeDto.class);
+        GroupEntity groupEntity = groupRepository.findById(entity.getGroupId()).get();
+        GroupDto groupDto = modelMapper.map(groupEntity,GroupDto.class);
+        UserEntity leader = userRepository.findById(groupEntity.getLeader()).get();
+        UserDto userDto = modelMapper.map(leader, UserDto.class);
+        groupDto.setLeader(userDto);
+        dto.setGroup(groupDto);
+        List<FridgeIngredientsDto> ingredientsDtos = new ArrayList<FridgeIngredientsDto>();
+        List<FridgeIngredientsEntity> ingredients = fridgeIngredientsRepository.findByFridgeId(id);
+        for(FridgeIngredientsEntity ingredientFridge : ingredients) {
+            IngredientsEntity ingredient = ingredientRepository.findById(ingredientFridge.getIngredientsId()).get();
+            IngredientsDto ingredientsDto = modelMapper.map(ingredient,IngredientsDto.class);
+            FridgeIngredientsDto fridgeDto = modelMapper.map(ingredientFridge, FridgeIngredientsDto.class);
+            fridgeDto.setIngredientsDto(ingredientsDto);
+            ingredientsDtos.add(fridgeDto);
+        }
+        dto.setIngredients(ingredientsDtos);
+        return dto;
+    }
+    public void useIngredient(Integer fridgeIngredientId, Integer quantityUsed) {
+        FridgeIngredientsEntity entity = fridgeIngredientsRepository.findById(fridgeIngredientId).get();
+        if(entity.getQuantity() < quantityUsed) {
+            throw  new NotCanDoException("Trong tủ lạnh chỉ còn " + entity.getQuantity() + " " + entity.getMeasure());
+        }
+        entity.setQuantity(entity.getQuantity() - quantityUsed);
+        fridgeIngredientsRepository.save(entity);
+    }
 }

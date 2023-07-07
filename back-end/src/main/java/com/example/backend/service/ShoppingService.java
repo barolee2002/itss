@@ -271,7 +271,9 @@ public class ShoppingService {
         for(GroupShoppingEntity entity : entities) {
             ShoppingEntity shoppingEntity = shoppingRepository.findById(entity.getShoppingId()).get();
             UserEntity userCreate = userRepository.findById(shoppingEntity.getUserId()).get();
+            UserDto userDto = shoppingModelMapper.map(userCreate, UserDto.class);
             ShoppingDto dto = shoppingModelMapper.map(shoppingEntity, ShoppingDto.class);
+            dto.setUser(userDto);
             shoppingDtos.add(dto);
         }
         return shoppingDtos;

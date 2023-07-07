@@ -37,6 +37,10 @@ public class GroupController {
     public List<UserDto> getUserByGroup(@PathVariable Integer id) {
         return groupService.getUserByGroup(id);
     }
+    @GetMapping("/group-users/{id}")
+    public List<UserDto> getUserNotInGroup(@PathVariable Integer id) {
+        return groupService.getUsersNotInGroup(id);
+    }
     @PostMapping("/group/share")
     public String shareShoppingToGroup(
             @RequestBody Map<String, Object> request

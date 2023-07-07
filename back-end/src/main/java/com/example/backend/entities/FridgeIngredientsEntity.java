@@ -14,8 +14,10 @@ public class FridgeIngredientsEntity {
     @Column
     private Integer fridgeId;
     @Column
-    private Integer ingredientId;
+    private Integer ingredientsId;
     @Column
     private Integer quantity;
+    @Column
+    private String measure;
 
 }
