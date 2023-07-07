@@ -57,6 +57,7 @@ function AddMarketOrder() {
 
     const handleClickItemIngredient = (item: ingredientProps) => {
         if (!ingredientsSelected.includes(item)) setIngredientsSelected((prev) => [...prev, item]);
+        console.log(ingredientsSelected);
     };
 
     const handleDeleteIngredient = (id: number) => {
@@ -245,7 +246,7 @@ function AddMarketOrder() {
                         )}
                     </InputGroup>
 
-                    <Table hover bordered className="mt-3">
+                    <Table bordered className="mt-3">
                         <thead className="fs-5 ">
                             <tr>
                                 <th>STT</th>
@@ -373,7 +374,7 @@ function AddMarketOrder() {
                         )}
                     </InputGroup>
 
-                    <Table hover bordered className="mt-3">
+                    <Table bordered className="mt-3">
                         <thead className="fs-5 ">
                             <tr>
                                 <th>STT</th>
