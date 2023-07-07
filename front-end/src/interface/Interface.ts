@@ -83,10 +83,11 @@ export interface shoppingProps {
 
 export interface groupsProps {
     id: number;
-    groupMembers: null;
+    groupMembers: userInfoProps[];
     createAt: string;
     leader: userInfoProps;
     name: string;
-    shoppings: null;
+    shoppings: shoppingProps[];
     updatedAt: string;
+    image: string;
 }

@@ -2,18 +2,27 @@ import axios from 'axios';
 import { Badge, Button, Modal, Image, Table, Tabs, Tab, Form } from 'react-bootstrap';
 import Url from '../../utils/url';
 import { useEffect, useState } from 'react';
-import { shoppingProps } from '../../interface/Interface';
+import { shoppingProps, userInfoProps } from '../../interface/Interface';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faToiletPortable } from '@fortawesome/free-solid-svg-icons';
+import { userInfo } from '../../utils/userInfo';
 // import { useDispatch } from 'react-redux';
 
 interface ModalDetailMarketOrderProps {
     show: boolean;
     hide: () => void;
     indexOrder: number;
+    leaderId?: number;
+    listMember?: userInfoProps[];
 }
 
-function ModalDetailMarketOrder({ show, hide, indexOrder }: ModalDetailMarketOrderProps) {
+function ModalDetailMarketOrder({
+    show,
+    hide,
+    indexOrder,
+    leaderId,
+    listMember,
+}: ModalDetailMarketOrderProps) {
     // const dispatch = useDispatch();
     const [reload, setReload] = useState(0);
     const [shopping, setShopping] = useState<shoppingProps>({} as shoppingProps);
@@ -39,7 +48,7 @@ function ModalDetailMarketOrder({ show, hide, indexOrder }: ModalDetailMarketOrd
         };
         fetchData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [show, reload]);
+    }, [show, reload, indexOrder]);
 
     const handleChangeAttributeStatus = async (
         status: 1 | 0 | null,
@@ -72,24 +81,18 @@ function ModalDetailMarketOrder({ show, hide, indexOrder }: ModalDetailMarketOrd
         }
     };
 
-    // const handleChangeDishStatus = async (status: 1 | 0, dishId: number) => {
-    //     if (status === 1) {
-    //         try {
-    //             // await axios.put(Url(`shopping/remove/${indexOrder}/${ingredientId}`));
-    //             setReload(Math.random());
-    //         } catch (error) {
-    //             console.log(error);
-    //         }
-    //     }
-    //     if (status === 0) {
-    //         try {
-    //             // await axios.put(Url(`shopping/${indexOrder}/${ingredientId}`));
-    //             setReload(Math.random());
-    //         } catch (error) {
-    //             console.log(error);
-    //         }
-    //     }
-    // };
+    const handleChangeUserBuy = async (id: number, userId: string) => {
+        try {
+            await axios.put(Url(`group/attribute`), {
+                id,
+                userId: parseInt(userId),
+            });
+            setReload(Math.random());
+        } catch (error: any) {
+            console.log(error);
+            alert(error.response.data.message);
+        }
+    };
 
     return (
         <Modal size="xl" show={show} onHide={hide}>
@@ -118,7 +121,7 @@ function ModalDetailMarketOrder({ show, hide, indexOrder }: ModalDetailMarketOrd
                 </div>
                 <Tabs defaultActiveKey="ingredients" className="mb-3" justify>
                     <Tab eventKey="ingredients" title="Nguyên liệu">
-                        <Table bordered hover className="mt-4 ">
+                        <Table bordered className="mt-4 ">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -139,7 +142,38 @@ function ModalDetailMarketOrder({ show, hide, indexOrder }: ModalDetailMarketOrd
                                     shopping.attributes.map((attribute, index) => (
                                         <tr key={index}>
                                             <td>{index + 1}</td>
-                                            <td>{attribute.user.name}</td>
+                                            <td>
+                                                {/* Nếu user là leader thì được select người đi mua */}
+                                                {leaderId === userInfo?.id ? (
+                                                    <Form.Select
+                                                        onChange={(e) =>
+                                                            handleChangeUserBuy(
+                                                                attribute.id,
+                                                                e.target.value,
+                                                            )
+                                                        }
+                                                    >
+                                                        <option value={attribute.user.name}>
+                                                            {attribute.user.name}
+                                                        </option>
+                                                        {listMember?.map((member, index) => {
+                                                            if (member.id !== attribute.user.id)
+                                                                return (
+                                                                    <option
+                                                                        key={index}
+                                                                        value={member.id}
+                                                                    >
+                                                                        {member.name}
+                                                                    </option>
+                                                                );
+                                                            return null;
+                                                        })}
+                                                    </Form.Select>
+                                                ) : (
+                                                    // Nếu không thì chỉ hiện tên người mua
+                                                    attribute.user.name
+                                                )}
+                                            </td>
                                             <td>
                                                 <Image
                                                     src={attribute.ingredients.image}
@@ -165,6 +199,11 @@ function ModalDetailMarketOrder({ show, hide, indexOrder }: ModalDetailMarketOrd
                                             <td>{attribute.exprided}</td>
                                             <td className="text-center">
                                                 <Form.Check
+                                                    disabled={
+                                                        leaderId === userInfo?.id
+                                                            ? false
+                                                            : userInfo?.id !== attribute.user.id
+                                                    }
                                                     className="fs-5"
                                                     checked={attribute.status === 1}
                                                     onChange={() =>
@@ -188,7 +227,7 @@ function ModalDetailMarketOrder({ show, hide, indexOrder }: ModalDetailMarketOrd
                         </Table>
                     </Tab>
                     <Tab eventKey="dishes" title="Món ăn">
-                        <Table bordered hover className="mt-4 ">
+                        <Table bordered className="mt-4 ">
                             <thead>
                                 <tr>
                                     <th>#</th>

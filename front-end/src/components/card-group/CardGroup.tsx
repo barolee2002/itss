@@ -2,16 +2,16 @@ import { Figure, Modal, Tab, Tabs } from 'react-bootstrap';
 import { useState } from 'react';
 
 import './cardgroup.scss';
+import { groupsProps } from '../../interface/Interface';
+import { Link } from 'react-router-dom';
 
 interface CardGroupProps {
-    group: any;
+    group: groupsProps;
 }
 
 function CardGroup({ group }: CardGroupProps) {
-    const [showModal, setShowModal] = useState(false);
-
     return (
-        <div>
+        <Link className="text-dark" to={`/group/${group.id}`}>
             <div
                 className="ms-3 me-4 mb-5 border border-black shadow-sm center flex-column"
                 style={{
@@ -20,20 +20,17 @@ function CardGroup({ group }: CardGroupProps) {
                     background: 'var(--background-color)',
                     cursor: 'pointer',
                 }}
-                onClick={() => setShowModal(true)}
             >
                 <Figure className="mb-4">
                     <Figure.Image
-                        width={200}
-                        height={200}
                         alt="Ảnh nhóm"
                         src={group.image}
-                        style={{ objectFit: 'cover' }}
+                        style={{ objectFit: 'cover', width: 200, height: 200 }}
                     />
                 </Figure>
                 <div className="fw-medium fs-4">{group.name}</div>
             </div>
-        </div>
+        </Link>
     );
 }
 

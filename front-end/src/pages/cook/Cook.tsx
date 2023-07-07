@@ -20,7 +20,7 @@ function Cook() {
     const [showModalDeleteDish, setShowModalModalDeleteDish] = useState(false);
     const [showModalRestoreDish, setShowModalRestoreDish] = useState(false);
     const [showModalDetailDish, setShowModalDetailDish] = useState(false);
-    const [indexCurrentDish, setIndexCurrentDish] = useState(1);
+    const [indexCurrentDish, setIndexCurrentDish] = useState<number | null>(null);
     const [currentDish, setCurrentDish] = useState<dishsProps>({} as dishsProps);
 
     const callApi = async () => {
@@ -129,11 +129,13 @@ function Cook() {
                 dish={currentDish}
             />
 
-            <ModalDetailDish
-                show={showModalDetailDish}
-                hide={() => setShowModalDetailDish(false)}
-                indexDish={indexCurrentDish}
-            />
+            {indexCurrentDish && (
+                <ModalDetailDish
+                    show={showModalDetailDish}
+                    hide={() => setShowModalDetailDish(false)}
+                    indexDish={indexCurrentDish}
+                />
+            )}
         </div>
     );
 }

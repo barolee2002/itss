@@ -20,6 +20,7 @@ import SignOut from '../../../Signout/SignOut';
 import './Taskbar.scss';
 import { useSelector } from 'react-redux';
 import { isLoginSelector } from '../../../../redux/selectors';
+import { userInfo } from '../../../../utils/userInfo';
 
 function Taskbar() {
     const isLogin = useSelector(isLoginSelector);
@@ -51,7 +52,7 @@ function Taskbar() {
                             className="taskbar-img"
                         />
                         <div className="ms-2 d-flex flex-column">
-                            <div className="fw-medium">Quang Đạt</div>
+                            <div className="fw-medium">{userInfo?.name}</div>
                             <div className="small">Sinh viên</div>
                         </div>
                     </>
