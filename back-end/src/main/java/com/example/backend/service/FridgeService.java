@@ -76,7 +76,7 @@ public class FridgeService {
         }
 
         List<FridgeIngredientsDto> ingredientsDtos = new ArrayList<FridgeIngredientsDto>();
-        List<FridgeIngredientsEntity> ingredients = fridgeIngredientsRepository.findByFridgeId(id);
+        List<FridgeIngredientsEntity> ingredients = fridgeIngredientsRepository.findByFridgeId(entity.getId());
         for(FridgeIngredientsEntity ingredientFridge : ingredients) {
             IngredientsEntity ingredient = ingredientRepository.findById(ingredientFridge.getIngredientsId()).get();
             IngredientsDto ingredientsDto = modelMapper.map(ingredient,IngredientsDto.class);
@@ -109,13 +109,21 @@ public class FridgeService {
     }
     public void addIngredients(Integer ingredientId,Integer fridgeId,Integer quantity, String measure) {
         FridgeIngredientsEntity oldEntity = fridgeIngredientsRepository.findByFridgeIdAndIngredientsIdAndMeasureAndCreateAt(fridgeId,ingredientId,measure,now());
+        IngredientsEntity ingredientsEntity = ingredientRepository.findById(ingredientId).get();
 
         if(oldEntity != null) {
             oldEntity.setQuantity(oldEntity.getQuantity() + quantity);
             fridgeIngredientsRepository.save(oldEntity);
         } else {
 
-            addNewIngredientToFridge(ingredientId,fridgeId,quantity,measure);
+            FridgeIngredientsEntity ingredientEntity = new FridgeIngredientsEntity();
+            ingredientEntity.setIngredientsId(ingredientId);
+            ingredientEntity.setFridgeId(fridgeId);
+            ingredientEntity.setQuantity(quantity);
+            ingredientEntity.setMeasure(measure);
+            ingredientEntity.setCreateAt(now());
+            ingredientEntity.setExprided(now().plusDays(ingredientsEntity.getDueDate()*3));
+            fridgeIngredientsRepository.save(ingredientEntity);
         }
     }
     public void addNewIngredientToFridge (Integer ingredientId,Integer fridgeId,Integer quantity, String measure) {
