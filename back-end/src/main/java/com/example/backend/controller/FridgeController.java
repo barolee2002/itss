@@ -19,16 +19,13 @@ public class FridgeController {
     FridgeService fridgeService;
     @GetMapping("/fridge/group/{id}")
     public FridgeDto getAllFridgeByGroup(@PathVariable Integer id) {
-        return fridgeService.getFridgeByGroup(id);
+        return fridgeService.getDetailGroupFridge(id);
     }
     @GetMapping("/fridge/user/{id}")
     public FridgeDto getAllFridgeByUser(@PathVariable Integer id) {
-        return fridgeService.getFridgeByUser(id);
+        return fridgeService.getDetailUserFridge(id);
     }
-    @GetMapping("/fridge/{id}")
-    public FridgeDto getDetailFridge(@PathVariable Integer id) {
-        return fridgeService.getDetailFridge(id);
-    }
+
     @PutMapping("fridge/use-ingredient")
     public String useIngredient(@RequestBody Map<String , Object> request) {
         Integer id = (Integer) request.get("id");
