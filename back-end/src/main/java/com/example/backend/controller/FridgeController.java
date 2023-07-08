@@ -50,7 +50,7 @@ public class FridgeController {
         Integer ingredientId = (Integer) request.get("ingredientId");
         Integer quantity = (Integer) request.get("quantity");
         String measure = (String) request.get("measure");
-        fridgeService.addIngredients(fridgeId, ingredientId, quantity,measure);
+        fridgeService.addIngredients(ingredientId, fridgeId, quantity,measure);
         return "success";
     }
     @DeleteMapping("/fridge/ingredients/{id}")
