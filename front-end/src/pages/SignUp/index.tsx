@@ -39,7 +39,7 @@ function SignUp() {
                     >
                         <div>
                             <span>Bạn đã có tài khoản?</span>
-                            <Link to="/sign-in" className="signup_link ms-1">
+                            <Link to="/" className="signup_link ms-1">
                                 Đăng nhập ngay
                             </Link>
                         </div>

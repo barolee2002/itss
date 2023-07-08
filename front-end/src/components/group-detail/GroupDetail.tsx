@@ -4,8 +4,8 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Url from '../../utils/url';
-import { groupsProps, marketProps } from '../../interface/Interface';
-import { Badge, Button, Tab, Table, Tabs } from 'react-bootstrap';
+import { groupsProps, marketProps, userInfoProps } from '../../interface/Interface';
+import { Badge, Button, Modal, Tab, Table, Tabs, Toast } from 'react-bootstrap';
 import { userInfo } from '../../utils/userInfo';
 import ModalDetailMarketOrder from '../modal/ModalDetailMarketOrder';
 
@@ -15,6 +15,9 @@ function GroupDetail() {
     const [showModalDetailMarketOrder, setShowModalDetailMarketOrder] = useState(false);
     const [currentIdMarketOrder, setCurrentIdMarketOrder] = useState(1);
     const [currentMarketOrder, setCurrentMarketOrder] = useState<marketProps>({} as marketProps);
+    const [showModalDeleteMember, setShowModalDeleteMember] = useState(false);
+    const [currentMember, setCurrentMember] = useState<userInfoProps>({} as userInfoProps);
+    const [showToast, setShowToast] = useState(false);
 
     const [group, setGroup] = useState<groupsProps>({} as groupsProps);
     const [marketOrder, setMarketOrder] = useState<marketProps[]>([]);
@@ -42,10 +45,25 @@ function GroupDetail() {
 
         fetchApiGroupDetail();
         fetchApiGroupMkOrder();
-    }, [param]);
+    }, [param, showToast]);
+
+    const handleDeleteMember = async (memberId: number) => {
+        try {
+            const groupId = parseInt(param.id!);
+            const result = await axios.delete(Url(`group/member`), {
+                data: { groupId, memberId },
+            });
+            setShowModalDeleteMember(false);
+            if (result.data === 'success') {
+                setShowToast(true);
+            }
+        } catch (error: any) {
+            alert(error.response.data.message);
+        }
+    };
 
     return (
-        <div>
+        <div className="position-relative">
             <div className="d-flex">
                 <Link to="/group" className="me-3 text-dark">
                     <FontAwesomeIcon icon={faArrowLeft} size="2xl" className="p-2" />
@@ -150,10 +168,18 @@ function GroupDetail() {
                                                 <div className="position-absolute end-2">
                                                     {group.leader.id === userInfo?.id &&
                                                         member.id !== userInfo?.id && (
-                                                            <FontAwesomeIcon
-                                                                icon={faXmark}
-                                                                size="xl"
-                                                            />
+                                                            <div
+                                                                onClick={() => {
+                                                                    setShowModalDeleteMember(true);
+                                                                    setCurrentMember(member);
+                                                                }}
+                                                            >
+                                                                <FontAwesomeIcon
+                                                                    icon={faXmark}
+                                                                    size="xl"
+                                                                    className="p-1"
+                                                                />
+                                                            </div>
                                                         )}
                                                     {member.id === userInfo?.id && (
                                                         <div className="fw-light fs-5">Bạn</div>
@@ -179,6 +205,49 @@ function GroupDetail() {
                                         </Button>
                                     )}
                                 </div>
+                                <Modal
+                                    show={showModalDeleteMember}
+                                    onHide={() => setShowModalDeleteMember(false)}
+                                >
+                                    <Modal.Header closeButton>
+                                        <Modal.Title>Xóa thành viên</Modal.Title>
+                                    </Modal.Header>
+                                    <Modal.Body>
+                                        Bạn có chắc chắn xóa <b>{currentMember.name}</b> khỏi nhóm?
+                                    </Modal.Body>
+                                    <Modal.Footer>
+                                        <Button
+                                            variant="secondary"
+                                            onClick={() => setShowModalDeleteMember(false)}
+                                        >
+                                            Hủy bỏ
+                                        </Button>
+                                        <Button
+                                            variant="danger"
+                                            onClick={() => {
+                                                handleDeleteMember(currentMember.id);
+                                                setShowModalDeleteMember(false);
+                                            }}
+                                        >
+                                            Xoá
+                                        </Button>
+                                    </Modal.Footer>
+                                </Modal>
+                                <Toast
+                                    onClose={() => setShowToast(false)}
+                                    show={showToast}
+                                    delay={3000}
+                                    autohide
+                                    bg="success"
+                                    className="position-absolute end-3 top-3"
+                                >
+                                    <Toast.Header>
+                                        <strong className="me-auto">Thành công</strong>
+                                    </Toast.Header>
+                                    <Toast.Body className="bg-light">
+                                        Đã xóa {currentMember.name} khỏi nhóm
+                                    </Toast.Body>
+                                </Toast>
                             </div>
                         </Tab>
                     )}
