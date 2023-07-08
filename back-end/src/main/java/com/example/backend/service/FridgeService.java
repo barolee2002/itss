@@ -108,23 +108,27 @@ public class FridgeService {
         fridgeRepository.save(newFridgeEntity);
     }
     public void addIngredients(Integer ingredientId,Integer fridgeId,Integer quantity, String measure) {
-        FridgeIngredientsEntity oldEntity = fridgeIngredientsRepository.findByFridgeIdAndIngredientsIdAndMeasure(fridgeId,ingredientId,measure);
-        IngredientsEntity ingredientsEntity = ingredientRepository.findById(ingredientId).get();
+        FridgeIngredientsEntity oldEntity = fridgeIngredientsRepository.findByFridgeIdAndIngredientsIdAndMeasureAndCreateAt(fridgeId,ingredientId,measure,now());
+
         if(oldEntity != null) {
-            if(oldEntity.getCreateAt() == now()) {
-                oldEntity.setQuantity(oldEntity.getQuantity() + quantity);
-                fridgeIngredientsRepository.save(oldEntity);
-            }
+            oldEntity.setQuantity(oldEntity.getQuantity() + quantity);
+            fridgeIngredientsRepository.save(oldEntity);
         } else {
-            FridgeIngredientsEntity ingredientEntity = new FridgeIngredientsEntity();
-            ingredientEntity.setIngredientsId(ingredientId);
-            ingredientEntity.setFridgeId(fridgeId);
-            ingredientEntity.setQuantity(quantity);
-            ingredientEntity.setMeasure(measure);
-            ingredientEntity.setCreateAt(now());
-            ingredientEntity.setExprided(now().plusDays(ingredientsEntity.getDueDate()*3));
-            fridgeIngredientsRepository.save(ingredientEntity);
+
+            addNewIngredientToFridge(ingredientId,fridgeId,quantity,measure);
         }
+    }
+    public void addNewIngredientToFridge (Integer ingredientId,Integer fridgeId,Integer quantity, String measure) {
+        IngredientsEntity ingredientsEntity = ingredientRepository.findById(ingredientId).get();
+
+        FridgeIngredientsEntity ingredientEntity = new FridgeIngredientsEntity();
+        ingredientEntity.setIngredientsId(ingredientId);
+        ingredientEntity.setFridgeId(fridgeId);
+        ingredientEntity.setQuantity(quantity);
+        ingredientEntity.setMeasure(measure);
+        ingredientEntity.setCreateAt(now());
+        ingredientEntity.setExprided(now().plusDays(ingredientsEntity.getDueDate()*3));
+        fridgeIngredientsRepository.save(ingredientEntity);
     }
     public void autoDeleteIngredient(Integer id) {
         FridgeIngredientsEntity entity = fridgeIngredientsRepository.findById(id).get();
