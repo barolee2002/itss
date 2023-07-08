@@ -32,4 +32,29 @@ public class FridgeController {
         fridgeService.useIngredient(id,quantityUsed);
         return "success";
     }
+    @DeleteMapping("fridge/{id}")
+    public String deleteDetailFridge(@PathVariable Integer id) {
+        fridgeService.deleteFridge(id);
+        return "success";
+    }
+    @PostMapping("/fridge")
+    public String addNewFridge(@RequestBody FridgeDto newFridge) {
+        fridgeService.addNewFridge(newFridge);
+        return "success";
+
+    }
+    @PostMapping("/fridge/ingredients")
+    public String addNewIngredient(@RequestBody Map<String , Object> request) {
+        Integer fridgeId = (Integer) request.get("fridgeId");
+        Integer ingredientId = (Integer) request.get("ingredientId");
+        Integer quantity = (Integer) request.get("quantity");
+        String measure = (String) request.get("measure");
+        fridgeService.addIngredients(fridgeId, ingredientId, quantity,measure);
+        return "success";
+    }
+    @DeleteMapping("/fridge/ingredients/{id}")
+    public String autoDeleteIngredient(Integer id) {
+        fridgeService.autoDeleteIngredient(id);
+        return "success";
+    }
 }

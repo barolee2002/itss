@@ -76,4 +76,35 @@ public class FridgeService {
         entity.setQuantity(entity.getQuantity() - quantityUsed);
         fridgeIngredientsRepository.save(entity);
     }
+    public void deleteFridge(Integer id) {
+        fridgeRepository.deleteById(id);
+    }
+    public void addNewFridge(FridgeDto newFridge) {
+        FridgeEntity newFridgeEntity = modelMapper.map(newFridge,FridgeEntity.class);
+        if(newFridge.getUser() != null) {
+            newFridgeEntity.setUserId(newFridge.getUser().getId());
+        } else {
+            newFridgeEntity.setGroupId(newFridge.getGroup().getId());
+        }
+        fridgeRepository.save(newFridgeEntity);
+    }
+    public void addIngredients(Integer ingredientId,Integer fridgeId,Integer quantity, String measure) {
+        FridgeIngredientsEntity oldEntity = fridgeIngredientsRepository.findByFridgeIdAndIngredientsIdAndMeasure(fridgeId,ingredientId,measure);
+        if(oldEntity != null) {
+            oldEntity.setQuantity(oldEntity.getQuantity() + quantity);
+            fridgeIngredientsRepository.save(oldEntity);
+        } else {
+            FridgeIngredientsEntity ingredientEntity = new FridgeIngredientsEntity();
+            ingredientEntity.setIngredientsId(ingredientId);
+            ingredientEntity.setFridgeId(fridgeId);
+            ingredientEntity.setQuantity(quantity);
+            ingredientEntity.setMeasure(measure);
+        }
+    }
+    public void autoDeleteIngredient(Integer id) {
+        FridgeIngredientsEntity entity = fridgeIngredientsRepository.findById(id).get();
+        if(entity.getQuantity() == 0) {
+            fridgeIngredientsRepository.deleteById(id);
+        }
+    }
 }
