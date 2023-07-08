@@ -33,7 +33,7 @@ function Market() {
             const response = await axios.get(Url(`/shopping/user/${userInfo?.id}`));
             return response.data;
         } catch (error) {
-            alert('Lỗi Server!!!');
+            alert('Không lấy được đơn đi chợ!!!');
             return null;
         }
     };

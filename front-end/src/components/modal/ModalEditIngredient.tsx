@@ -52,7 +52,7 @@ function ModalEditIngredient({ show, hide, ingredient }: ModalAddIngredientProps
     return (
         <Modal show={show} size="lg" onHide={hide}>
             <Modal.Header closeButton>
-                <Modal.Title>Chỉnh sửa nguyên liệu</Modal.Title>
+                <Modal.Title>Nguyên liệu</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form.Group className="mb-3" controlId="1">
