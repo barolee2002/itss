@@ -8,6 +8,7 @@ import { groupsProps, marketProps, userInfoProps } from '../../interface/Interfa
 import { Badge, Button, Modal, Tab, Table, Tabs, Toast } from 'react-bootstrap';
 import { userInfo } from '../../utils/userInfo';
 import ModalDetailMarketOrder from '../modal/ModalDetailMarketOrder';
+import ModalAddMemberToGroup from '../modal/ModalAddMemberToGroup';
 
 function GroupDetail() {
     const param = useParams();
@@ -16,6 +17,7 @@ function GroupDetail() {
     const [currentIdMarketOrder, setCurrentIdMarketOrder] = useState(1);
     const [currentMarketOrder, setCurrentMarketOrder] = useState<marketProps>({} as marketProps);
     const [showModalDeleteMember, setShowModalDeleteMember] = useState(false);
+    const [showModalAddMember, setShowModalAddMember] = useState(false);
     const [currentMember, setCurrentMember] = useState<userInfoProps>({} as userInfoProps);
     const [showToast, setShowToast] = useState(false);
 
@@ -45,7 +47,7 @@ function GroupDetail() {
 
         fetchApiGroupDetail();
         fetchApiGroupMkOrder();
-    }, [param, showToast]);
+    }, [param, showToast, showModalAddMember]);
 
     const handleDeleteMember = async (memberId: number) => {
         try {
@@ -71,6 +73,7 @@ function GroupDetail() {
                 <h2>{group.name}</h2>
             </div>
             <div className="mt-3">
+                {/* Tab đơn đi chợ của nhóm */}
                 <Tabs defaultActiveKey="home" id="uncontrolled-tab-example" className="mb-3">
                     <Tab eventKey="home" title="Đơn đi chợ">
                         <div className="position-relative">
@@ -128,6 +131,7 @@ function GroupDetail() {
                         </div>
                     </Tab>
 
+                    {/* Tab member */}
                     {group.leader?.id && userInfo?.id && (
                         <Tab eventKey="member" title="Thành viên">
                             <div>
@@ -199,12 +203,15 @@ function GroupDetail() {
                                                 backgroundColor: '#DDA0DD',
                                                 color: 'black',
                                             }}
+                                            onClick={() => setShowModalAddMember(true)}
                                         >
                                             Thêm thành viên
                                             <FontAwesomeIcon className="ms-2" icon={faPlus} />
                                         </Button>
                                     )}
                                 </div>
+
+                                {/* Modal delete member */}
                                 <Modal
                                     show={showModalDeleteMember}
                                     onHide={() => setShowModalDeleteMember(false)}
@@ -233,6 +240,8 @@ function GroupDetail() {
                                         </Button>
                                     </Modal.Footer>
                                 </Modal>
+
+                                {/* Toast xóa thành viên thành công */}
                                 <Toast
                                     onClose={() => setShowToast(false)}
                                     show={showToast}
@@ -248,6 +257,13 @@ function GroupDetail() {
                                         Đã xóa {currentMember.name} khỏi nhóm
                                     </Toast.Body>
                                 </Toast>
+
+                                {/* Modal Add member */}
+                                <ModalAddMemberToGroup
+                                    show={showModalAddMember}
+                                    hide={() => setShowModalAddMember(false)}
+                                    groupId={parseInt(param.id!)}
+                                />
                             </div>
                         </Tab>
                     )}
