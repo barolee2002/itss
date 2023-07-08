@@ -11,7 +11,7 @@ public class FridgeDto {
     private String name;
     GroupDto group;
     UserDto user;
-    private LocalDate exprided;
+
     private Integer type;
     private List<FridgeIngredientsDto> ingredients;
 
