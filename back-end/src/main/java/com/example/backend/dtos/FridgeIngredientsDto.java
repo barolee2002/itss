@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class FridgeIngredientsDto {
-    IngredientsDto ingredientsDto;
+    IngredientsDto ingredient;
     private Integer quantity;
     private String measure;
 }
