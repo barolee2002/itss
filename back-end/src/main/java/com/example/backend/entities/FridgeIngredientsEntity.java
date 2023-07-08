@@ -3,6 +3,7 @@ package com.example.backend.entities;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -19,5 +20,9 @@ public class FridgeIngredientsEntity {
     private Integer quantity;
     @Column
     private String measure;
+    @Column
+    private LocalDate exprided;
+    @Column
+    private LocalDate createAt;
 
 }

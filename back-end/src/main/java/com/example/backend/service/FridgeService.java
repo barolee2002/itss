@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static java.time.LocalDate.now;
+
 @Service
 @RequiredArgsConstructor
 public class FridgeService {
@@ -22,44 +24,7 @@ public class FridgeService {
     private final FridgeIngredientsRepository fridgeIngredientsRepository;
     private final IngredientsRepository ingredientRepository;
     private final ModelMapper modelMapper;
-//    public List<FridgeDto> getFridgeDtoByUserAndGroup(Integer userId) {
-//        List<GroupEntity> groups = groupRepository.findByLeader(userId);
-//        List<FridgeDto> fridgeDtos = new ArrayList<FridgeDto>();
-//        for(GroupMemberEntity group : groups) {
-//            List<FridgeEntity> fridgeEntities = fridgeRepository.findByGroupId(group.getGroupId());
-//
-//        }
-//    }
-    public FridgeDto getFridgeByGroup(Integer groupId) {
-        FridgeEntity fridges = fridgeRepository.findByGroupId(groupId);
-        FridgeDto fridgeDto = modelMapper.map(fridges, FridgeDto.class);
-        GroupEntity group = groupRepository.findById(groupId).get();
-         GroupDto groupDto = modelMapper.map(group, GroupDto.class);
 
-        UserEntity leader = userRepository.findById(group.getLeader()).get();
-        UserDto userDto = modelMapper.map(leader, UserDto.class);
-        groupDto.setLeader(userDto);
-
-            fridgeDto.setGroup(groupDto);
-
-
-
-        return fridgeDto;
-    }
-    public FridgeDto getFridgeByUser(Integer userId) {
-        FridgeEntity fridges = fridgeRepository.findByUserId(userId);
-        FridgeDto fridgeDto = modelMapper.map(fridges, FridgeDto.class);
-        UserEntity user = userRepository.findById(userId).get();
-        UserDto userDto = modelMapper.map(user, UserDto.class);
-
-
-
-        fridgeDto.setUser(userDto);
-
-
-
-        return fridgeDto;
-    }
     public FridgeDto getDetailGroupFridge(Integer id) {
 
         FridgeEntity entity = fridgeRepository.findByGroupId(id);
@@ -144,7 +109,8 @@ public class FridgeService {
     }
     public void addIngredients(Integer ingredientId,Integer fridgeId,Integer quantity, String measure) {
         FridgeIngredientsEntity oldEntity = fridgeIngredientsRepository.findByFridgeIdAndIngredientsIdAndMeasure(fridgeId,ingredientId,measure);
-        if(oldEntity != null) {
+        IngredientsEntity ingredientsEntity = ingredientRepository.findById(ingredientId).get();
+        if(oldEntity.getCreateAt() == now()) {
             oldEntity.setQuantity(oldEntity.getQuantity() + quantity);
             fridgeIngredientsRepository.save(oldEntity);
         } else {
@@ -153,6 +119,9 @@ public class FridgeService {
             ingredientEntity.setFridgeId(fridgeId);
             ingredientEntity.setQuantity(quantity);
             ingredientEntity.setMeasure(measure);
+            ingredientEntity.setCreateAt(now());
+            ingredientEntity.setExprided(now().plusDays(ingredientsEntity.getDueDate()*3));
+            fridgeIngredientsRepository.save(ingredientEntity);
         }
     }
     public void autoDeleteIngredient(Integer id) {
