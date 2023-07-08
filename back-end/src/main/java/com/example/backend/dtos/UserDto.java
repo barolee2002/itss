@@ -17,6 +17,7 @@ public class UserDto {
 
     private String gender;
     private String email;
+    private Integer fridgeId;
     private LocalDate createAt;
     private String address;
     List<GroupDto> groups;
