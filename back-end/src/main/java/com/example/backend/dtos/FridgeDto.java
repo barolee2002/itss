@@ -2,6 +2,7 @@ package com.example.backend.dtos;
 
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -10,6 +11,7 @@ public class FridgeDto {
     private String name;
     GroupDto group;
     UserDto user;
+    private LocalDate exprided;
     private Integer type;
     private List<FridgeIngredientsDto> ingredients;
 
