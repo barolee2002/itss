@@ -80,7 +80,7 @@ public class FridgeService {
         }
 
         List<FridgeIngredientsDto> ingredientsDtos = new ArrayList<FridgeIngredientsDto>();
-        List<FridgeIngredientsEntity> ingredients = fridgeIngredientsRepository.findByFridgeId(id);
+        List<FridgeIngredientsEntity> ingredients = fridgeIngredientsRepository.findByFridgeId(entity.getId());
         for(FridgeIngredientsEntity ingredientFridge : ingredients) {
             IngredientsEntity ingredient = ingredientRepository.findById(ingredientFridge.getIngredientsId()).get();
             IngredientsDto ingredientsDto = modelMapper.map(ingredient,IngredientsDto.class);
