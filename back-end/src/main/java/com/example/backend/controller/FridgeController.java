@@ -18,8 +18,12 @@ public class FridgeController {
     @Autowired
     FridgeService fridgeService;
     @GetMapping("/fridge/group/{id}")
-    public List<FridgeDto> getAllFridgeByGroup(@PathVariable Integer id) {
-        return fridgeService.getAllFridgeByGroup(id);
+    public FridgeDto getAllFridgeByGroup(@PathVariable Integer id) {
+        return fridgeService.getFridgeByGroup(id);
+    }
+    @GetMapping("/fridge/user/{id}")
+    public FridgeDto getAllFridgeByUser(@PathVariable Integer id) {
+        return fridgeService.getFridgeByUser(id);
     }
     @GetMapping("/fridge/{id}")
     public FridgeDto getDetailFridge(@PathVariable Integer id) {

@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface FridgeRepository extends JpaRepository<FridgeEntity, Integer> {
-     List<FridgeEntity> findByGroupId(Integer groupId);
-     List<FridgeEntity> findByUserId(Integer userId);
+     FridgeEntity findByGroupId(Integer groupId);
+     FridgeEntity findByUserId(Integer userId);
 }

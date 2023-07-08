@@ -30,39 +30,61 @@ public class FridgeService {
 //
 //        }
 //    }
-    public List<FridgeDto> getAllFridgeByGroup(Integer groupId) {
-        List<FridgeEntity> fridges = fridgeRepository.findByGroupId(groupId);
-        List<FridgeDto> fridgeDtoList = Arrays.asList(modelMapper.map(fridges, FridgeDto[].class));
+    public FridgeDto getFridgeByGroup(Integer groupId) {
+        FridgeEntity fridges = fridgeRepository.findByGroupId(groupId);
+        FridgeDto fridgeDto = modelMapper.map(fridges, FridgeDto.class);
         GroupEntity group = groupRepository.findById(groupId).get();
          GroupDto groupDto = modelMapper.map(group, GroupDto.class);
 
         UserEntity leader = userRepository.findById(group.getLeader()).get();
         UserDto userDto = modelMapper.map(leader, UserDto.class);
         groupDto.setLeader(userDto);
-        for(FridgeDto fridgeDto : fridgeDtoList) {
+
             fridgeDto.setGroup(groupDto);
-        }
 
 
-        return fridgeDtoList;
+
+        return fridgeDto;
+    }
+    public FridgeDto getFridgeByUser(Integer userId) {
+        FridgeEntity fridges = fridgeRepository.findByUserId(userId);
+        FridgeDto fridgeDto = modelMapper.map(fridges, FridgeDto.class);
+        UserEntity user = userRepository.findById(userId).get();
+        UserDto userDto = modelMapper.map(user, UserDto.class);
+
+
+
+        fridgeDto.setUser(userDto);
+
+
+
+        return fridgeDto;
     }
     public FridgeDto getDetailFridge(Integer id) {
         FridgeEntity entity = fridgeRepository.findById(id).get();
         FridgeDto dto = new FridgeDto();
         dto = modelMapper.map(entity,FridgeDto.class);
-        GroupEntity groupEntity = groupRepository.findById(entity.getGroupId()).get();
-        GroupDto groupDto = modelMapper.map(groupEntity,GroupDto.class);
-        UserEntity leader = userRepository.findById(groupEntity.getLeader()).get();
-        UserDto userDto = modelMapper.map(leader, UserDto.class);
-        groupDto.setLeader(userDto);
-        dto.setGroup(groupDto);
+        if (entity.getGroupId() != null) {
+
+            GroupEntity groupEntity = groupRepository.findById(entity.getGroupId()).get();
+            GroupDto groupDto = modelMapper.map(groupEntity,GroupDto.class);
+            UserEntity leader = userRepository.findById(groupEntity.getLeader()).get();
+            UserDto userDto = modelMapper.map(leader, UserDto.class);
+            groupDto.setLeader(userDto);
+            dto.setGroup(groupDto);
+        } else {
+            UserEntity user = userRepository.findById(entity.getUserId()).get();
+            UserDto userDto =  modelMapper.map(user, UserDto.class);
+            dto.setUser(userDto);
+        }
+
         List<FridgeIngredientsDto> ingredientsDtos = new ArrayList<FridgeIngredientsDto>();
         List<FridgeIngredientsEntity> ingredients = fridgeIngredientsRepository.findByFridgeId(id);
         for(FridgeIngredientsEntity ingredientFridge : ingredients) {
             IngredientsEntity ingredient = ingredientRepository.findById(ingredientFridge.getIngredientsId()).get();
             IngredientsDto ingredientsDto = modelMapper.map(ingredient,IngredientsDto.class);
             FridgeIngredientsDto fridgeDto = modelMapper.map(ingredientFridge, FridgeIngredientsDto.class);
-            fridgeDto.setIngredientsDto(ingredientsDto);
+            fridgeDto.setIngredient(ingredientsDto);
             ingredientsDtos.add(fridgeDto);
         }
         dto.setIngredients(ingredientsDtos);
