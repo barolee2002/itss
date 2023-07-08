@@ -1,7 +1,10 @@
 export interface ingredientsProps {
+    id?: number;
     ingredient: ingredientProps;
     quantity: number;
     measure: string;
+    exprided?: string;
+    createAt?: string;
 }
 export interface ingredientProps {
     id: number;
@@ -47,6 +50,7 @@ export interface userInfoProps {
     id: number;
     name: string;
     status: 1 | 0;
+    fridgeId: number;
 }
 
 export interface attributesProps {
@@ -90,4 +94,13 @@ export interface groupsProps {
     shoppings: shoppingProps[];
     updatedAt: string;
     image: string;
+}
+
+export interface fridgeProps {
+    id: number;
+    name: string;
+    group: groupsProps;
+    user: userInfoProps | null;
+    type: number;
+    ingredients: ingredientsProps[];
 }

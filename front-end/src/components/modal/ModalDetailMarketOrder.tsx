@@ -14,6 +14,7 @@ interface ModalDetailMarketOrderProps {
     indexOrder: number;
     leaderId?: number;
     listMember?: userInfoProps[];
+    fridgeId?: number;
 }
 
 function ModalDetailMarketOrder({
@@ -22,6 +23,7 @@ function ModalDetailMarketOrder({
     indexOrder,
     leaderId,
     listMember,
+    fridgeId,
 }: ModalDetailMarketOrderProps) {
     // const dispatch = useDispatch();
     const [reload, setReload] = useState(0);
@@ -94,6 +96,22 @@ function ModalDetailMarketOrder({
         }
     };
 
+    // Thêm vào tủ lạnh
+    const handleAddToFridge = async (ingredientId: number, quantity: number, measure: string) => {
+        try {
+            await axios.post(Url(`fridge/ingredients`), {
+                fridgeId: fridgeId ? fridgeId : userInfo?.fridgeId,
+                ingredientId,
+                quantity,
+                measure,
+            });
+            setReload(Math.random());
+        } catch (error: any) {
+            console.log(error);
+            alert(error.response.data.message);
+        }
+    };
+
     return (
         <Modal size="xl" show={show} onHide={hide}>
             <Modal.Header closeButton>
@@ -134,7 +152,7 @@ function ModalDetailMarketOrder({
                                     <th>Ngày mua</th>
                                     <th>Ngày hết hạn</th>
                                     <th style={{ width: '5%' }}></th>
-                                    <th style={{ width: '5%' }}></th>
+                                    <th style={{ width: '5%' }}>Tủ lạnh</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -216,10 +234,25 @@ function ModalDetailMarketOrder({
                                                 />
                                             </td>
                                             <td className="text-center">
-                                                <FontAwesomeIcon
-                                                    size="xl"
-                                                    icon={faToiletPortable}
-                                                />
+                                                {attribute.status === 1 ? (
+                                                    <div
+                                                        onClick={() =>
+                                                            handleAddToFridge(
+                                                                attribute.ingredients.id,
+                                                                attribute.quantity,
+                                                                attribute.measure,
+                                                            )
+                                                        }
+                                                    >
+                                                        <FontAwesomeIcon
+                                                            size="xl"
+                                                            icon={faToiletPortable}
+                                                            className="p-1"
+                                                        />
+                                                    </div>
+                                                ) : (
+                                                    <div></div>
+                                                )}
                                             </td>
                                         </tr>
                                     ))}
