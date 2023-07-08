@@ -65,7 +65,7 @@ function Taskbar() {
                     <NavItem text="Nguyên liệu" icon={faKitchenSet} href="/ingredients" />
                     <NavItem text="Đơn đi chợ" icon={faStore} href="/market" />
                     <NavItem text="Món ăn yêu thích" icon={faHeart} href="/add-task" />
-                    <NavItem text="Tủ lạnh" icon={faToiletPortable} href="/add-task" />
+                    <NavItem text="Tủ lạnh" icon={faToiletPortable} href="/fridge" />
                     <NavItem text="Xem nhóm" icon={faPeopleGroup} href="/group" />
                 </div>
             )}

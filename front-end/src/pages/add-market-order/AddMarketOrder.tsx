@@ -57,7 +57,6 @@ function AddMarketOrder() {
 
     const handleClickItemIngredient = (item: ingredientProps) => {
         if (!ingredientsSelected.includes(item)) setIngredientsSelected((prev) => [...prev, item]);
-        console.log(ingredientsSelected);
     };
 
     const handleDeleteIngredient = (id: number) => {

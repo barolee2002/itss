@@ -1,14 +1,27 @@
-import { faArrowLeft, faPlus, faTrashCan, faXmark } from '@fortawesome/free-solid-svg-icons';
+import {
+    faArrowLeft,
+    faPlus,
+    faRightFromBracket,
+    faTrashCan,
+    faXmark,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Url from '../../utils/url';
-import { groupsProps, marketProps, userInfoProps } from '../../interface/Interface';
+import {
+    fridgeProps,
+    groupsProps,
+    ingredientsProps,
+    marketProps,
+    userInfoProps,
+} from '../../interface/Interface';
 import { Badge, Button, Modal, Tab, Table, Tabs, Toast } from 'react-bootstrap';
 import { userInfo } from '../../utils/userInfo';
 import ModalDetailMarketOrder from '../modal/ModalDetailMarketOrder';
 import ModalAddMemberToGroup from '../modal/ModalAddMemberToGroup';
+import ModalRemoveFridgeGroup from '../modal/ModalRemoveFridgeGroup';
 
 function GroupDetail() {
     const param = useParams();
@@ -20,6 +33,11 @@ function GroupDetail() {
     const [showModalAddMember, setShowModalAddMember] = useState(false);
     const [currentMember, setCurrentMember] = useState<userInfoProps>({} as userInfoProps);
     const [showToast, setShowToast] = useState(false);
+    const [fridge, setFridge] = useState<fridgeProps>({} as fridgeProps);
+    const [currentIngredient, setCurrentIngredient] = useState<ingredientsProps>(
+        {} as ingredientsProps,
+    );
+    const [showModalRemoveFridgeGroup, setShowModalRemoveFridgeGroup] = useState(false);
 
     const [group, setGroup] = useState<groupsProps>({} as groupsProps);
     const [marketOrder, setMarketOrder] = useState<marketProps[]>([]);
@@ -45,9 +63,26 @@ function GroupDetail() {
             }
         };
 
+        const fetchApiGroupFridge = async () => {
+            try {
+                const results = await axios.get(Url(`fridge/group/${param.id}`));
+                setFridge(results.data);
+            } catch (error: any) {
+                alert(error.response.data.message);
+                console.log(error);
+            }
+        };
+
         fetchApiGroupDetail();
         fetchApiGroupMkOrder();
-    }, [param, showToast, showModalAddMember]);
+        fetchApiGroupFridge();
+    }, [
+        param,
+        showToast,
+        showModalDetailMarketOrder,
+        showModalAddMember,
+        showModalRemoveFridgeGroup,
+    ]);
 
     const handleDeleteMember = async (memberId: number) => {
         try {
@@ -126,6 +161,7 @@ function GroupDetail() {
                                     indexOrder={currentIdMarketOrder}
                                     leaderId={group.leader?.id}
                                     listMember={group.groupMembers}
+                                    fridgeId={fridge.id}
                                 />
                             </div>
                         </div>
@@ -267,6 +303,63 @@ function GroupDetail() {
                             </div>
                         </Tab>
                     )}
+                    <Tab eventKey="fridge" title="Tủ lạnh">
+                        <div className="overflow-y-scroll" style={{ height: '92vh' }}>
+                            <Table hover bordered>
+                                <thead className="fs-5 ">
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Ảnh</th>
+                                        <th>Tên nguyên liệu</th>
+                                        <th>Số lượng</th>
+                                        <th>Đơn vị tính</th>
+                                        <th>Ngày tạo</th>
+                                        <th>Ngày hết hạn</th>
+                                        <th>Sử dụng</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {fridge.ingredients?.map((item, index) => (
+                                        <tr key={index}>
+                                            <td>{index + 1}</td>
+                                            <td>
+                                                <img
+                                                    src={item.ingredient.image}
+                                                    alt="anh"
+                                                    style={{ height: '3rem', width: '3rem' }}
+                                                />
+                                            </td>
+                                            <td>{item.ingredient.name}</td>
+                                            <td>{item.quantity}</td>
+                                            <td>{item.measure}</td>
+                                            <td>{item.createAt}</td>
+                                            <td>{item.exprided}</td>
+                                            <td
+                                                onClick={() => {
+                                                    setCurrentIngredient(item);
+                                                    setShowModalRemoveFridgeGroup(true);
+                                                }}
+                                            >
+                                                <FontAwesomeIcon
+                                                    size="lg"
+                                                    icon={faRightFromBracket}
+                                                />
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </Table>
+
+                            {/* ModalRemoveFridgeGroup */}
+                            {currentIngredient && (
+                                <ModalRemoveFridgeGroup
+                                    show={showModalRemoveFridgeGroup}
+                                    hide={() => setShowModalRemoveFridgeGroup(false)}
+                                    ingredient={currentIngredient}
+                                />
+                            )}
+                        </div>
+                    </Tab>
                 </Tabs>
             </div>
         </div>
