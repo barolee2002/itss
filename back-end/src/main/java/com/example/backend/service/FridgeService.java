@@ -110,9 +110,11 @@ public class FridgeService {
     public void addIngredients(Integer ingredientId,Integer fridgeId,Integer quantity, String measure) {
         FridgeIngredientsEntity oldEntity = fridgeIngredientsRepository.findByFridgeIdAndIngredientsIdAndMeasure(fridgeId,ingredientId,measure);
         IngredientsEntity ingredientsEntity = ingredientRepository.findById(ingredientId).get();
-        if(oldEntity.getCreateAt() == now()) {
-            oldEntity.setQuantity(oldEntity.getQuantity() + quantity);
-            fridgeIngredientsRepository.save(oldEntity);
+        if(oldEntity != null) {
+            if(oldEntity.getCreateAt() == now()) {
+                oldEntity.setQuantity(oldEntity.getQuantity() + quantity);
+                fridgeIngredientsRepository.save(oldEntity);
+            }
         } else {
             FridgeIngredientsEntity ingredientEntity = new FridgeIngredientsEntity();
             ingredientEntity.setIngredientsId(ingredientId);
