@@ -60,8 +60,40 @@ public class FridgeService {
 
         return fridgeDto;
     }
-    public FridgeDto getDetailFridge(Integer id) {
-        FridgeEntity entity = fridgeRepository.findById(id).get();
+    public FridgeDto getDetailGroupFridge(Integer id) {
+
+        FridgeEntity entity = fridgeRepository.findByGroupId(id);
+        FridgeDto dto = new FridgeDto();
+        dto = modelMapper.map(entity,FridgeDto.class);
+        if (entity.getGroupId() != null) {
+
+            GroupEntity groupEntity = groupRepository.findById(entity.getGroupId()).get();
+            GroupDto groupDto = modelMapper.map(groupEntity,GroupDto.class);
+            UserEntity leader = userRepository.findById(groupEntity.getLeader()).get();
+            UserDto userDto = modelMapper.map(leader, UserDto.class);
+            groupDto.setLeader(userDto);
+            dto.setGroup(groupDto);
+        } else {
+            UserEntity user = userRepository.findById(entity.getUserId()).get();
+            UserDto userDto =  modelMapper.map(user, UserDto.class);
+            dto.setUser(userDto);
+        }
+
+        List<FridgeIngredientsDto> ingredientsDtos = new ArrayList<FridgeIngredientsDto>();
+        List<FridgeIngredientsEntity> ingredients = fridgeIngredientsRepository.findByFridgeId(id);
+        for(FridgeIngredientsEntity ingredientFridge : ingredients) {
+            IngredientsEntity ingredient = ingredientRepository.findById(ingredientFridge.getIngredientsId()).get();
+            IngredientsDto ingredientsDto = modelMapper.map(ingredient,IngredientsDto.class);
+            FridgeIngredientsDto fridgeDto = modelMapper.map(ingredientFridge, FridgeIngredientsDto.class);
+            fridgeDto.setIngredient(ingredientsDto);
+            ingredientsDtos.add(fridgeDto);
+        }
+        dto.setIngredients(ingredientsDtos);
+        return dto;
+    }
+    public FridgeDto getDetailUserFridge(Integer id) {
+
+        FridgeEntity entity = fridgeRepository.findByUserId(id);
         FridgeDto dto = new FridgeDto();
         dto = modelMapper.map(entity,FridgeDto.class);
         if (entity.getGroupId() != null) {
