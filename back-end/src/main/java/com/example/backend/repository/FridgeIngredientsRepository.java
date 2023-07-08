@@ -10,4 +10,6 @@ public interface FridgeIngredientsRepository extends JpaRepository<FridgeIngredi
     List<FridgeIngredientsEntity> findByIngredientsId(Integer id);
     List<FridgeIngredientsEntity> findByFridgeId(Integer id);
 
+    FridgeIngredientsEntity findByFridgeIdAndIngredientsIdAndMeasure(Integer fridgeId, Integer ingredientsId, String measure);
+
 }
