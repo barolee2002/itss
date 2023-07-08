@@ -3,9 +3,11 @@ package com.example.backend.service;
 import com.example.backend.dtos.Login;
 import com.example.backend.dtos.Register;
 import com.example.backend.dtos.UserDto;
+import com.example.backend.entities.FridgeEntity;
 import com.example.backend.entities.UserEntity;
 import com.example.backend.exception.DuplicateException;
 import com.example.backend.exception.NotFoundException;
+import com.example.backend.repository.FridgeRepository;
 import com.example.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -19,6 +21,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
+    private final FridgeRepository fridgeRepository;
     public UserDto login(Login login) {
         UserEntity user = userRepository.findByUsername(login.getUsername());
         UserDto userDto = new UserDto();
@@ -28,6 +31,8 @@ public class UserService {
             throw new NotFoundException("Mật khẩu không đúng");
         } else {
             userDto = modelMapper.map(user,UserDto.class);
+            FridgeEntity fridge = fridgeRepository.findByUserId(userDto.getId());
+            userDto.setFridgeId(fridge.getId());
         }
         return userDto;
 
@@ -43,7 +48,12 @@ public class UserService {
             newUser.setEmail(register.getEmail());
             newUser.setCreateAt(now());
             newUser.setStatus(1);
-            userRepository.save(newUser);
+            newUser = userRepository.save(newUser);
+            FridgeEntity newFridge = new FridgeEntity();
+            newFridge.setName("Tủ lạnh cá nhân");
+            newFridge.setUserId(newUser.getId());
+            newFridge.setType(0);
+            fridgeRepository.save(newFridge);
         }
     }
 
