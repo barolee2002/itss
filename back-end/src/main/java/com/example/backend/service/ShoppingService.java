@@ -33,6 +33,7 @@ public class ShoppingService {
     private final GroupShoppingRepository groupShoppingRepository;
     private final UserRepository userRepository;
     private final DishRepository dishRepository;
+    private final GroupMemberRepository groupMemberRepository;
     public List<ShoppingDto> getAllShoppings() {
         List<ShoppingDto> dtos = new ArrayList<ShoppingDto>();
         List<ShoppingEntity> entities = shoppingRepository.findAll();
@@ -168,7 +169,20 @@ public class ShoppingService {
 
     public List<ShoppingDto> getShoppingByUserId(Integer userId) {
         List<ShoppingEntity> shoppingList = shoppingRepository.findByUserId(userId);
+        List<GroupMemberEntity> groups = groupMemberRepository.findByUserId(userId);
+        for(GroupMemberEntity group : groups) {
 
+                List<GroupShoppingEntity> groupShopping = groupShoppingRepository.findByGroupId(group.getGroupId());
+                for(GroupShoppingEntity groupShoppingEntity : groupShopping) {
+                    ShoppingEntity entity = shoppingRepository.findById(groupShoppingEntity.getShoppingId()).get();
+                    if(entity != null) {
+                        System.out.println("anvjdssdfsd");
+                        shoppingList.remove(entity);
+                    }
+
+
+            }
+        }
         List<ShoppingDto> shoppingDtos = new ArrayList<ShoppingDto>();
 
         for(ShoppingEntity entity : shoppingList) {
