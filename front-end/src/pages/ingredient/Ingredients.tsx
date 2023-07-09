@@ -5,7 +5,7 @@ import { Badge, Button, Table } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRotateLeft, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 // import ModalDetailIngredient from '../../components/modal/ModalDetailIngredient';
-import { ingredientProps } from '../../interface/Interface';
+import { ingredientProps } from '../../utils/interface/Interface';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteIngredients, restoreIngredients, updateIngredients } from './IngredientSlice';
 import { ingredientsSelector } from '../../redux/selectors';

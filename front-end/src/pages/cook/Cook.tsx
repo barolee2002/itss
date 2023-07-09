@@ -1,17 +1,20 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import Url from '../../utils/url';
-import { Badge, Table } from 'react-bootstrap';
+import { Badge, Button, Table } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRotateLeft, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faRotateLeft, faTrashCan, faHeart } from '@fortawesome/free-solid-svg-icons';
 import ModalDeleteDish from '../../components/modal/ModalDeleteDish';
 import ModalDetailDish from '../../components/modal/ModalDetailDish';
-import { dishsProps } from '../../interface/Interface';
+import { dishsProps } from '../../utils/interface/Interface';
 import Search from '../../components/search/SearchCook';
 import { useDispatch, useSelector } from 'react-redux';
 import { dishsSelector } from '../../redux/selectors';
-import { updateDishs } from './DishsSlice';
+import { favoriteDish, unFavoriteDish, updateDishs } from './DishsSlice';
 import ModalRestoreDish from '../../components/modal/ModalRestoreDish';
+import { Link } from 'react-router-dom';
+import { faHeart as noHeart } from '@fortawesome/free-regular-svg-icons';
+import { userInfo } from '../../utils/userInfo';
 
 function Cook() {
     const dispatch = useDispatch();
@@ -25,7 +28,7 @@ function Cook() {
 
     const callApi = async () => {
         try {
-            const response = await axios.get(Url(`dishs`));
+            const response = await axios.get(Url(`dishs/user/${userInfo?.id}`));
             return response.data;
         } catch (error) {
             alert('Lỗi Server!!!');
@@ -46,8 +49,22 @@ function Cook() {
         fetchData();
     }, []);
 
+    const handleFavorite = async (dishId: number, isFavorited: 1 | 0) => {
+        if (isFavorited === 1) {
+            await axios.delete(Url('favorite'), {
+                data: { userId: userInfo!.id!, dishId },
+            });
+            dispatch(unFavoriteDish(dishId));
+        }
+
+        if (isFavorited === 0) {
+            await axios.post(Url('favorite'), { userId: userInfo!.id!, dishId });
+            dispatch(favoriteDish(dishId));
+        }
+    };
+
     return (
-        <div>
+        <div className="position-relative">
             <Search />
             <div className="overflow-y-scroll" style={{ height: '92vh' }}>
                 <Table hover bordered>
@@ -60,6 +77,7 @@ function Cook() {
                             <th>Kiểu món ăn</th>
                             <th>Ngày tạo</th>
                             <th>Xóa</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -67,7 +85,11 @@ function Cook() {
                             <tr key={index}>
                                 <td>{index + 1}</td>
                                 <td>
-                                    <img src={dish.image} alt="anh" />
+                                    <img
+                                        src={dish.image}
+                                        alt="anh"
+                                        style={{ width: '3rem', height: '3rem' }}
+                                    />
                                 </td>
                                 <td
                                     onClick={() => {
@@ -111,6 +133,34 @@ function Cook() {
                                         </div>
                                     )}
                                 </td>
+                                <td>
+                                    {dish.favorite === 1 ? (
+                                        <div
+                                            onClick={() => {
+                                                handleFavorite(dish.id, dish.favorite);
+                                            }}
+                                        >
+                                            <FontAwesomeIcon
+                                                size="lg"
+                                                className="p-1"
+                                                icon={faHeart}
+                                                style={{ color: '#d91717' }}
+                                            />
+                                        </div>
+                                    ) : (
+                                        <div
+                                            onClick={() => {
+                                                handleFavorite(dish.id, dish.favorite);
+                                            }}
+                                        >
+                                            <FontAwesomeIcon
+                                                size="lg"
+                                                className="p-1"
+                                                icon={noHeart}
+                                            />
+                                        </div>
+                                    )}
+                                </td>
                             </tr>
                         ))}
                     </tbody>
@@ -136,6 +186,15 @@ function Cook() {
                     indexDish={indexCurrentDish}
                 />
             )}
+            <Link to="/cook/create" className="position-absolute end-3 bottom-3">
+                <Button
+                    title="Thêm món ăn"
+                    className="rounded-circle fs-2"
+                    style={{ width: '5rem', height: '5rem' }}
+                >
+                    <FontAwesomeIcon icon={faPlus} />
+                </Button>
+            </Link>
         </div>
     );
 }

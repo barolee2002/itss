@@ -15,8 +15,8 @@ import {
     faUtensils,
 } from '@fortawesome/free-solid-svg-icons';
 
-import NavItem from '../../../NavbarItem/NavItem';
-import SignOut from '../../../Signout/SignOut';
+import NavItem from '../../../navbar-item/NavItem';
+import SignOut from '../../../sign-out/SignOut';
 import './Taskbar.scss';
 import { useSelector } from 'react-redux';
 import { isLoginSelector } from '../../../../redux/selectors';
@@ -64,7 +64,6 @@ function Taskbar() {
                     <NavItem text="Món ăn" icon={faUtensils} href="/cook" />
                     <NavItem text="Nguyên liệu" icon={faKitchenSet} href="/ingredients" />
                     <NavItem text="Đơn đi chợ" icon={faStore} href="/market" />
-                    <NavItem text="Món ăn yêu thích" icon={faHeart} href="/add-task" />
                     <NavItem text="Tủ lạnh" icon={faToiletPortable} href="/fridge" />
                     <NavItem text="Xem nhóm" icon={faPeopleGroup} href="/group" />
                 </div>

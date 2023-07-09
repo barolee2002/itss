@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Url from '../../utils/url';
 import { userInfo } from '../../utils/userInfo';
-import { groupsProps } from '../../interface/Interface';
+import { groupsProps } from '../../utils/interface/Interface';
 import CardGroup from '../../components/card-group/CardGroup';
 
 function Group() {

@@ -1,4 +1,4 @@
-import { userInfoProps } from '../interface/Interface';
+import { userInfoProps } from './interface/Interface';
 
 // Lấy thông tin người dùng
 const userInfoString: string | null = localStorage.getItem('userInfo');

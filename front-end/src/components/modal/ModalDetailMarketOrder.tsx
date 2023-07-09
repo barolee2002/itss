@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Badge, Button, Modal, Image, Table, Tabs, Tab, Form } from 'react-bootstrap';
 import Url from '../../utils/url';
 import { useEffect, useState } from 'react';
-import { shoppingProps, userInfoProps } from '../../interface/Interface';
+import { shoppingProps, userInfoProps } from '../../utils/interface/Interface';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faToiletPortable } from '@fortawesome/free-solid-svg-icons';
 import { userInfo } from '../../utils/userInfo';

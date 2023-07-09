@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Button, Modal } from 'react-bootstrap';
 import Url from '../../utils/url';
-import { dishsProps } from '../../interface/Interface';
+import { dishsProps } from '../../utils/interface/Interface';
 import { useDispatch } from 'react-redux';
 import { deleteDish } from '../../pages/cook/DishsSlice';
 

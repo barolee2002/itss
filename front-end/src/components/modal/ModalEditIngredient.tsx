@@ -5,7 +5,7 @@ import Url from '../../utils/url';
 import { addIngredients, editIngredient } from '../../pages/ingredient/IngredientSlice';
 import { useDispatch } from 'react-redux';
 import moment from 'moment';
-import { ingredientProps } from '../../interface/Interface';
+import { ingredientProps } from '../../utils/interface/Interface';
 
 interface ModalAddIngredientProps {
     show: boolean;

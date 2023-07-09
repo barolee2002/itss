@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Badge, Button, Col, Modal, Row, Image, Table } from 'react-bootstrap';
 import Url from '../../utils/url';
 import { useEffect, useState } from 'react';
-import { dishsProps } from '../../interface/Interface';
+import { dishsProps } from '../../utils/interface/Interface';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 
@@ -72,7 +72,7 @@ function ModalDetailDish({ show, hide, indexDish }: ModalDetailDishProps) {
             </Modal.Header>
             <Modal.Body>
                 <Row>
-                    <Col>
+                    <Col xs={8}>
                         <div>
                             <b>Kiểu món ăn:</b> {dish.type}
                         </div>
@@ -86,8 +86,13 @@ function ModalDetailDish({ show, hide, indexDish }: ModalDetailDishProps) {
                             <b>Ngày tạo món:</b> {dish.createAt}
                         </div>
                     </Col>
-                    <Col>
-                        <Image src={dish.image} alt="Anh" rounded />
+                    <Col xs={4}>
+                        <Image
+                            src={dish.image}
+                            alt="Anh"
+                            rounded
+                            style={{ width: '100%', aspectRatio: '1/1', objectFit: 'cover' }}
+                        />
                     </Col>
                 </Row>
                 <Table bordered hover className="mt-4">

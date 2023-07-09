@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { marketProps } from '../../interface/Interface';
+import { marketProps } from '../../utils/interface/Interface';
 
 export const marketsSlice = createSlice({
     name: 'marketOrders',
