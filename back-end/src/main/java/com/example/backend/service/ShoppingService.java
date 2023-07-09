@@ -121,24 +121,7 @@ public class ShoppingService {
             }
 
         }
-//        for(DishIngredientsEntity dishShopping  : dishShoppingList) {
-//            ShoppingAttribute oldAttribute = attributeRepository.findByShoppingIdAndIngredientsIdAndMeasure(entity.getId(),dishShopping.getIngredientsId(),dishShopping.getMeasure());
-//            if(oldAttribute != null) {
-//                oldAttribute.setQuantity((oldAttribute.getQuantity()).add(BigDecimal.valueOf(dishShopping.getQuantity())));
-//                attributeRepository.save(oldAttribute);
-//
-//            } else {
-//                ShoppingAttribute attribute = new ShoppingAttribute();
-//                attribute.setShoppingId(entity.getId());
-//                attribute.setStatus(0);
-//                attribute.setUserId(entity.getUserId());
-//                attribute.setIngredientsId(dishShopping.getIngredientsId());
-//                attribute.setQuantity(BigDecimal.valueOf(dishShopping.getQuantity() * ));
-//                attribute.setMeasure(dishShopping.getMeasure());
-//                attributeRepository.save(attribute);
-//            }
-//
-//        }
+
         for(ShoppingAttributeDto attributeDto : shoppingDto.getAttributes()) {
 
             ShoppingAttribute oldAttribute = attributeRepository.findByShoppingIdAndIngredientsIdAndMeasure(entity.getId(),attributeDto.getIngredients().getId(),attributeDto.getMeasure());

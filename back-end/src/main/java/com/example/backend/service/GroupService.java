@@ -11,9 +11,12 @@ import org.apache.catalina.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static java.time.LocalDate.now;
 
 @Service
 @RequiredArgsConstructor
@@ -162,9 +165,16 @@ public class GroupService {
 
     }
     public void addGroup(GroupDto groupDto) {
-        GroupEntity entity = modelMapper.map(groupDto, GroupEntity.class);
+        GroupEntity entity = new GroupEntity();
+        entity.setName(groupDto.getName());
+        entity.setImage(groupDto.getImage());
         entity.setLeader(groupDto.getLeader().getId());
+        entity.setCreateAt(now());
         entity = groupRepository.save(entity);
+        GroupMemberEntity groupMember = new GroupMemberEntity();
+        groupMember.setGroupId(entity.getId());
+        groupMember.setUserId(entity.getLeader());
+        groupMemberRepository.save(groupMember);
         FridgeEntity newFridge = new FridgeEntity ();
         newFridge.setName("Tủ lạng của " + groupDto.getName());
         newFridge.setType(1);
