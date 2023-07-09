@@ -189,13 +189,14 @@ public class GroupService {
             for(GroupShoppingEntity shopping : shoppings) {
                 ShoppingEntity entity = shoppingRepository.findById(shopping.getShoppingId()).get();
                 if(entity.getStatus() == 0) {
-                    throw new NotCanDoException("Vui lòng hoàn thành nốt đươn đi chựo trước khi xóa nhóm");
+                    throw new NotCanDoException("Vui lòng hoàn thành nốt đơn đi chựo trước khi xóa nhóm");
                 }
             }
         }
         FridgeEntity fridge = fridgeRepository.findByGroupId(groupId);
         List<FridgeIngredientsEntity> ingredients = ingredientsRepository.findByFridgeId(fridge.getId());
-        if (ingredients != null) {
+
+        if (ingredients.size() != 0) {
             throw new NotCanDoException("Vui lòng dùng hết nguyên liệu trong tủ lạnh trước khi xóa nhóm");
         }
         groupRepository.deleteById(groupId);
