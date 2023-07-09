@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
+
 @RestController
 @Validated
 @RequestMapping("admin")
@@ -86,6 +88,18 @@ public class GroupController {
     @PostMapping("/group")
     public String addGroup(@RequestBody GroupDto groupDto) {
         groupService.addGroup(groupDto);
+        return "Success";
+    }
+
+    @DeleteMapping("/group/{id}")
+    public String removeGroup(@PathVariable Integer id) {
+        groupService.deleteGroup(id);
+        return "Success";
+
+    }
+    @PutMapping("/group")
+    public String updateGroup(@RequestBody GroupDto groupDto) {
+        groupService.updateGroup(groupDto);
         return "Success";
     }
 

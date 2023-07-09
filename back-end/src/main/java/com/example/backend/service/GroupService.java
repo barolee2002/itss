@@ -181,6 +181,16 @@ public class GroupService {
         newFridge.setGroupId(entity.getId());
         fridgeRepository.save(newFridge);
     }
+    public void deleteGroup (Integer groupId) {
+        groupRepository.deleteById(groupId);
+    }
+    public void updateGroup(GroupDto groupDto) {
+        GroupEntity entity = groupRepository.findById(groupDto.getId()).get();
+        entity.setName(groupDto.getName());
+        entity.setImage(groupDto.getImage());
+        entity.setUpdateAt(now());
+        groupRepository.save(entity);
+    }
 
 
 }
