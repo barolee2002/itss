@@ -151,8 +151,7 @@ public class GroupService {
         List<UserEntity> users = userRepository.findAll();
         GroupEntity group  = groupRepository.findById(groupId).get();
         List <GroupMemberEntity> groups = groupMemberRepository.findByGroupId(groupId);
-        GroupMemberEntity groupMemberEntity = groupMemberRepository.findByGroupIdAndUserId(groupId, group.getLeader());
-        groups.remove(groupMemberEntity);
+
         for(GroupMemberEntity groupMember : groups) {
             UserEntity user = userRepository.findById(groupMember.getUserId()).get();
             users.remove(user);
@@ -160,6 +159,11 @@ public class GroupService {
         List<UserDto> dtos = Arrays.asList(modelMapper.map(users,UserDto[].class));
         return dtos;
 
+    }
+    public void addGroup(GroupDto groupDto) {
+        GroupEntity entity = modelMapper.map(groupDto, GroupEntity.class);
+        entity.setLeader(groupDto.getLeader().getId());
+        groupRepository.save(entity);
     }
 
 

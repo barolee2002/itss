@@ -26,6 +26,11 @@ public class UserController {
         userService.register(user);
         return "success";
     }
+    @PutMapping("/user")
+    public String updateInfor(@RequestBody UserDto userDto) {
+        userService.updateInfor(userDto);
+        return "success";
+    }
 
 
 }
