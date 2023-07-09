@@ -5,6 +5,7 @@ import com.example.backend.dtos.ShoppingDto;
 import com.example.backend.dtos.UserDto;
 import com.example.backend.entities.*;
 import com.example.backend.exception.DuplicateException;
+import com.example.backend.exception.NotCanDoException;
 import com.example.backend.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.User;
@@ -29,6 +30,7 @@ public class GroupService {
     private final GroupShoppingRepository groupShoppingRepository;
     private final ShoppingRepository shoppingRepository;
     private final FridgeRepository fridgeRepository;
+    private final FridgeIngredientsRepository ingredientsRepository;
     private final ModelMapper modelMapper;
     public List<GroupDto> getAllGroups() {
         List<GroupEntity> entities = groupRepository.findAll();
@@ -182,6 +184,20 @@ public class GroupService {
         fridgeRepository.save(newFridge);
     }
     public void deleteGroup (Integer groupId) {
+        List<GroupShoppingEntity> shoppings = groupShoppingRepository.findByGroupId(groupId);
+        if(shoppings != null) {
+            for(GroupShoppingEntity shopping : shoppings) {
+                ShoppingEntity entity = shoppingRepository.findById(shopping.getShoppingId()).get();
+                if(entity.getStatus() == 0) {
+                    throw new NotCanDoException("Vui lòng hoàn thành nốt đươn đi chựo trước khi xóa nhóm");
+                }
+            }
+        }
+        FridgeEntity fridge = fridgeRepository.findByGroupId(groupId);
+        List<FridgeIngredientsEntity> ingredients = ingredientsRepository.findByFridgeId(fridge.getId());
+        if (ingredients != null) {
+            throw new NotCanDoException("Vui lòng dùng hết nguyên liệu trong tủ lạnh trước khi xóa nhóm");
+        }
         groupRepository.deleteById(groupId);
     }
     public void updateGroup(GroupDto groupDto) {
