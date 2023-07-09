@@ -30,6 +30,7 @@ public class FavoriteService {
             for(FavoriteEntity favorite : favorites) {
                 DishEntity dish = dishRepository.findById(favorite.getRecipeId()).get();
                 DishDto favoriteDish = modelMapper.map(dish, DishDto.class);
+                favoriteDish.setFavorite(1);
                 favoriteDishes.add(favoriteDish);
             }
             return favoriteDishes;
@@ -48,7 +49,7 @@ public class FavoriteService {
         }
         public void removeFavoriteDish(Integer userId, Integer dishId) {
             FavoriteEntity entity = favoriteRepository.findByUserIdAndRecipeId(userId, dishId);
-            if(entity != null) {
+            if(entity == null) {
                 throw new NotFoundException("Không thấy món ăn này trong danh sách yêu thích");
             } else {
 
