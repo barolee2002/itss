@@ -16,6 +16,7 @@ public class DishDto {
     private String recipeDes;
     private LocalDate createAt;
     private LocalDate updateAt;
+    private Integer favorite;
     private List<DishIngredientsDto>  ingredients;
 
 
