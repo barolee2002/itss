@@ -203,8 +203,16 @@ public class GroupService {
     }
     public void updateGroup(GroupDto groupDto) {
         GroupEntity entity = groupRepository.findById(groupDto.getId()).get();
-        entity.setName(groupDto.getName());
-        entity.setImage(groupDto.getImage());
+        String updateName = entity.getName();
+        String updateImage = entity.getImage();
+        if(groupDto.getName() != "") {
+            updateName = groupDto.getName();
+        }
+        if(groupDto.getName() != "") {
+            updateImage = groupDto.getName();
+        }
+        entity.setName(updateName);
+        entity.setImage(updateImage);
         entity.setUpdateAt(now());
         groupRepository.save(entity);
     }
