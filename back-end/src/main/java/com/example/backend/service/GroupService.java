@@ -208,7 +208,7 @@ public class GroupService {
         if(groupDto.getName() != "") {
             updateName = groupDto.getName();
         }
-        if(groupDto.getName() != "") {
+        if(groupDto.getImage() != "") {
             updateImage = groupDto.getName();
         }
         entity.setName(updateName);
