@@ -95,30 +95,50 @@ public class ShoppingService {
             dishAttribute = shoppingModelMapper.map(dishAttributeDto,DishAttributeEntity.class);
             dishAttribute.setShoppingId(entity.getId());
             dishAttribute.setDishId(dishAttributeDto.getDish().getId());
+            dishAttribute.setQuantity(dishAttributeDto.getQuantity());
             dishAttribute.setCookStatus(0);
             dishAttribute.setCreateAt(now());
             dishAttributeRepository.save(dishAttribute);
             List<DishIngredientsEntity> dishDto = dishIngredientsRepository.findByDishId(dishAttribute.getDishId());
             dishShoppingList.addAll(dishDto);
-        }
-        for(DishIngredientsEntity dishShopping  : dishShoppingList) {
-            ShoppingAttribute oldAttribute = attributeRepository.findByShoppingIdAndIngredientsIdAndMeasure(entity.getId(),dishShopping.getIngredientsId(),dishShopping.getMeasure());
-            if(oldAttribute != null) {
-                oldAttribute.setQuantity((oldAttribute.getQuantity()).add(BigDecimal.valueOf(dishShopping.getQuantity())));
-                attributeRepository.save(oldAttribute);
+            for(DishIngredientsEntity dishShopping  : dishDto) {
+                ShoppingAttribute oldAttribute = attributeRepository.findByShoppingIdAndIngredientsIdAndMeasure(entity.getId(),dishShopping.getIngredientsId(),dishShopping.getMeasure());
+                if(oldAttribute != null) {
+                    oldAttribute.setQuantity((oldAttribute.getQuantity()).add(BigDecimal.valueOf(dishShopping.getQuantity())));
+                    attributeRepository.save(oldAttribute);
 
-            } else {
-                ShoppingAttribute attribute = new ShoppingAttribute();
-                attribute.setShoppingId(entity.getId());
-                attribute.setStatus(0);
-                attribute.setUserId(entity.getUserId());
-                attribute.setIngredientsId(dishShopping.getIngredientsId());
-                attribute.setQuantity(BigDecimal.valueOf(dishShopping.getQuantity()));
-                attribute.setMeasure(dishShopping.getMeasure());
-                attributeRepository.save(attribute);
+                } else {
+                    ShoppingAttribute attribute = new ShoppingAttribute();
+                    attribute.setShoppingId(entity.getId());
+                    attribute.setStatus(0);
+                    attribute.setUserId(entity.getUserId());
+                    attribute.setIngredientsId(dishShopping.getIngredientsId());
+                    attribute.setQuantity(BigDecimal.valueOf(dishShopping.getQuantity() * dishAttribute.getQuantity()));
+                    attribute.setMeasure(dishShopping.getMeasure());
+                    attributeRepository.save(attribute);
+                }
+
             }
 
         }
+//        for(DishIngredientsEntity dishShopping  : dishShoppingList) {
+//            ShoppingAttribute oldAttribute = attributeRepository.findByShoppingIdAndIngredientsIdAndMeasure(entity.getId(),dishShopping.getIngredientsId(),dishShopping.getMeasure());
+//            if(oldAttribute != null) {
+//                oldAttribute.setQuantity((oldAttribute.getQuantity()).add(BigDecimal.valueOf(dishShopping.getQuantity())));
+//                attributeRepository.save(oldAttribute);
+//
+//            } else {
+//                ShoppingAttribute attribute = new ShoppingAttribute();
+//                attribute.setShoppingId(entity.getId());
+//                attribute.setStatus(0);
+//                attribute.setUserId(entity.getUserId());
+//                attribute.setIngredientsId(dishShopping.getIngredientsId());
+//                attribute.setQuantity(BigDecimal.valueOf(dishShopping.getQuantity() * ));
+//                attribute.setMeasure(dishShopping.getMeasure());
+//                attributeRepository.save(attribute);
+//            }
+//
+//        }
         for(ShoppingAttributeDto attributeDto : shoppingDto.getAttributes()) {
 
             ShoppingAttribute oldAttribute = attributeRepository.findByShoppingIdAndIngredientsIdAndMeasure(entity.getId(),attributeDto.getIngredients().getId(),attributeDto.getMeasure());

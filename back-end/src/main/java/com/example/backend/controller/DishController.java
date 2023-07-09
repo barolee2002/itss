@@ -8,6 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @Validated
@@ -16,9 +17,9 @@ import java.util.List;
 public class DishController {
     @Autowired
     private DishService dishService;
-    @GetMapping("/dishs")
-    public List<DishDto> getAllDishes() {
-        return dishService.getAllDishes();
+    @GetMapping("/dishs/user/{id}")
+    public List<DishDto> getAllDishes(@PathVariable Integer id) {
+        return dishService.getAllDishes(id);
     }
     @GetMapping("/dishs/{id}")
     public DishDto getDishDetailById(@PathVariable Integer id) {
@@ -32,10 +33,11 @@ public class DishController {
     public List<DishDto> getDishByFilter(
             @RequestParam(name = "name" ,required = false) String name,
             @RequestParam(name = "status" ,required = false) Integer status,
-            @RequestParam(name = "type",required = false) String type
+            @RequestParam(name = "type",required = false) String type,
+            @RequestParam(name = "userId", required = false) Integer userId
 
     ) {
-        return dishService.getDishByFilter(name,status,type);
+        return dishService.getDishByFilter(name,status,type,userId);
     }
 
     @GetMapping("/dish_type")
@@ -48,9 +50,13 @@ public class DishController {
         dishService.save(dishDto);
         return "success";
     }
-    @PostMapping("/dish/{id}/{ingredientId}")
-    public String updateDish(@PathVariable Integer id, @PathVariable Integer ingredientId) {
-        dishService.addIngredientId(id, ingredientId);
+    @PostMapping("/dish/adding-ingredient")
+    public String updateDish(@RequestBody Map<String,Object> request) {
+        Integer dishId = (Integer) request.get("dishId");
+        Integer ingredientId = (Integer) request.get("ingredientId");
+        Integer quantity = (Integer) request.get("quantity");
+        String measure = (String) request.get("measure");
+        dishService.addIngredientId(dishId, ingredientId, quantity, measure);
         return "success";
     }
     @PutMapping("/dish/{id}")

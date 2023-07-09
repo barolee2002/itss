@@ -9,10 +9,7 @@ import com.example.backend.entities.DishEntity;
 import com.example.backend.entities.DishIngredientsEntity;
 import com.example.backend.entities.IngredientsEntity;
 import com.example.backend.exception.DuplicateException;
-import com.example.backend.repository.DishAttributeRepository;
-import com.example.backend.repository.DishIngredientsRepository;
-import com.example.backend.repository.DishRepository;
-import com.example.backend.repository.IngredientsRepository;
+import com.example.backend.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -30,14 +27,24 @@ public class DishService {
     private final DishAttributeRepository attributeRepository;
     private final DishIngredientsRepository dishIngredientRepository;
     private final ModelMapper dishModelMapper;
+    private final FavoriteRepository favoriteRepository;
     private final IngredientsRepository ingredientsRepository;
-    public List<DishDto> getAllDishes() {
+    public List<DishDto> getAllDishes(Integer userId) {
         List<DishDto> dtos = new ArrayList<DishDto>();
         List<DishEntity> entities = dishRepository.findAll();
       
 
         dtos = Arrays.asList(dishModelMapper.map(entities,DishDto[].class));
+        for(DishDto dto : dtos) {
+            if(favoriteRepository.findByUserIdAndRecipeId(userId, dto.getId()) != null) {
+                dto.setFavorite(1);
+            } else {
+                dto.setFavorite(0);
+            }
+        }
+        dtos.sort(Comparator.comparing(DishDto::getFavorite).reversed());
         return dtos;
+
 
     }
     public DishDto getDishDetailById(Integer id) {
@@ -62,7 +69,7 @@ public class DishService {
         dto.setIngredients(ingredientsDtos);
         return dto;
     }
-    public List<DishDto> getDishByFilter(String name, Integer status,String type) {
+    public List<DishDto> getDishByFilter(String name, Integer status,String type,Integer userId) {
         List<DishDto> dtos = new ArrayList<DishDto>();
         List<DishEntity> entities = new ArrayList<DishEntity>();
         Integer filterStatus = null;
@@ -77,6 +84,14 @@ public class DishService {
 
 
         dtos = Arrays.asList(dishModelMapper.map(entities,DishDto[].class));
+        for(DishDto dto : dtos) {
+            if(favoriteRepository.findByUserIdAndRecipeId(userId, dto.getId()) != null) {
+                dto.setFavorite(1);
+            } else {
+                dto.setFavorite(0);
+            }
+        }
+        dtos.sort(Comparator.comparing(DishDto::getFavorite).reversed());
         return dtos;
     }
 
@@ -100,13 +115,15 @@ public class DishService {
     public List<String> getAllDishTypes() {
         return dishRepository.findDistinctType();
     }
-    public void addIngredientId(Integer id,Integer ingredientId) {
+    public void addIngredientId(Integer dishId,Integer ingredientId,Integer quantity, String measure) {
         DishIngredientsEntity dishIngredient = new DishIngredientsEntity();
-        if(dishIngredientRepository.findByDishIdAndIngredientsId(id, ingredientId) != null) {
+        if(dishIngredientRepository.findByDishIdAndIngredientsId(dishId, ingredientId) != null) {
             throw new DuplicateException("Đã có nguyên liệu này ");
         } else {
-            dishIngredient.setDishId(id);
+            dishIngredient.setDishId(dishId);
             dishIngredient.setIngredientsId(ingredientId);
+            dishIngredient.setQuantity(quantity);
+            dishIngredient.setMeasure(measure);
             dishIngredientRepository.save(dishIngredient);
         }
 
