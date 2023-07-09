@@ -56,6 +56,11 @@ public class UserService {
             fridgeRepository.save(newFridge);
         }
     }
+    public void updateInfor (UserDto userDto) {
+        UserEntity user = userRepository.findById(userDto.getId()).get();
+        user = modelMapper.map(userDto,UserEntity.class);
+        userRepository.save(user);
+    }
 
 
 }
