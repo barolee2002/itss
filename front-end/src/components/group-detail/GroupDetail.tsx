@@ -17,7 +17,7 @@ import {
     marketProps,
     userInfoProps,
 } from '../../utils/interface/Interface';
-import { Badge, Button, Modal, Tab, Table, Tabs, Toast } from 'react-bootstrap';
+import { Badge, Button, Form, Modal, Tab, Table, Tabs, Toast } from 'react-bootstrap';
 import { userInfo } from '../../utils/userInfo';
 import ModalDetailMarketOrder from '../modal/ModalDetailMarketOrder';
 import ModalAddMemberToGroup from '../modal/ModalAddMemberToGroup';
@@ -28,7 +28,6 @@ function GroupDetail() {
 
     const [showModalDetailMarketOrder, setShowModalDetailMarketOrder] = useState(false);
     const [currentIdMarketOrder, setCurrentIdMarketOrder] = useState(1);
-    const [currentMarketOrder, setCurrentMarketOrder] = useState<marketProps>({} as marketProps);
     const [showModalDeleteMember, setShowModalDeleteMember] = useState(false);
     const [showModalAddMember, setShowModalAddMember] = useState(false);
     const [currentMember, setCurrentMember] = useState<userInfoProps>({} as userInfoProps);
@@ -41,6 +40,10 @@ function GroupDetail() {
 
     const [group, setGroup] = useState<groupsProps>({} as groupsProps);
     const [marketOrder, setMarketOrder] = useState<marketProps[]>([]);
+
+    const [editNameGroup, setEditNameGroup] = useState('');
+    const [editImageGroup, setEditImageGroup] = useState('');
+    const [showModalDeleteGroup, setShowModalDeleteGroup] = useState(false);
 
     useEffect(() => {
         const fetchApiGroupDetail = async () => {
@@ -99,6 +102,15 @@ function GroupDetail() {
         }
     };
 
+    const handleDeleteGroup = async () => {
+        try {
+            await axios.delete(Url(`group/${group.id}`), { data: {} });
+        } catch (error: any) {
+            // alert(error.response.data.message);
+            console.log(error);
+        }
+    };
+
     return (
         <div className="position-relative">
             <div className="d-flex">
@@ -111,7 +123,7 @@ function GroupDetail() {
                 {/* Tab đơn đi chợ của nhóm */}
                 <Tabs defaultActiveKey="home" id="uncontrolled-tab-example" className="mb-3">
                     <Tab eventKey="home" title="Đơn đi chợ">
-                        <div className="position-relative">
+                        <div>
                             <div className="overflow-y-scroll" style={{ height: '92vh' }}>
                                 <Table hover bordered>
                                     <thead className="fs-5 ">
@@ -359,6 +371,51 @@ function GroupDetail() {
                                 />
                             )}
                         </div>
+                    </Tab>
+
+                    {/* Tab cài đặt */}
+                    <Tab eventKey="setting" title="Cài đặt">
+                        <Form className="w-75">
+                            <Form.Group className="mb-3" controlId="nameGroup">
+                                <Form.Label>Tên nhóm</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Nhập tên nhóm mới"
+                                    value={editNameGroup}
+                                    onChange={(e) => setEditNameGroup(e.target.value)}
+                                />
+                            </Form.Group>
+                            <Form.Group className="mb-3" controlId="imageGroup">
+                                <Form.Label>Link ảnh nhóm</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Nhập link ảnh mới"
+                                    value={editImageGroup}
+                                    onChange={(e) => setEditImageGroup(e.target.value)}
+                                />
+                            </Form.Group>
+                        </Form>
+                        <Button onClick={() => setShowModalDeleteGroup(true)}>Xóa nhóm</Button>
+                        <Modal
+                            show={showModalDeleteGroup}
+                            onHide={() => setShowModalDeleteGroup(false)}
+                        >
+                            <Modal.Header closeButton>
+                                <Modal.Title>Xóa nhóm</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>Bạn có chắc chắn muốn xóa {group.name} không?</Modal.Body>
+                            <Modal.Footer>
+                                <Button
+                                    variant="secondary"
+                                    onClick={() => setShowModalDeleteGroup(false)}
+                                >
+                                    Hủy bỏ
+                                </Button>
+                                <Button variant="danger" onClick={handleDeleteGroup}>
+                                    Xoá
+                                </Button>
+                            </Modal.Footer>
+                        </Modal>
                     </Tab>
                 </Tabs>
             </div>

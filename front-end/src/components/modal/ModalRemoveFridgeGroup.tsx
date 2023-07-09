@@ -20,7 +20,7 @@ function ModalRemoveFridgeGroup({ show, hide, ingredient }: ModalRemoveFridgeGro
                 id: ingredient.id,
                 quantityUsed: quantity,
             });
-            // await axios.delete(Url(`fridge/ingredients/${ingredient.id}`));
+            await axios.delete(Url(`fridge/ingredients/${ingredient.id}`));
             hide();
         } catch (error: any) {
             alert(error.response.data.message);
