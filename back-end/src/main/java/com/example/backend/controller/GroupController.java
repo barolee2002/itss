@@ -83,7 +83,7 @@ public class GroupController {
         groupService.addBuyUser(id, userId);
         return "Success";
     }
-    @PostMapping("group")
+    @PostMapping("/group")
     public String addGroup(@RequestBody GroupDto groupDto) {
         groupService.addGroup(groupDto);
         return "Success";
