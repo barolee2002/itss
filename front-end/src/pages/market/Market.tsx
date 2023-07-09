@@ -5,7 +5,7 @@ import Url from '../../utils/url';
 import { Badge, Button, Table } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faShareFromSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons';
-import { marketProps } from '../../interface/Interface';
+import { marketProps } from '../../utils/interface/Interface';
 import { useDispatch, useSelector } from 'react-redux';
 import { isLoginSelector, marketOrderSelector } from '../../redux/selectors';
 import SearchMarketOrders from '../../components/search/SearchMarketOrders';

@@ -1,7 +1,7 @@
 import { faShareFromSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Modal, Table } from 'react-bootstrap';
-import { groupsProps, marketProps } from '../../interface/Interface';
+import { groupsProps, marketProps } from '../../utils/interface/Interface';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Url from '../../utils/url';

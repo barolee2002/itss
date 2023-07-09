@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Button, Modal } from 'react-bootstrap';
 import Url from '../../utils/url';
 import { useDispatch } from 'react-redux';
-import { marketProps, userInfoProps } from '../../interface/Interface';
+import { marketProps, userInfoProps } from '../../utils/interface/Interface';
 import { deleteMarket } from '../../pages/market/MarketSlice';
 import { useEffect, useState } from 'react';
 

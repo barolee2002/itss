@@ -2,7 +2,7 @@ import { Figure, Modal, Tab, Tabs } from 'react-bootstrap';
 import { useState } from 'react';
 
 import './cardgroup.scss';
-import { groupsProps } from '../../interface/Interface';
+import { groupsProps } from '../../utils/interface/Interface';
 import { Link } from 'react-router-dom';
 
 interface CardGroupProps {

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { ingredientProps } from '../../interface/Interface';
+import { ingredientProps } from '../../utils/interface/Interface';
 
 export const ingredientsSlice = createSlice({
     name: 'ingredients',

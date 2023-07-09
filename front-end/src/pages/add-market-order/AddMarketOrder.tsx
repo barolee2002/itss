@@ -1,16 +1,20 @@
-import { faArrowLeft, faMagnifyingGlass, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import {
+    faArrowLeft,
+    faHeart,
+    faMagnifyingGlass,
+    faTrashCan,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Col, Form, Image, InputGroup, Row, Tab, Table, Tabs } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { userInfo } from '../../utils/userInfo';
-import SearchIngredients from '../../components/search/SearchIngredients';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { dishsSelector, ingredientsSelector } from '../../redux/selectors';
 import axios from 'axios';
 import Url from '../../utils/url';
 import { updateIngredients } from '../ingredient/IngredientSlice';
-import { dishesProps, dishsProps, ingredientProps } from '../../interface/Interface';
+import { dishsProps, ingredientProps } from '../../utils/interface/Interface';
 import { updateDishs } from '../cook/DishsSlice';
 import moment from 'moment';
 
@@ -74,7 +78,7 @@ function AddMarketOrder() {
     const callApiDish = async (name: string) => {
         try {
             const response = await axios.get(Url(`dishs/filter`), {
-                params: { name: name, status: 1, type: '' },
+                params: { name: name, status: 1, type: '', userId: userInfo?.id },
             });
             return response.data;
         } catch (error) {
@@ -357,16 +361,31 @@ function AddMarketOrder() {
                             >
                                 {listDishes.map((item, index) => (
                                     <div
-                                        className="hover p-1 d-flex align-items-center border"
+                                        className="hover p-1 d-flex align-items-center justify-content-between border"
                                         key={index}
                                         onClick={() => handleClickItemDish(item)}
                                     >
-                                        <Image
-                                            src={item.image}
-                                            alt="item"
-                                            style={{ width: '3rem', height: '3rem' }}
-                                        />
-                                        <div className="ms-3">{item.name}</div>
+                                        <div className="d-flex align-items-center p-1 ">
+                                            <Image
+                                                src={item.image}
+                                                alt="item"
+                                                style={{ width: '3rem', height: '3rem' }}
+                                            />
+                                            <div className="ms-3">{item.name}</div>
+                                        </div>
+
+                                        <div>
+                                            {item.favorite === 1 ? (
+                                                <FontAwesomeIcon
+                                                    size="lg"
+                                                    className="p-1 me-2"
+                                                    icon={faHeart}
+                                                    style={{ color: '#d91717' }}
+                                                />
+                                            ) : (
+                                                <div></div>
+                                            )}
+                                        </div>
                                     </div>
                                 ))}
                             </div>

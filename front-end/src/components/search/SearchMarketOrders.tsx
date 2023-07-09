@@ -6,7 +6,7 @@ import Url from '../../utils/url';
 import { useEffect, useState } from 'react';
 import { updateMarkets } from '../../pages/market/MarketSlice';
 import { useDispatch } from 'react-redux';
-import { userInfoProps } from '../../interface/Interface';
+import { userInfoProps } from '../../utils/interface/Interface';
 
 function SearchMarketOrders() {
     // Lấy thông tin người dùng

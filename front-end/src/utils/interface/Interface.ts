@@ -28,6 +28,7 @@ export interface dishsProps {
     recipeDes: string;
     status: 1 | 0;
     type: 'Món chính' | 'Món phụ' | string;
+    favorite: 1 | 0;
 }
 
 export interface marketProps {

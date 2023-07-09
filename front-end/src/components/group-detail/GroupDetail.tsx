@@ -16,7 +16,7 @@ import {
     ingredientsProps,
     marketProps,
     userInfoProps,
-} from '../../interface/Interface';
+} from '../../utils/interface/Interface';
 import { Badge, Button, Modal, Tab, Table, Tabs, Toast } from 'react-bootstrap';
 import { userInfo } from '../../utils/userInfo';
 import ModalDetailMarketOrder from '../modal/ModalDetailMarketOrder';
@@ -313,7 +313,7 @@ function GroupDetail() {
                                         <th>Tên nguyên liệu</th>
                                         <th>Số lượng</th>
                                         <th>Đơn vị tính</th>
-                                        <th>Ngày tạo</th>
+                                        <th>Ngày cho vào tủ</th>
                                         <th>Ngày hết hạn</th>
                                         <th>Sử dụng</th>
                                     </tr>
