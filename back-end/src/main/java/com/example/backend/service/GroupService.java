@@ -25,6 +25,7 @@ public class GroupService {
     private final ShoppingAttributeRepository attributeRepository;
     private final GroupShoppingRepository groupShoppingRepository;
     private final ShoppingRepository shoppingRepository;
+    private final FridgeRepository fridgeRepository;
     private final ModelMapper modelMapper;
     public List<GroupDto> getAllGroups() {
         List<GroupEntity> entities = groupRepository.findAll();
@@ -163,7 +164,12 @@ public class GroupService {
     public void addGroup(GroupDto groupDto) {
         GroupEntity entity = modelMapper.map(groupDto, GroupEntity.class);
         entity.setLeader(groupDto.getLeader().getId());
-        groupRepository.save(entity);
+        entity = groupRepository.save(entity);
+        FridgeEntity newFridge = new FridgeEntity ();
+        newFridge.setName("Tủ lạng của " + groupDto.getName());
+        newFridge.setType(1);
+        newFridge.setGroupId(entity.getId());
+        fridgeRepository.save(newFridge);
     }
 
 

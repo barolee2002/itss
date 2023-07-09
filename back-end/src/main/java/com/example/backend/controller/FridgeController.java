@@ -54,7 +54,7 @@ public class FridgeController {
         return "success";
     }
     @DeleteMapping("/fridge/ingredients/{id}")
-    public String autoDeleteIngredient(Integer id) {
+    public String autoDeleteIngredient(@PathVariable Integer id) {
         fridgeService.autoDeleteIngredient(id);
         return "success";
     }

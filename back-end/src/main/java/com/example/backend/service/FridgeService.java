@@ -139,9 +139,10 @@ public class FridgeService {
         fridgeIngredientsRepository.save(ingredientEntity);
     }
     public void autoDeleteIngredient(Integer id) {
+//        FridgeIngredientsEntity entity = fridgeIngredientsRepository.findById(id).get();
         FridgeIngredientsEntity entity = fridgeIngredientsRepository.findById(id).get();
         if(entity.getQuantity() == 0) {
-            fridgeIngredientsRepository.deleteById(id);
+            fridgeIngredientsRepository.deleteById(entity.getId());
         }
     }
 }
