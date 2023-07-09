@@ -53,7 +53,7 @@ function Taskbar() {
                         />
                         <div className="ms-2 d-flex flex-column">
                             <div className="fw-medium">{userInfo?.name}</div>
-                            <div className="small">Sinh viên</div>
+                            {/* <div className="small">Sinh viên</div> */}
                         </div>
                     </>
                 )}

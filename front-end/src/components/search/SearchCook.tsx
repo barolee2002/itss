@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { updateDishs } from '../../pages/cook/DishsSlice';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { userInfo } from '../../utils/userInfo';
 
 function Search() {
     const dispatch = useDispatch();
@@ -18,7 +19,7 @@ function Search() {
     const callApi2 = async (name: string, status: number, type: string) => {
         try {
             const response = await axios.get(Url(`dishs/filter`), {
-                params: { name: name, status: status, type: type },
+                params: { name: name, status: status, type: type, userId: userInfo?.id },
             });
             return response.data;
         } catch (error) {
