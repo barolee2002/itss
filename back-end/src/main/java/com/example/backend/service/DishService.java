@@ -93,6 +93,7 @@ public class DishService {
             dishIngredient.setDishId(entity.getId());
             dishIngredient.setIngredientsId(ingredient.getIngredient().getId());
             dishIngredient.setQuantity(ingredient.getQuantity());
+            dishIngredient.setMeasure(ingredient.getMeasure());
             dishIngredientRepository.save(dishIngredient);
         }
     }

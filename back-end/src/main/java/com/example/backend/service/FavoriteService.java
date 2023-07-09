@@ -46,7 +46,7 @@ public class FavoriteService {
             }
 
         }
-        public void removeFavoriteEntity(Integer userId, Integer dishId) {
+        public void removeFavoriteDish(Integer userId, Integer dishId) {
             FavoriteEntity entity = favoriteRepository.findByUserIdAndRecipeId(userId, dishId);
             if(entity != null) {
                 throw new NotFoundException("Không thấy món ăn này trong danh sách yêu thích");
