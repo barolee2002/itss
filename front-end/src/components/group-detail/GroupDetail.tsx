@@ -8,7 +8,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import Url from '../../utils/url';
 import {
     fridgeProps,
@@ -25,6 +25,7 @@ import ModalRemoveFridgeGroup from '../modal/ModalRemoveFridgeGroup';
 
 function GroupDetail() {
     const param = useParams();
+    const navigate = useNavigate();
 
     const [showModalDetailMarketOrder, setShowModalDetailMarketOrder] = useState(false);
     const [currentIdMarketOrder, setCurrentIdMarketOrder] = useState(1);
@@ -44,6 +45,8 @@ function GroupDetail() {
     const [editNameGroup, setEditNameGroup] = useState('');
     const [editImageGroup, setEditImageGroup] = useState('');
     const [showModalDeleteGroup, setShowModalDeleteGroup] = useState(false);
+
+    const [reload, setReload] = useState(2);
 
     useEffect(() => {
         const fetchApiGroupDetail = async () => {
@@ -80,6 +83,7 @@ function GroupDetail() {
         fetchApiGroupMkOrder();
         fetchApiGroupFridge();
     }, [
+        reload,
         param,
         showToast,
         showModalDetailMarketOrder,
@@ -104,9 +108,38 @@ function GroupDetail() {
 
     const handleDeleteGroup = async () => {
         try {
-            await axios.delete(Url(`group/${group.id}`), { data: {} });
+            await axios.delete(Url(`group/${group.id}`));
+            navigate('/group');
         } catch (error: any) {
-            // alert(error.response.data.message);
+            alert(error.response.data.message);
+            console.log(error);
+        }
+    };
+
+    const handleEditNameGroup = async () => {
+        try {
+            await axios.put(Url(`group`), {
+                id: group.id,
+                name: editNameGroup,
+                image: '',
+            });
+            setReload(Math.random());
+        } catch (error: any) {
+            alert(error.response.data.message);
+            console.log(error);
+        }
+    };
+
+    const handleEditImage = async () => {
+        try {
+            await axios.put(Url(`group`), {
+                id: group.id,
+                name: '',
+                image: editImageGroup,
+            });
+            setReload(Math.random());
+        } catch (error: any) {
+            alert(error.response.data.message);
             console.log(error);
         }
     };
@@ -375,27 +408,50 @@ function GroupDetail() {
 
                     {/* Tab cài đặt */}
                     <Tab eventKey="setting" title="Cài đặt">
-                        <Form className="w-75">
-                            <Form.Group className="mb-3" controlId="nameGroup">
-                                <Form.Label>Tên nhóm</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="Nhập tên nhóm mới"
-                                    value={editNameGroup}
-                                    onChange={(e) => setEditNameGroup(e.target.value)}
-                                />
-                            </Form.Group>
-                            <Form.Group className="mb-3" controlId="imageGroup">
-                                <Form.Label>Link ảnh nhóm</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="Nhập link ảnh mới"
-                                    value={editImageGroup}
-                                    onChange={(e) => setEditImageGroup(e.target.value)}
-                                />
-                            </Form.Group>
+                        <Form className="mb-5 w-100">
+                            <div className="mb-3 d-flex align-items-end">
+                                <Form.Group className="w-75" controlId="nameGroup1">
+                                    <Form.Label>Tên nhóm</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        placeholder="Nhập tên nhóm mới"
+                                        value={editNameGroup}
+                                        onChange={(e) => setEditNameGroup(e.target.value)}
+                                    />
+                                </Form.Group>
+                                <Button
+                                    className="ms-3"
+                                    style={{ width: '10%', height: 38 }}
+                                    onClick={handleEditNameGroup}
+                                >
+                                    Xác nhận
+                                </Button>
+                            </div>
+
+                            <div className="mb-3 d-flex align-items-end">
+                                <Form.Group className="w-75" controlId="imageGroup1">
+                                    <Form.Label>Link ảnh nhóm</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        placeholder="Nhập link ảnh mới"
+                                        value={editImageGroup}
+                                        onChange={(e) => setEditImageGroup(e.target.value)}
+                                    />
+                                </Form.Group>
+                                <Button
+                                    className="ms-3"
+                                    style={{ width: '10%', height: 38 }}
+                                    onClick={handleEditImage}
+                                >
+                                    Xác nhận
+                                </Button>
+                            </div>
                         </Form>
-                        <Button onClick={() => setShowModalDeleteGroup(true)}>Xóa nhóm</Button>
+
+                        {/* Xóa nhóm */}
+                        <Button variant="danger" onClick={() => setShowModalDeleteGroup(true)}>
+                            Xóa nhóm
+                        </Button>
                         <Modal
                             show={showModalDeleteGroup}
                             onHide={() => setShowModalDeleteGroup(false)}
