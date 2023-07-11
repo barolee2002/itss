@@ -25,7 +25,7 @@ function Group() {
             }
         };
         fetchApi();
-    }, []);
+    }, [showModalAddGroup]);
 
     const handleAddGroup = async () => {
         try {
@@ -64,7 +64,8 @@ function Group() {
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
-                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                        {' '}
+                        <Form.Group className="mb-3" controlId="ControlInput1">
                             <Form.Label>Tên nhóm</Form.Label>
                             <Form.Control
                                 type="text"
@@ -72,7 +73,7 @@ function Group() {
                                 onChange={(e) => setName(e.target.value)}
                             />
                         </Form.Group>
-                        <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+                        <Form.Group className="mb-3" controlId="ControlTextarea1">
                             <Form.Label>Link ảnh nhóm</Form.Label>
                             <Form.Control
                                 type="text"
