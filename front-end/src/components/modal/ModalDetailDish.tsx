@@ -148,7 +148,8 @@ function ModalDetailDish({ show, hide, indexDish }: ModalDetailDishProps) {
                 </Table>
             </Modal.Body>
             <Modal.Footer className="d-flex justify-content-between">
-                <Button onClick={hide}>Thêm nguyên liệu</Button>
+                <div></div>
+                {/* <Button onClick={hide}>Thêm nguyên liệu</Button> */}
                 <Button onClick={hide}>Xong</Button>
             </Modal.Footer>
         </Modal>
