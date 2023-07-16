@@ -272,7 +272,7 @@ function ModalDetailMarketOrder({
                                         <th>#</th>
                                         <th>Ảnh</th>
                                         <th>Tên món ăn</th>
-                                        <th>Trạng thái</th>
+                                        {/* <th>Trạng thái</th> */}
                                         <th>Số lượng</th>
                                         <th>Ngày nấu</th>
                                         <th>Ngày hết hạn</th>
@@ -295,7 +295,7 @@ function ModalDetailMarketOrder({
                                                     />
                                                 </td>
                                                 <td>{dish.dish.name}</td>
-                                                <td>
+                                                {/* <td>
                                                     {dish.cook_status === 1 ? (
                                                         <Badge pill bg="success">
                                                             Đã mua
@@ -305,7 +305,7 @@ function ModalDetailMarketOrder({
                                                             Chưa mua
                                                         </Badge>
                                                     )}
-                                                </td>
+                                                </td> */}
                                                 <td>{dish.quantity}</td>
                                                 <td>{dish.cookDate}</td>
                                                 <td>{dish.expride}</td>

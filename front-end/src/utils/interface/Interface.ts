@@ -46,7 +46,8 @@ export interface userInfoProps {
     avatar: string;
     createAt: string;
     email: string;
-    gender: 'nam' | 'nữ';
+    username: string;
+    gender: 'nam' | 'nữ' | '';
     groups: null;
     id: number;
     name: string;
