@@ -11,6 +11,7 @@ public class Register {
 
     private String password;
     private String avatar;
+    private String name;
 
     private String gender;
     private String email;

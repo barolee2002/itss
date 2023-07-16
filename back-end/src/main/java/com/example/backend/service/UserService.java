@@ -46,6 +46,10 @@ public class UserService {
             newUser.setUsername(register.getUsername());
             newUser.setPassword(register.getPassword());
             newUser.setEmail(register.getEmail());
+            newUser.setName(register.getName());
+            newUser.setAvatar(register.getAvatar());
+            newUser.setGender(register.getGender());
+            newUser.setAddress(register.getAddress());
             newUser.setCreateAt(now());
             newUser.setStatus(1);
             newUser = userRepository.save(newUser);
