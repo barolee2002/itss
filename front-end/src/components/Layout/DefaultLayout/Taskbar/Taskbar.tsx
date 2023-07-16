@@ -24,7 +24,6 @@ import { userInfo } from '../../../../utils/userInfo';
 
 function Taskbar() {
     const isLogin = useSelector(isLoginSelector);
-    const notifyRef = useRef<HTMLDivElement>(null);
 
     return (
         <div className="d-flex flex-column position-relative">
@@ -47,7 +46,11 @@ function Taskbar() {
                 {isLogin && (
                     <>
                         <img
-                            src="https://cdn4.iconfinder.com/data/icons/avatars-circle-2/72/133-512.png"
+                            src={
+                                userInfo?.avatar
+                                    ? userInfo.avatar
+                                    : 'https://cdn4.iconfinder.com/data/icons/avatars-circle-2/72/133-512.png'
+                            }
                             alt="hinhanh"
                             className="taskbar-img"
                         />
