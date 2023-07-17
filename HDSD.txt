@@ -1,0 +1,8 @@
++ Cài đặt MySQL và công cụ quản lí CSDL. VD: MySQL Workbench
++ Import database trong folder database vào CSDL của mình
++ Đổi username và password thành của mình trong file application.properties (backend)
++ Mở Backend trong Intellij
++ Chạy file BackEndApplication 
++ Mở Frontend trên VSCode :
+ - Chạy lệnh "yarn" để cài đặt các package
+ - Chạy lệnh "yarn start"
