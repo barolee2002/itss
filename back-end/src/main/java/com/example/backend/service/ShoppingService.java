@@ -23,7 +23,6 @@ import static java.time.LocalDate.now;
 @Service
 @RequiredArgsConstructor
 public class ShoppingService {
-    private final DishService dishService;
     private final ShoppingRepository shoppingRepository;
     private final DishIngredientsRepository dishIngredientsRepository;
     private final ShoppingAttributeRepository attributeRepository;

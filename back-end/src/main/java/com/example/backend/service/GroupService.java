@@ -189,7 +189,7 @@ public class GroupService {
             for(GroupShoppingEntity shopping : shoppings) {
                 ShoppingEntity entity = shoppingRepository.findById(shopping.getShoppingId()).get();
                 if(entity.getStatus() == 0) {
-                    throw new NotCanDoException("Vui lòng hoàn thành nốt đơn đi chựo trước khi xóa nhóm");
+                    throw new NotCanDoException("Vui lòng hoàn thành nốt đơn đi chợ trước khi xóa nhóm");
                 }
             }
         }
